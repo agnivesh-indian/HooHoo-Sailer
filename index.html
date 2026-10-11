@@ -108,13 +108,14 @@
     max-width: 540px;
     margin: 0 auto;
     padding:
-      calc(var(--safe-top) + 10px)
-      calc(var(--safe-right) + 14px)
+      calc(var(--safe-top) + 8px)
+      calc(var(--safe-right) + 12px)
       calc(var(--safe-bottom) + 6px)
-      calc(var(--safe-left) + 14px);
-    gap: 8px;
+      calc(var(--safe-left) + 12px);
+    gap: 6px;
   }
 
+  /* ============ HEADER ============ */
   .header {
     display: flex;
     align-items: center;
@@ -132,19 +133,21 @@
   }
 
   .brand-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 11px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     background: var(--accent-grad);
     display: grid;
     place-items: center;
-    font-size: 20px;
+    font-size: 18px;
     box-shadow: 0 6px 16px -6px var(--accent);
     flex-shrink: 0;
   }
 
+  .brand-text { min-width: 0; }
+
   .brand-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--text);
@@ -152,7 +155,7 @@
   }
 
   .brand-sub {
-    font-size: 10.5px;
+    font-size: 10px;
     color: var(--text-3);
     font-weight: 500;
     letter-spacing: 0.03em;
@@ -166,9 +169,9 @@
   }
 
   .icon-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-2);
@@ -176,68 +179,173 @@
     place-items: center;
     cursor: pointer;
     transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
-    font-size: 17px;
+    font-size: 16px;
     font-family: inherit;
   }
 
   .icon-btn:hover { background: var(--surface-2); color: var(--text); }
   .icon-btn:active { transform: scale(0.92); }
 
-  .stats {
-    display: flex;
-    gap: 8px;
+  /* ============ LEVEL PROGRESS BAR (VOYAGE) ============ */
+  .voyage-bar {
     flex-shrink: 0;
-  }
-
-  .stat-card {
-    flex: 1;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 9px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
+    padding: 8px 12px 10px;
     box-shadow: var(--shadow-xs);
-    min-width: 0;
   }
 
-  .stat-label {
-    font-size: 9.5px;
+  .voyage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .voyage-label {
+    font-size: 10px;
     font-weight: 700;
     color: var(--text-3);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
-  .stat-value {
-    font-size: 17px;
+  .voyage-current {
+    font-size: 11px;
     font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.3s;
+    color: var(--accent);
+    letter-spacing: 0.02em;
   }
 
-  .stat-value.bump { animation: bump 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .voyage-track {
+    position: relative;
+    height: 30px;
+    background: linear-gradient(180deg, #b8e0f2 0%, #7fc4e8 60%, #4fc3f7 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
 
-  @keyframes bump {
-    0% { transform: scale(1); }
-    45% { transform: scale(1.22); color: var(--success); }
-    100% { transform: scale(1); }
+  [data-theme="dark"] .voyage-track {
+    background: linear-gradient(180deg, #122a47 0%, #0d2f4f 60%, #01579b 100%);
+  }
+
+  /* Water wave texture inside track */
+  .voyage-track::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0 18px,
+      rgba(255, 255, 255, 0.15) 18px 20px
+    );
+    pointer-events: none;
+  }
+
+  .voyage-progress {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 172, 193, 0.35), rgba(0, 229, 255, 0.5));
+    transition: width 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+    pointer-events: none;
+  }
+
+  /* Level marker dots */
+  .level-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .level-marker-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s;
+  }
+
+  .level-marker.reached .level-marker-dot {
+    background: #ffe066;
+    border-color: #fff8d0;
+    box-shadow: 0 0 10px #ffe066, 0 0 4px #fff;
+    transform: scale(1.25);
+  }
+
+  .level-marker.current .level-marker-dot {
+    background: #00e5ff;
+    border-color: #a8f0e8;
+    box-shadow: 0 0 12px #00e5ff, 0 0 5px #fff;
+    animation: markerPulse 1s ease-in-out infinite;
+  }
+
+  @keyframes markerPulse {
+    0%, 100% { transform: scale(1.25); }
+    50% { transform: scale(1.5); }
+  }
+
+  /* Moving boat indicator on track */
+  .voyage-boat {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%) scaleX(1);
+    font-size: 22px;
+    transition: left 0.6s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.2s;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    z-index: 4;
+    pointer-events: none;
+    animation: boatBob 2s ease-in-out infinite;
+  }
+
+  @keyframes boatBob {
+    0%, 100% { transform: translate(-50%, -50%) rotate(-2deg); }
+    50% { transform: translate(-50%, calc(-50% - 2px)) rotate(2deg); }
+  }
+
+  /* Level tick labels */
+  .level-ticks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .level-tick-label {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.02em;
+    z-index: 2;
+    pointer-events: none;
   }
 
   /* ============ GAME CANVAS ============ */
   .game-wrap {
     position: relative;
     flex: 1;
-    min-height: 220px;
+    min-height: 180px;
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border);
     background: #7fc4e8;
+    transition: background 0.8s;
   }
 
   canvas {
@@ -247,168 +355,151 @@
     touch-action: none;
   }
 
-  /* ============ BREATH VISUAL GUIDE (RING) ============ */
-  .breath-ring-wrap {
+  /* ============ ENVIRONMENTAL STATE BADGE ============ */
+  .env-badge {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 4;
-    opacity: 0.9;
-  }
-
-  .breath-ring-svg {
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
-  }
-
-  .ring-track {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.15);
-    stroke-width: 4;
-  }
-
-  .ring-progress {
-    fill: none;
-    stroke: url(#ringGrad);
-    stroke-width: 4;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 0.1s linear;
-  }
-
-  .ring-center {
-    fill: rgba(255, 255, 255, 0.05);
-    stroke: rgba(255, 255, 255, 0.2);
-    stroke-width: 1;
-  }
-
-  /* ============ BREATH COUNTDOWN NUMBER ============ */
-  .breath-timer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 48px;
-    font-weight: 800;
-    color: white;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 30px rgba(120, 200, 255, 0.6);
-    pointer-events: none;
-    z-index: 5;
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-    transition: color 0.3s, opacity 0.3s;
-    line-height: 1;
-  }
-
-  .breath-timer.inhale {
-    color: #a8d8ff;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 40px rgba(100, 180, 255, 0.8);
-  }
-
-  .breath-timer.exhale {
-    color: #a8f0e8;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 40px rgba(80, 230, 220, 0.8);
-  }
-
-  /* Breathing instruction overlay */
-  .breath-overlay {
-    position: absolute;
-    top: 14px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: white;
-    padding: 10px 22px;
+    padding: 6px 16px;
     border-radius: 40px;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     pointer-events: none;
-    transition: opacity 0.3s, transform 0.3s, background 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.15);
     z-index: 6;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    white-space: nowrap;
   }
 
-  .breath-overlay.inhale {
-    background: rgba(25, 118, 210, 0.65);
-    border-color: rgba(100, 180, 255, 0.4);
-    box-shadow: 0 0 30px rgba(60, 140, 240, 0.5);
+  .env-badge .env-icon {
+    font-size: 14px;
+    transition: transform 0.4s;
   }
 
-  .breath-overlay.exhale {
-    background: rgba(0, 172, 193, 0.7);
-    border-color: rgba(80, 230, 220, 0.5);
-    box-shadow: 0 0 30px rgba(0, 200, 200, 0.5);
+  /* Inhale state - calm, building */
+  .env-badge.inhale {
+    background: rgba(25, 118, 210, 0.7);
+    border-color: rgba(100, 180, 255, 0.5);
+    box-shadow: 0 0 20px rgba(60, 140, 240, 0.4);
   }
 
-  .breath-overlay.critical {
-    background: rgba(229, 72, 77, 0.85);
-    animation: critPulse 0.6s ease-in-out infinite alternate;
-  }
-
-  @keyframes critPulse {
-    from { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.6); }
-    to { box-shadow: 0 0 0 14px rgba(229, 72, 77, 0); }
-  }
-
-  .breath-overlay .breath-icon {
-    font-size: 18px;
-    animation: breatheIcon 4s ease-in-out infinite;
-  }
-
-  .breath-overlay.inhale .breath-icon {
+  .env-badge.inhale .env-icon {
     animation: inhaleIcon 4s ease-in-out infinite;
   }
 
-  .breath-overlay.exhale .breath-icon {
+  /* Exhale state - releasing power */
+  .env-badge.exhale {
+    background: rgba(0, 172, 193, 0.75);
+    border-color: rgba(80, 230, 220, 0.6);
+    box-shadow: 0 0 24px rgba(0, 200, 200, 0.5);
+  }
+
+  .env-badge.exhale .env-icon {
     animation: exhaleIcon 4s ease-in-out infinite;
   }
 
+  /* Warning state - waves building */
+  .env-badge.warning {
+    background: rgba(230, 130, 40, 0.8);
+    border-color: rgba(255, 180, 80, 0.6);
+    box-shadow: 0 0 24px rgba(255, 150, 40, 0.6);
+    animation: warnPulse 0.8s ease-in-out infinite alternate;
+  }
+
+  /* Critical state - sinking imminent */
+  .env-badge.critical {
+    background: rgba(229, 72, 77, 0.85);
+    border-color: rgba(255, 120, 120, 0.7);
+    box-shadow: 0 0 30px rgba(255, 60, 60, 0.7);
+    animation: critPulse 0.4s ease-in-out infinite alternate;
+  }
+
   @keyframes inhaleIcon {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.4); }
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.3) rotate(-5deg); }
   }
 
   @keyframes exhaleIcon {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(0.6); }
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(0.75) rotate(5deg); }
   }
 
-  .countdown {
+  @keyframes warnPulse {
+    from { transform: translateX(-50%) scale(1); }
+    to { transform: translateX(-50%) scale(1.03); }
+  }
+
+  @keyframes critPulse {
+    from { transform: translateX(-50%) scale(1); }
+    to { transform: translateX(-50%) scale(1.06); }
+  }
+
+  /* ============ WAVE POWER BAR ============ */
+  .wave-power {
     position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 42px;
+    bottom: 10px;
+    left: 12px;
+    right: 12px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .wave-power-label {
+    font-size: 9px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .wave-power-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .wave-power-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4fc3f7, #00e5ff, #a8f0e8);
+    border-radius: 40px;
+    transition: width 0.15s linear;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+  }
+
+  .wave-power-value {
+    font-size: 10px;
     font-weight: 800;
     color: white;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 100, 100, 0.5);
-    pointer-events: none;
-    z-index: 7;
-    opacity: 0;
-    transition: opacity 0.2s;
-    letter-spacing: -0.02em;
+    min-width: 32px;
+    text-align: right;
     font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
-  .countdown.show { opacity: 1; }
-  .countdown.critical {
-    color: #ff5f5f;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 60, 60, 0.8);
-    animation: countPulse 0.4s ease-in-out infinite alternate;
-  }
-
-  @keyframes countPulse {
-    from { transform: translateX(-50%) scale(1); }
-    to { transform: translateX(-50%) scale(1.15); }
-  }
-
+  /* ============ FLOAT FEEDBACK ============ */
   .float-feedback {
     position: absolute;
     left: 50%;
@@ -417,7 +508,7 @@
     font-size: 26px;
     font-weight: 800;
     color: white;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
     pointer-events: none;
     z-index: 8;
     opacity: 0;
@@ -441,37 +532,8 @@
   .float-feedback.good { color: #7dffa8; }
   .float-feedback.miss { color: #ffa8b8; }
 
-  .suggestion-banner {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: white;
-    padding: 7px 16px;
-    border-radius: 40px;
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    text-align: center;
-    max-width: 90%;
-    opacity: 0;
-    transition: opacity 0.4s, transform 0.4s;
-    pointer-events: none;
-    z-index: 6;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    line-height: 1.35;
-  }
-
-  .suggestion-banner.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  /* ============ MILESTONE OVERLAY (Chrome Dino style) ============ */
-  .milestone-overlay {
+  /* ============ LEVEL ANNOUNCE ============ */
+  .level-announce {
     position: absolute;
     inset: 0;
     display: flex;
@@ -481,37 +543,37 @@
     pointer-events: none;
     z-index: 10;
     opacity: 0;
-    background: radial-gradient(circle at center, rgba(255, 215, 100, 0.25), transparent 70%);
+    background: radial-gradient(circle at center, rgba(0, 229, 255, 0.2), transparent 70%);
   }
 
-  .milestone-overlay.show {
-    animation: milestoneFlash 2.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  .level-announce.show {
+    animation: levelAnnounce 2.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
   }
 
-  @keyframes milestoneFlash {
+  @keyframes levelAnnounce {
     0% { opacity: 0; transform: scale(0.8); }
-    10% { opacity: 1; transform: scale(1.05); }
-    20% { transform: scale(1); }
+    12% { opacity: 1; transform: scale(1.05); }
+    22% { transform: scale(1); }
     85% { opacity: 1; }
     100% { opacity: 0; transform: scale(1); }
   }
 
-  .milestone-badge {
-    width: 90px;
-    height: 90px;
+  .level-badge {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    font-size: 48px;
-    background: radial-gradient(circle at 30% 30%, #ffe066, #f0b800);
+    font-size: 40px;
+    background: radial-gradient(circle at 30% 30%, #00e5ff, #0288d1);
     box-shadow:
-      0 0 60px rgba(255, 215, 80, 0.9),
-      0 0 120px rgba(255, 200, 60, 0.6),
-      inset 0 -8px 20px rgba(180, 120, 0, 0.4),
-      inset 0 8px 20px rgba(255, 255, 255, 0.5);
-    margin-bottom: 16px;
-    animation: badgeSpin 1.5s cubic-bezier(0.2, 0.9, 0.3, 1);
-    border: 3px solid rgba(255, 255, 255, 0.6);
+      0 0 50px rgba(0, 229, 255, 0.9),
+      0 0 100px rgba(0, 200, 200, 0.5),
+      inset 0 -6px 16px rgba(0, 60, 100, 0.5),
+      inset 0 6px 16px rgba(255, 255, 255, 0.5);
+    margin-bottom: 14px;
+    animation: badgeSpin 1.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    border: 3px solid rgba(255, 255, 255, 0.7);
   }
 
   @keyframes badgeSpin {
@@ -520,14 +582,14 @@
     100% { transform: rotate(0deg) scale(1); }
   }
 
-  .milestone-title {
-    font-size: 32px;
+  .level-announce-title {
+    font-size: 30px;
     font-weight: 900;
-    color: #ffe066;
+    color: #a8f0e8;
     text-shadow:
       0 4px 20px rgba(0, 0, 0, 0.7),
-      0 0 40px rgba(255, 200, 60, 0.9),
-      0 0 80px rgba(255, 180, 40, 0.6);
+      0 0 40px rgba(0, 229, 255, 0.9),
+      0 0 80px rgba(0, 180, 200, 0.6);
     letter-spacing: 0.02em;
     text-align: center;
     padding: 0 20px;
@@ -540,8 +602,8 @@
     100% { transform: scale(1); opacity: 1; }
   }
 
-  .milestone-sub {
-    font-size: 15px;
+  .level-announce-sub {
+    font-size: 14px;
     font-weight: 600;
     color: white;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
@@ -558,17 +620,14 @@
     to { opacity: 0.95; transform: translateY(0); }
   }
 
-  /* Radial burst particles */
   .burst-particle {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 8px;
-    height: 8px;
+    top: 50%; left: 50%;
+    width: 8px; height: 8px;
     border-radius: 50%;
-    background: #ffe066;
+    background: #a8f0e8;
     pointer-events: none;
-    box-shadow: 0 0 12px rgba(255, 220, 100, 0.9);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
     animation: burstOut 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
   }
 
@@ -577,25 +636,10 @@
     100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.3); }
   }
 
-  /* Rising star particles */
-  .star-particle {
-    position: absolute;
-    font-size: 22px;
-    pointer-events: none;
-    animation: starRise 2.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-  }
-
-  @keyframes starRise {
-    0% { opacity: 0; transform: translateY(0) rotate(0) scale(0.5); }
-    20% { opacity: 1; transform: translateY(-20px) rotate(45deg) scale(1.2); }
-    100% { opacity: 0; transform: translateY(-250px) rotate(360deg) scale(0.6); }
-  }
-
-  /* Screen flash */
   .screen-flash {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(255, 240, 180, 0.6), transparent 60%);
+    background: radial-gradient(circle at center, rgba(180, 240, 255, 0.7), transparent 60%);
     pointer-events: none;
     z-index: 9;
     opacity: 0;
@@ -614,7 +658,7 @@
   .sink-overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(8, 20, 40, 0.5), rgba(8, 20, 40, 0.9));
+    background: radial-gradient(circle at center, rgba(8, 20, 40, 0.5), rgba(8, 20, 40, 0.92));
     backdrop-filter: blur(2px);
     display: flex;
     flex-direction: column;
@@ -628,14 +672,11 @@
     text-align: center;
   }
 
-  .sink-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .sink-overlay.show { opacity: 1; pointer-events: auto; }
 
   .sink-icon {
-    font-size: 60px;
-    margin-bottom: 12px;
+    font-size: 56px;
+    margin-bottom: 10px;
     animation: sinkBobbing 2s ease-in-out infinite;
   }
 
@@ -645,7 +686,7 @@
   }
 
   .sink-title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: white;
     letter-spacing: -0.02em;
@@ -654,7 +695,7 @@
   }
 
   .sink-sub {
-    font-size: 13px;
+    font-size: 12.5px;
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 4px;
     line-height: 1.5;
@@ -662,21 +703,21 @@
   }
 
   .sink-progress {
-    font-size: 12px;
+    font-size: 11.5px;
     color: rgba(255, 255, 255, 0.6);
-    margin-top: 12px;
+    margin-top: 10px;
     font-weight: 600;
     letter-spacing: 0.05em;
   }
 
   .sink-restart {
-    margin-top: 20px;
-    padding: 12px 32px;
+    margin-top: 18px;
+    padding: 11px 28px;
     background: var(--accent-grad);
     color: white;
     border: none;
     border-radius: 14px;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 10px 24px -10px var(--accent);
@@ -697,21 +738,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 4px 0 6px;
+    gap: 6px;
+    padding: 2px 0 4px;
   }
 
   .hold-btn {
     position: relative;
     width: 100%;
     max-width: 340px;
-    height: 76px;
-    border-radius: 22px;
+    height: 70px;
+    border-radius: 20px;
     background: var(--surface);
     border: 2px solid var(--border-strong);
     color: var(--text-2);
     font-family: inherit;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -758,13 +799,11 @@
     width: 0%;
     background: var(--accent-grad);
     transition: width 0.1s linear;
-    border-radius: 20px;
+    border-radius: 18px;
     pointer-events: none;
   }
 
-  .hold-btn.charging .hold-fill {
-    transition: none;
-  }
+  .hold-btn.charging .hold-fill { transition: none; }
 
   .hold-content {
     position: relative;
@@ -779,43 +818,13 @@
   }
 
   .hold-icon {
-    font-size: 22px;
+    font-size: 20px;
     transition: transform 0.2s;
   }
 
   .hold-btn.charging .hold-icon { transform: scale(1.15); }
 
   .hold-label { white-space: nowrap; }
-
-  .wind-meter {
-    width: 100%;
-    max-width: 340px;
-    height: 6px;
-    background: var(--surface-3);
-    border-radius: 40px;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid var(--border);
-  }
-
-  .wind-meter-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2), #00e5ff);
-    border-radius: 40px;
-    transition: width 0.15s linear;
-    box-shadow: 0 0 12px -2px var(--accent-2);
-  }
-
-  .wind-meter-fill.full {
-    animation: windFull 0.5s ease-out;
-  }
-
-  @keyframes windFull {
-    0% { filter: brightness(1); }
-    50% { filter: brightness(1.6); }
-    100% { filter: brightness(1); }
-  }
 
   .quick-bar {
     display: flex;
@@ -827,17 +836,17 @@
     flex: 1;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 13px;
-    padding: 10px 8px;
+    border-radius: 12px;
+    padding: 9px 8px;
     color: var(--text-2);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
     font-family: inherit;
     letter-spacing: 0.01em;
   }
@@ -849,8 +858,8 @@
   .footer {
     flex-shrink: 0;
     text-align: center;
-    padding: 4px 0 2px;
-    font-size: 10.5px;
+    padding: 3px 0 1px;
+    font-size: 10px;
     color: var(--text-3);
     letter-spacing: 0.02em;
     font-weight: 500;
@@ -858,10 +867,7 @@
     margin-top: 2px;
   }
 
-  .footer strong {
-    font-weight: 700;
-    color: var(--text-2);
-  }
+  .footer strong { font-weight: 700; color: var(--text-2); }
 
   .toast {
     position: fixed;
@@ -886,16 +892,13 @@
     max-width: calc(100vw - 40px);
   }
 
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* ============ WELCOME ============ */
   .welcome-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(8, 20, 40, 0.72);
+    background: rgba(8, 20, 40, 0.75);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     z-index: 3000;
@@ -1059,10 +1062,7 @@
     margin-top: 6px;
   }
 
-  .welcome-note.danger {
-    border-left-color: var(--danger);
-    color: var(--text-2);
-  }
+  .welcome-note.danger { border-left-color: var(--danger); color: var(--text-2); }
 
   .welcome-note strong { color: var(--text-2); }
 
@@ -1416,19 +1416,20 @@
   .danger-btn:active { transform: scale(0.98); }
 
   @media (max-height: 700px) {
-    .stats { display: none; }
-    .hold-btn { height: 66px; }
-    .game-wrap { min-height: 180px; }
-    .breath-timer { font-size: 38px; }
+    .hold-btn { height: 62px; }
+    .game-wrap { min-height: 160px; }
+    .voyage-bar { padding: 6px 10px 8px; }
+    .level-badge { width: 68px; height: 68px; font-size: 34px; }
+    .level-announce-title { font-size: 24px; }
   }
 
   @media (max-width: 380px) {
     .brand-sub { display: none; }
-    .hold-btn { font-size: 13px; height: 68px; }
-    .hold-icon { font-size: 18px; }
-    .breath-timer { font-size: 40px; }
-    .milestone-badge { width: 70px; height: 70px; font-size: 38px; }
-    .milestone-title { font-size: 26px; }
+    .hold-btn { font-size: 12px; height: 62px; }
+    .hold-icon { font-size: 17px; }
+    .level-announce-title { font-size: 22px; }
+    .voyage-track { height: 26px; }
+    .voyage-boat { font-size: 18px; }
   }
 </style>
 </head>
@@ -1449,62 +1450,44 @@
     </div>
   </header>
 
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-label">Voyage</div>
-      <div class="stat-value" id="distanceStat">0m</div>
+  <!-- VOYAGE PROGRESS BAR -->
+  <div class="voyage-bar">
+    <div class="voyage-header">
+      <span class="voyage-label">🗺️ Voyage</span>
+      <span class="voyage-current" id="voyageCurrent">Level 1 · Open Sea</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Exhales</div>
-      <div class="stat-value" id="cyclesStat">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Best Run</div>
-      <div class="stat-value" id="bestStat">0</div>
+    <div class="voyage-track" id="voyageTrack">
+      <div class="voyage-progress" id="voyageProgress"></div>
+      <div class="level-ticks" id="levelTicks"></div>
+      <div class="voyage-boat" id="voyageBoat">⛵</div>
     </div>
   </div>
 
-  <div class="game-wrap">
+  <div class="game-wrap" id="gameWrap">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- Breath Ring SVG (visual guide) -->
-    <div class="breath-ring-wrap">
-      <svg class="breath-ring-svg" width="200" height="200" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#42a5f5"/>
-            <stop offset="50%" stop-color="#26c6da"/>
-            <stop offset="100%" stop-color="#00e5ff"/>
-          </linearGradient>
-          <linearGradient id="ringGradExhale" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#26c6da"/>
-            <stop offset="50%" stop-color="#00e5ff"/>
-            <stop offset="100%" stop-color="#a8f0e8"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-track" cx="100" cy="100" r="88"/>
-        <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88"
-          stroke-dasharray="552.92" stroke-dashoffset="552.92"
-          transform="rotate(-90 100 100)"/>
-      </svg>
+    <!-- Environmental state badge (replaces countdown) -->
+    <div class="env-badge inhale" id="envBadge">
+      <span class="env-icon" id="envIcon">🌊</span>
+      <span id="envText">Calm Seas</span>
     </div>
 
-    <!-- Breath timer number (inside ring) -->
-    <div class="breath-timer" id="breathTimer">4</div>
-
-    <div class="breath-overlay" id="breathOverlay">
-      <span class="breath-icon">🌬️</span>
-      <span id="breathText">Ready</span>
+    <!-- Wave power meter (bottom of canvas) -->
+    <div class="wave-power">
+      <span class="wave-power-label">🌊 Wave</span>
+      <div class="wave-power-track">
+        <div class="wave-power-fill" id="wavePowerFill"></div>
+      </div>
+      <span class="wave-power-value" id="wavePowerValue">0%</span>
     </div>
-    <div class="countdown" id="countdown"></div>
+
     <div class="float-feedback" id="floatFeedback"></div>
-    <div class="suggestion-banner" id="suggestionBanner"></div>
 
-    <!-- Milestone celebration (Chrome Dino style) -->
-    <div class="milestone-overlay" id="milestoneOverlay">
-      <div class="milestone-badge" id="milestoneBadge">🏆</div>
-      <div class="milestone-title" id="milestoneTitle">Milestone!</div>
-      <div class="milestone-sub" id="milestoneSub">Great job</div>
+    <!-- Level announce -->
+    <div class="level-announce" id="levelAnnounce">
+      <div class="level-badge" id="levelBadge">🌊</div>
+      <div class="level-announce-title" id="levelAnnounceTitle">Open Sea</div>
+      <div class="level-announce-sub" id="levelAnnounceSub">Level 1 — Begin your voyage</div>
     </div>
 
     <div class="screen-flash" id="screenFlash"></div>
@@ -1529,9 +1512,6 @@
         <span class="hold-label" id="holdLabel">Hold to exhale</span>
       </div>
     </button>
-    <div class="wind-meter">
-      <div class="wind-meter-fill" id="windMeterFill"></div>
-    </div>
   </div>
 
   <div class="quick-bar">
@@ -1576,30 +1556,30 @@
         <div class="step-item">
           <div class="step-num">1</div>
           <div class="step-text">
-            <strong>Watch the ring.</strong> A blue ring fills while you
-            <em>breathe in</em>. When it turns teal and starts counting down,
-            <strong>breathe out</strong>.
+            <strong>Watch the ocean.</strong> When the sea calms and the badge
+            shows <em>Calm Seas</em>, <strong>breathe in</strong> — the waves
+            will build around you.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-text">
-            <strong>Press and hold</strong> the button during the exhale.
-            The longer you hold, the further you sail.
+            <strong>When waves rise high and the badge shows <em>Ride the Waves</em></strong>,
+            <strong>press and hold</strong> the button to exhale and harness their power.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num step-num warn">!</div>
           <div class="step-text">
-            <strong>Don't miss an exhale.</strong> If the countdown hits zero,
-            your ship sinks and the voyage restarts.
+            <strong>Don't miss an exhale.</strong> If the storm surge overwhelms
+            the boat, your ship sinks and the voyage restarts.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">3</div>
           <div class="step-text">
-            <strong>Hit milestones</strong> at 5, 10, 15, 20, 30, 50, and 100
-            exhales for epic celebrations.
+            <strong>Advance through levels.</strong> Each level brings bigger
+            waves and new seas — from Open Sea to the Great Unknown.
           </div>
         </div>
       </div>
@@ -1607,7 +1587,6 @@
 
     <div class="welcome-note danger">
       <strong>Every exhale counts.</strong> Miss one and the voyage restarts.
-      Build the longest run you can.
     </div>
 
     <button class="start-btn" id="startBtn">
@@ -1647,15 +1626,9 @@
       </div>
 
       <div class="option-picker" id="soundPicker" style="margin-top:6px;">
-        <button class="option-btn" data-sound="ocean">
-          <span class="opt-icon">🌊</span> Ocean
-        </button>
-        <button class="option-btn" data-sound="wind">
-          <span class="opt-icon">🌬️</span> Wind
-        </button>
-        <button class="option-btn" data-sound="both">
-          <span class="opt-icon">🎵</span> Both
-        </button>
+        <button class="option-btn" data-sound="ocean"><span class="opt-icon">🌊</span> Ocean</button>
+        <button class="option-btn" data-sound="wind"><span class="opt-icon">🌬️</span> Wind</button>
+        <button class="option-btn" data-sound="both"><span class="opt-icon">🎵</span> Both</button>
       </div>
 
       <div class="strength-row">
@@ -1664,9 +1637,7 @@
         <span class="strength-value" id="volumeValue">60%</span>
       </div>
 
-      <button class="test-btn" id="testSoundBtn">
-        <span>🔊</span> Test sailing sound
-      </button>
+      <button class="test-btn" id="testSoundBtn"><span>🔊</span> Test sailing sound</button>
     </div>
 
     <div class="setting-group">
@@ -1685,23 +1656,15 @@
         <span class="strength-value" id="hapticStrengthValue">6</span>
       </div>
 
-      <button class="test-btn" id="testHapticBtn">
-        <span>📳</span> Test sailing vibration
-      </button>
+      <button class="test-btn" id="testHapticBtn"><span>📳</span> Test sailing vibration</button>
     </div>
 
     <div class="setting-group">
       <span class="setting-label">Breathing Pace</span>
       <div class="option-picker" id="pacePicker">
-        <button class="option-btn" data-pace="calm">
-          <span class="opt-icon">🧘</span> Calm
-        </button>
-        <button class="option-btn" data-pace="balanced">
-          <span class="opt-icon">⚖️</span> Balanced
-        </button>
-        <button class="option-btn" data-pace="deep">
-          <span class="opt-icon">💨</span> Deep
-        </button>
+        <button class="option-btn" data-pace="calm"><span class="opt-icon">🧘</span> Calm</button>
+        <button class="option-btn" data-pace="balanced"><span class="opt-icon">⚖️</span> Balanced</button>
+        <button class="option-btn" data-pace="deep"><span class="opt-icon">💨</span> Deep</button>
       </div>
       <div style="font-size:11px; color:var(--text-3); margin-top:8px; line-height:1.5; padding:0 4px;">
         <strong style="color:var(--text-2);">Calm</strong> 4s in · 6s out &nbsp;·&nbsp;
@@ -1716,9 +1679,7 @@
         <strong>HooHoo Sailer</strong> uses slow-paced breathing at ~6 breaths
         per minute, a protocol shown in HRV research to increase vagal tone,
         reduce cortisol, and support emotional regulation. The boat moves
-        <strong>only during your exhale</strong>. Missing an exhale sinks the
-        ship and restarts the voyage — this reinforces sustained attention to
-        the breath.
+        <strong>only during your exhale</strong>.
         <br><br>
         Not a replacement for professional care. If stress is persistent,
         please reach out to a licensed mental health professional.
@@ -1726,9 +1687,7 @@
     </div>
 
     <div class="setting-group">
-      <button class="danger-btn" id="clearHistoryBtn">
-        🗑️ Reset all data & counters
-      </button>
+      <button class="danger-btn" id="clearHistoryBtn">🗑️ Reset all data & counters</button>
     </div>
   </div>
 </div>
@@ -1747,10 +1706,10 @@
     pace: 'calm',
     hasSeenWelcome: false,
     totalDistance: 0,
-    bestRun: 0,
+    bestLevel: 1,
   };
 
-  const STORAGE_KEY = 'hoohooSailer.v4';
+  const STORAGE_KEY = 'hoohooSailer.v5';
 
   const PACES = {
     calm:     { inhale: 4, exhale: 6 },
@@ -1760,34 +1719,34 @@
 
   const EXHALE_GRACE = 1.5;
 
-  // Milestones with badge, title, subtitle
-  const MILESTONES = {
-    3:  { badge: '🥉', title: 'Warming Up', sub: '3 in a row — keep sailing!' },
-    5:  { badge: '⭐', title: 'High Five!', sub: '5 exhales — finding your rhythm.' },
-    10: { badge: '🏅', title: 'Perfect Ten', sub: '10 exhales — you\'re in the zone.' },
-    15: { badge: '💫', title: 'Steady Hand', sub: '15 exhales — smooth breathing.' },
-    20: { badge: '🏆', title: 'Master Sailor', sub: '20 exhales — incredible control.' },
-    30: { badge: '👑', title: 'Captain', sub: '30 exhales — you own these seas.' },
-    50: { badge: '💎', title: 'Legend', sub: '50 exhales — legendary voyage.' },
-    75: { badge: '🌟', title: 'Unstoppable', sub: '75 exhales — truly remarkable.' },
-    100:{ badge: '🚀', title: 'Cosmic', sub: '100 exhales — you\'ve transcended.' },
-  };
+  // Level system — each level defines ocean state at each milestone
+  const LEVELS = [
+    { num: 1, name: 'Open Sea',       icon: '🌊', startAt: 0,   waveMax: 0.45, skyTint: 0,    desc: 'Level 1 — Begin your voyage' },
+    { num: 2, name: 'Windward Pass',  icon: '💨', startAt: 5,   waveMax: 0.60, skyTint: 0.05, desc: 'Level 2 — Wind picks up' },
+    { num: 3, name: 'Coral Strait',   icon: '🐠', startAt: 10,  waveMax: 0.72, skyTint: 0.1,  desc: 'Level 3 — Shallow waters' },
+    { num: 4, name: 'Storm Front',    icon: '⛈️', startAt: 15,  waveMax: 0.85, skyTint: 0.15, desc: 'Level 4 — Storm brewing' },
+    { num: 5, name: 'The Narrows',    icon: '🌪️', startAt: 20,  waveMax: 0.95, skyTint: 0.18, desc: 'Level 5 — Perilous passage' },
+    { num: 6, name: 'Titan Waters',   icon: '⚡', startAt: 30,  waveMax: 1.05, skyTint: 0.22, desc: 'Level 6 — Titans await' },
+    { num: 7, name: 'The Abyss',      icon: '🌀', startAt: 50,  waveMax: 1.15, skyTint: 0.28, desc: 'Level 7 — Beyond the deep' },
+    { num: 8, name: 'Great Unknown',  icon: '🌟', startAt: 75,  waveMax: 1.25, skyTint: 0.32, desc: 'Level 8 — Legendary seas' },
+    { num: 9, name: 'Eternal Voyage', icon: '🚀', startAt: 100, waveMax: 1.35, skyTint: 0.36, desc: 'Level 9 — No limits' },
+  ];
 
   const $ = id => document.getElementById(id);
 
+  const gameWrap       = $('gameWrap');
   const gameCanvas     = $('gameCanvas');
   const ctx            = gameCanvas.getContext('2d');
-  const breathOverlay  = $('breathOverlay');
-  const breathText     = $('breathText');
-  const breathTimer    = $('breathTimer');
-  const ringProgress   = $('ringProgress');
-  const countdownEl    = $('countdown');
+  const envBadge       = $('envBadge');
+  const envIcon        = $('envIcon');
+  const envText        = $('envText');
+  const wavePowerFill  = $('wavePowerFill');
+  const wavePowerValue = $('wavePowerValue');
   const floatFeedback  = $('floatFeedback');
-  const suggestionBanner = $('suggestionBanner');
-  const milestoneOverlay = $('milestoneOverlay');
-  const milestoneBadge = $('milestoneBadge');
-  const milestoneTitle = $('milestoneTitle');
-  const milestoneSub   = $('milestoneSub');
+  const levelAnnounce  = $('levelAnnounce');
+  const levelBadge     = $('levelBadge');
+  const levelAnnounceTitle = $('levelAnnounceTitle');
+  const levelAnnounceSub = $('levelAnnounceSub');
   const screenFlash    = $('screenFlash');
   const sinkOverlay    = $('sinkOverlay');
   const sinkTitle      = $('sinkTitle');
@@ -1797,11 +1756,11 @@
   const holdBtn        = $('holdBtn');
   const holdFill       = $('holdFill');
   const holdLabel      = $('holdLabel');
-  const windMeterFill  = $('windMeterFill');
-  const distanceStat   = $('distanceStat');
-  const cyclesStat     = $('cyclesStat');
-  const bestStat       = $('bestStat');
   const toast          = $('toast');
+  const voyageCurrent  = $('voyageCurrent');
+  const voyageProgress = $('voyageProgress');
+  const voyageBoat     = $('voyageBoat');
+  const levelTicks     = $('levelTicks');
 
   const settingsBtn    = $('settingsBtn');
   const settingsBackdrop = $('settingsBackdrop');
@@ -1817,10 +1776,8 @@
   const testSoundBtn   = $('testSoundBtn');
   const testHapticBtn  = $('testHapticBtn');
   const clearHistoryBtn = $('clearHistoryBtn');
-
   const resetSessionBtn = $('resetSessionBtn');
   const resetAllBtn     = $('resetAllBtn');
-
   const welcomeBackdrop = $('welcomeBackdrop');
   const welcomeClose    = $('welcomeClose');
   const startBtn        = $('startBtn');
@@ -1845,6 +1802,7 @@
     phaseElapsed: 0,
     phaseDuration: 0,
     runExhales: 0,
+    currentLevel: 1,
     isHolding: false,
     exhaleHoldTime: 0,
     exhaleLockedIn: false,
@@ -1858,6 +1816,8 @@
     clouds: [],
     seagulls: [],
     foamTrail: [],
+    sprayParticles: [],
+    lightningBolts: [],
 
     boatBobbing: 0,
     sailingSoundOn: false,
@@ -1868,14 +1828,14 @@
     sinkBoatY: 0,
     sinkBoatRot: 0,
 
-    milestoneQueue: [],
-    milestonePlaying: false,
-
-    // Breath ring visual
-    ringProgressValue: 0,
+    // Environment
+    waveIntensity: 0.3,      // Current wave size/energy 0..1.3
+    targetWaveIntensity: 0.3,
+    stormSurge: 0,           // 0..1 — how urgent the miss window is (during grace)
+    skyTint: 0,
   };
 
-  /* HAPTIC */
+  /* ====== HAPTIC ====== */
   function haptic(durationMs) {
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
@@ -1892,7 +1852,7 @@
     if (navigator.vibrate) { try { navigator.vibrate(0); } catch (e) {} }
   }
 
-  /* AUDIO */
+  /* ====== AUDIO ====== */
   let audioCtx = null;
   let ambientNodes = null;
   let ambientGain = null;
@@ -2054,8 +2014,8 @@
 
   function playSuccessChime() { playChime([659.25, 830.61, 987.77], 0.08, 0.08); }
   function playGoldenChime() { playChime([523.25, 659.25, 783.99, 1046.5], 0.09, 0.07); }
-  function playMilestoneFanfare() { playChime([523.25, 659.25, 783.99, 1046.5, 1318.5], 0.11, 0.09); }
-  function playBigMilestoneFanfare() { playChime([392, 523.25, 659.25, 783.99, 1046.5, 1318.5, 1568], 0.12, 0.08); }
+  function playLevelUpFanfare() { playChime([392, 523.25, 659.25, 783.99, 1046.5, 1318.5], 0.11, 0.09); }
+  function playBigLevelFanfare() { playChime([261.63, 392, 523.25, 659.25, 783.99, 1046.5, 1318.5, 1568], 0.12, 0.09); }
 
   function playSinkSound() {
     if (!state.sound) return;
@@ -2076,7 +2036,6 @@
         osc.start(now + i * 0.15);
         osc.stop(now + i * 0.15 + 0.65);
       });
-
       const noise = ctx.createBufferSource();
       noise.buffer = makeNoiseBuffer(ctx, 0.8);
       const lp = ctx.createBiquadFilter();
@@ -2093,7 +2052,7 @@
     } catch (e) {}
   }
 
-  /* TOAST */
+  /* ====== TOAST ====== */
   let toastTimer = null;
   function showToast(msg, emoji = '✨') {
     toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
@@ -2102,8 +2061,7 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
-  /* FLOAT FEEDBACK & SUGGESTION */
-  let suggestionTimer = null;
+  /* ====== FLOAT FEEDBACK ====== */
   function showFloat(text, cls) {
     floatFeedback.textContent = text;
     floatFeedback.className = 'float-feedback ' + (cls || '');
@@ -2111,79 +2069,112 @@
     floatFeedback.classList.add('show');
   }
 
-  function showSuggestion(text, durationMs) {
-    suggestionBanner.textContent = text;
-    suggestionBanner.classList.add('show');
-    clearTimeout(suggestionTimer);
-    suggestionTimer = setTimeout(() => suggestionBanner.classList.remove('show'), durationMs || 3500);
+  /* ====== LEVEL MANAGEMENT ====== */
+  function getLevelForExhales(n) {
+    let level = LEVELS[0];
+    for (const L of LEVELS) {
+      if (n >= L.startAt) level = L;
+    }
+    return level;
   }
 
-  function hideSuggestion() { suggestionBanner.classList.remove('show'); }
+  function buildLevelTicks() {
+    levelTicks.innerHTML = '';
+    const maxExhales = 100;
+    LEVELS.forEach((L, i) => {
+      if (L.startAt === 0) return; // skip level 1 at 0
+      const pct = Math.min(100, (L.startAt / maxExhales) * 100);
+      const marker = document.createElement('div');
+      marker.className = 'level-marker';
+      marker.dataset.level = L.num;
+      marker.dataset.at = L.startAt;
+      marker.style.left = pct + '%';
+      marker.innerHTML = `<div class="level-marker-dot"></div>`;
+      levelTicks.appendChild(marker);
+    });
 
-  /* MILESTONE CELEBRATION (Chrome Dino style) */
-  function triggerMilestone(num) {
-    const m = MILESTONES[num];
-    if (!m) return;
+    // Also add a tick label for each level
+    LEVELS.forEach((L) => {
+      if (L.startAt === 0) return;
+      const pct = Math.min(100, (L.startAt / maxExhales) * 100);
+      const label = document.createElement('div');
+      label.className = 'level-tick-label';
+      label.style.left = pct + '%';
+      label.textContent = L.num;
+      levelTicks.appendChild(label);
+    });
+  }
 
-    milestoneBadge.textContent = m.badge;
-    milestoneTitle.textContent = m.title;
-    milestoneSub.textContent = m.sub;
+  function updateVoyageProgress(exhales) {
+    const maxExhales = 100;
+    const pct = Math.min(100, (exhales / maxExhales) * 100);
+    voyageProgress.style.width = pct + '%';
+    voyageBoat.style.left = pct + '%';
 
-    milestoneOverlay.classList.remove('show');
-    void milestoneOverlay.offsetWidth;
-    milestoneOverlay.classList.add('show');
+    // Update markers reached
+    levelTicks.querySelectorAll('.level-marker').forEach(m => {
+      const at = parseInt(m.dataset.at, 10);
+      m.classList.toggle('reached', exhales >= at);
+    });
+
+    // Current level marker highlight
+    const currentLevel = getLevelForExhales(exhales);
+    levelTicks.querySelectorAll('.level-marker').forEach(m => {
+      m.classList.toggle('current', parseInt(m.dataset.level, 10) === currentLevel.num);
+    });
+
+    voyageCurrent.textContent = `Level ${currentLevel.num} · ${currentLevel.name}`;
+  }
+
+  function triggerLevelUp(level) {
+    // Full cinematic
+    levelBadge.textContent = level.icon;
+    levelAnnounceTitle.textContent = level.name;
+    levelAnnounceSub.textContent = level.desc;
+
+    levelAnnounce.classList.remove('show');
+    void levelAnnounce.offsetWidth;
+    levelAnnounce.classList.add('show');
 
     screenFlash.classList.remove('show');
     void screenFlash.offsetWidth;
     screenFlash.classList.add('show');
 
-    // Radial burst particles
-    const isBig = num >= 20;
-    const particleCount = isBig ? 28 : 18;
-    for (let i = 0; i < particleCount; i++) {
+    // Radial burst
+    const isBig = level.num >= 5;
+    const count = isBig ? 28 : 20;
+    for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'burst-particle';
-      const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.3;
-      const dist = (isBig ? 200 : 130) + Math.random() * 60;
+      const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+      const dist = (isBig ? 200 : 140) + Math.random() * 60;
       p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
       p.style.width = (isBig ? 10 : 7) + Math.random() * 4 + 'px';
       p.style.height = p.style.width;
-      p.style.background = ['#ffe066', '#ffb84d', '#fff4b8', '#ffd54f'][i % 4];
-      milestoneOverlay.appendChild(p);
+      p.style.background = ['#00e5ff', '#a8f0e8', '#4fc3f7', '#ffffff'][i % 4];
+      levelAnnounce.appendChild(p);
       setTimeout(() => p.remove(), 1500);
     }
 
-    // Rising stars
-    const starCount = isBig ? 14 : 8;
-    for (let i = 0; i < starCount; i++) {
-      const s = document.createElement('div');
-      s.className = 'star-particle';
-      s.textContent = ['✨', '⭐', '🌟', '💫'][i % 4];
-      s.style.left = (15 + Math.random() * 70) + '%';
-      s.style.top = (55 + Math.random() * 20) + '%';
-      s.style.animationDelay = (Math.random() * 0.5) + 's';
-      s.style.fontSize = (18 + Math.random() * 16) + 'px';
-      milestoneOverlay.appendChild(s);
-      setTimeout(() => s.remove(), 3000);
-    }
-
-    // Sound
     if (isBig) {
-      playBigMilestoneFanfare();
+      playBigLevelFanfare();
       hapticPattern([80, 50, 80, 50, 120, 60, 200]);
     } else {
-      playMilestoneFanfare();
+      playLevelUpFanfare();
       hapticPattern([60, 40, 60, 40, 120]);
     }
 
-    game.milestonePlaying = true;
-    setTimeout(() => {
-      game.milestonePlaying = false;
-    }, 2800);
+    if (level.num > state.bestLevel) {
+      state.bestLevel = level.num;
+      saveState();
+    }
+
+    // Update the wave max for the level
+    game.skyTint = level.skyTint;
   }
 
-  /* THEME */
+  /* ====== THEME ====== */
   function applyTheme() {
     const root = document.documentElement;
     let effective = state.theme;
@@ -2209,7 +2200,7 @@
     haptic(8);
   });
 
-  /* STORAGE */
+  /* ====== STORAGE ====== */
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -2229,12 +2220,12 @@
         pace: state.pace,
         hasSeenWelcome: state.hasSeenWelcome,
         totalDistance: state.totalDistance,
-        bestRun: state.bestRun,
+        bestLevel: state.bestLevel,
       }));
     } catch (e) {}
   }
 
-  /* PHASE LOGIC */
+  /* ====== PHASE LOGIC ====== */
   function setPhase(phase) {
     game.phase = phase;
     game.phaseElapsed = 0;
@@ -2249,45 +2240,13 @@
       holdBtn.classList.add('ready');
       holdBtn.classList.remove('critical');
       updateHoldLabel();
-      countdownEl.classList.remove('show', 'critical');
     } else if (phase === 'inhale') {
       holdBtn.classList.remove('ready', 'charging', 'critical');
       holdLabel.textContent = 'Wait for exhale';
       stopSailingSound();
       stopHaptic();
-      countdownEl.classList.remove('show', 'critical');
-      hideSuggestion();
-    }
-
-    updateBreathBanner();
-    updateRingGradient();
-  }
-
-  function updateBreathBanner() {
-    breathOverlay.classList.remove('inhale', 'exhale', 'critical');
-    if (game.phase === 'inhale') {
-      breathOverlay.classList.add('inhale');
-      breathText.textContent = 'Breathe in';
-    } else if (game.phase === 'exhale') {
-      if (!game.exhaleLockedIn && game.phaseElapsed > EXHALE_GRACE * 0.4) {
-        breathOverlay.classList.add('critical');
-      } else {
-        breathOverlay.classList.add('exhale');
-      }
-      breathText.textContent = game.exhaleLockedIn ? 'Hold & sail' : 'Breathe out';
-    } else if (game.phase === 'sinking') {
-      breathText.textContent = 'Sinking...';
-    } else {
-      breathText.textContent = 'Ready';
-    }
-  }
-
-  function updateRingGradient() {
-    // Change ring progress stroke gradient based on phase
-    if (game.phase === 'exhale') {
-      ringProgress.setAttribute('stroke', 'url(#ringGradExhale)');
-    } else {
-      ringProgress.setAttribute('stroke', 'url(#ringGrad)');
+      // Reset surge
+      game.stormSurge = 0;
     }
   }
 
@@ -2295,13 +2254,65 @@
     if (game.phase === 'exhale' && game.isHolding) {
       holdLabel.textContent = 'Sailing...';
     } else if (game.phase === 'exhale') {
-      holdLabel.textContent = 'Hold to sail';
+      holdLabel.textContent = 'Hold to ride waves';
     } else {
-      holdLabel.textContent = 'Wait for exhale';
+      holdLabel.textContent = 'Breathe in...';
     }
   }
 
-  /* EVALUATE EXHALE */
+  /* ====== ENVIRONMENTAL STATE ====== */
+  function updateEnvironmentState() {
+    // Determines the environmental badge state
+    const level = getLevelForExhales(game.runExhales);
+    const waveMax = level.waveMax;
+
+    if (game.phase === 'inhale') {
+      // Calm seas building
+      envBadge.className = 'env-badge inhale';
+      envIcon.textContent = '🌊';
+      envText.textContent = 'Calm Seas — Breathe In';
+      game.targetWaveIntensity = 0.25 + waveMax * 0.15;
+    } else if (game.phase === 'exhale') {
+      if (game.exhaleLockedIn) {
+        // Successfully riding the wave
+        envBadge.className = 'env-badge exhale';
+        envIcon.textContent = '🌊';
+        envText.textContent = 'Riding the Wave';
+        game.targetWaveIntensity = 0.6 + waveMax * 0.3;
+      } else {
+        // Not yet holding — the storm builds
+        const totalExhale = PACES[state.pace].exhale + EXHALE_GRACE;
+        const elapsed = game.phaseElapsed;
+        const remaining = Math.max(0, totalExhale - elapsed);
+
+        if (remaining <= EXHALE_GRACE) {
+          // Critical: waves rising dangerously
+          envBadge.className = 'env-badge critical';
+          envIcon.textContent = '🌊';
+          envText.textContent = 'BREACH! Hold NOW!';
+          game.targetWaveIntensity = 0.9 + waveMax * 0.4;
+          holdBtn.classList.add('critical');
+        } else {
+          // Warning: storm building
+          envBadge.className = 'env-badge warning';
+          envIcon.textContent = '⛅';
+          envText.textContent = 'Waves Rising — Get Ready';
+          game.targetWaveIntensity = 0.5 + waveMax * 0.25;
+          holdBtn.classList.remove('critical');
+        }
+      }
+    }
+
+    // Smoothly approach target
+    game.waveIntensity += (game.targetWaveIntensity - game.waveIntensity) * 0.05;
+
+    // Update wave power meter
+    const wavePercent = Math.min(100, Math.round((game.waveIntensity / 1.4) * 100));
+    wavePowerFill.style.width = wavePercent + '%';
+    wavePowerValue.textContent = wavePercent + '%';
+  }
+
+  /* ====== EVALUATE EXHALE ====== */
   function evaluateExhale() {
     const pace = PACES[state.pace];
     const held = game.exhaleHoldTime;
@@ -2313,60 +2324,44 @@
     }
 
     game.runExhales++;
-    cyclesStat.textContent = game.runExhales;
-    cyclesStat.classList.remove('danger');
-    bumpEl(cyclesStat);
 
+    // Check for level up
+    const prevLevel = getLevelForExhales(game.runExhales - 1);
+    const newLevel = getLevelForExhales(game.runExhales);
+    if (newLevel.num > prevLevel.num) {
+      // Big moment — level up!
+      setTimeout(() => triggerLevelUp(newLevel), 300);
+    }
+
+    // Feedback tiers
     if (quality >= 0.95) {
       showFloat('PERFECT! 🏆', 'golden');
       playGoldenChime();
       hapticPattern([60, 40, 60, 40, 100]);
-      showSuggestion('Beautiful. Feel how calm and steady you are.', 4000);
     } else if (quality >= 0.8) {
       showFloat('Great! ✨', 'good');
       playSuccessChime();
       hapticPattern([50, 40, 80]);
-      showSuggestion('Almost perfect — extend just a touch more next time.', 3500);
     } else if (quality >= 0.6) {
       showFloat('Nice 👍', 'good');
       haptic(50);
-      showSuggestion('Good. Aim for the full hold next round.', 3000);
     } else if (quality >= 0.3) {
       showFloat('Keep going', '');
       haptic(30);
-      showSuggestion('Slow, long exhales generate the strongest wind.', 3500);
     } else {
       showFloat('Short breath', 'miss');
       haptic(20);
-      showSuggestion('Hold the button longer — count to 6 in your head.', 3500);
     }
 
-    // Milestone check (Chrome Dino style)
-    if (MILESTONES[game.runExhales]) {
-      triggerMilestone(game.runExhales);
-    } else if (game.runExhales > 0 && game.runExhales % 25 === 0) {
-      // Every 25 after 100
-      triggerMilestone(100);
-    }
+    // Update progress UI
+    updateVoyageProgress(game.runExhales);
+    updateEnvironmentState();
 
-    // Regular toasts (smaller ones)
-    if (game.runExhales === 1) {
-      setTimeout(() => showToast('First exhale — you\'re sailing!', '⛵'), 900);
-    }
-
-    // Best run
-    if (game.runExhales > state.bestRun) {
-      state.bestRun = game.runExhales;
-      bestStat.textContent = state.bestRun;
-      bumpEl(bestStat);
-    }
-
-    saveState();
     return true;
   }
 
-  /* SINK */
-  function sinkShip(reason) {
+  /* ====== SINK ====== */
+  function sinkShip() {
     game.phase = 'sinking';
     game.sinkProgress = 0;
     game.sinkBoatY = 0;
@@ -2377,16 +2372,11 @@
     playSinkSound();
     hapticPattern([100, 80, 200, 100, 400]);
     holdBtn.classList.remove('ready', 'charging', 'critical');
-    countdownEl.classList.remove('show', 'critical');
-    hideSuggestion();
 
-    const msgs = {
-      missed: { title: 'Ship Sank! 🌊', sub: 'You missed the exhale. The wind died and the boat went under.' },
-    };
-    const m = msgs[reason] || msgs.missed;
-    sinkTitle.textContent = m.title;
-    sinkSub.textContent = m.sub;
-    sinkProgress.textContent = `You completed ${game.runExhales} exhale${game.runExhales === 1 ? '' : 's'} this run.`;
+    const level = getLevelForExhales(game.runExhales);
+    sinkTitle.textContent = 'Ship Sank! 🌊';
+    sinkSub.textContent = `The waves overwhelmed you in ${level.name}.`;
+    sinkProgress.textContent = `You reached level ${level.num} with ${game.runExhales} exhale${game.runExhales === 1 ? '' : 's'}.`;
 
     sinkOverlay.classList.add('show');
   }
@@ -2394,19 +2384,22 @@
   function restartVoyage() {
     sinkOverlay.classList.remove('show');
     game.runExhales = 0;
-    cyclesStat.textContent = '0';
     game.distance = 0;
     game.sailWind = 0;
     game.targetSailWind = 0;
-    game.sinkProgress = 0;
     game.sinkBoatY = 0;
     game.sinkBoatRot = 0;
     game.windParticles = [];
     game.foamTrail = [];
+    game.sprayParticles = [];
+    game.lightningBolts = [];
     game.phase = 'ready';
     game.phaseElapsed = 0;
-    updateBreathBanner();
-    haptic(10);
+    game.currentLevel = 1;
+    game.skyTint = 0;
+
+    updateVoyageProgress(0);
+    updateEnvironmentState();
 
     setTimeout(() => {
       if (game.phase === 'ready') setPhase('inhale');
@@ -2415,7 +2408,7 @@
 
   sinkRestart.addEventListener('click', restartVoyage);
 
-  /* HOLD BUTTON */
+  /* ====== HOLD ====== */
   function startHold(e) {
     if (e) e.preventDefault();
     if (game.phase !== 'exhale') { haptic(6); return; }
@@ -2426,11 +2419,9 @@
     game.exhaleHoldTime = 0;
     holdBtn.classList.add('charging');
     holdBtn.classList.remove('ready', 'critical');
-    countdownEl.classList.remove('show', 'critical');
     updateHoldLabel();
     haptic(20);
     startSailingSound();
-    updateBreathBanner();
   }
 
   function endHold(e) {
@@ -2449,24 +2440,16 @@
   holdBtn.addEventListener('pointerleave', endHold);
   holdBtn.addEventListener('contextmenu', e => e.preventDefault());
 
-  /* UPDATE */
+  /* ====== UPDATE ====== */
   function update(dt) {
     game.time += dt;
 
     if (game.phase === 'inhale' || game.phase === 'exhale') {
       game.phaseElapsed += dt;
-
       const pace = PACES[state.pace];
 
       if (game.phase === 'inhale') {
         game.targetSailWind = 0;
-        // Inhale ring: fills from 0 → 1 over inhale duration
-        const prog = Math.min(1, game.phaseElapsed / pace.inhale);
-        game.ringProgressValue = prog;
-        // Update countdown timer showing remaining seconds
-        const remaining = Math.max(0, pace.inhale - game.phaseElapsed);
-        breathTimer.textContent = Math.ceil(remaining);
-        breathTimer.className = 'breath-timer inhale';
       } else if (game.phase === 'exhale') {
         if (game.isHolding) {
           game.exhaleHoldTime += dt;
@@ -2474,31 +2457,7 @@
         } else {
           game.targetSailWind = 0;
         }
-
-        // Exhale ring: fills from 0 → 1 over (exhale + grace) duration
-        const totalExhale = pace.exhale + EXHALE_GRACE;
-        const prog = Math.min(1, game.phaseElapsed / totalExhale);
-        game.ringProgressValue = prog;
-
-        // Timer: remaining exhale target time if not locked, otherwise remaining grace
-        if (game.exhaleLockedIn) {
-          const remainingHold = Math.max(0, pace.exhale - game.exhaleHoldTime);
-          breathTimer.textContent = Math.ceil(remainingHold);
-          breathTimer.className = 'breath-timer exhale';
-        } else {
-          const remaining = Math.max(0, totalExhale - game.phaseElapsed);
-          breathTimer.textContent = remaining.toFixed(1);
-          breathTimer.className = 'breath-timer exhale';
-        }
-
-        updateCountdown();
-        updateBreathBanner();
       }
-
-      // Ring progress stroke
-      const circumference = 552.92;
-      const offset = circumference * (1 - game.ringProgressValue);
-      ringProgress.style.strokeDashoffset = offset;
 
       if (game.phaseElapsed >= game.phaseDuration) {
         if (game.phase === 'exhale') {
@@ -2511,10 +2470,6 @@
       game.sinkProgress += dt * 0.6;
       game.sinkBoatY += dt * 35;
       game.sinkBoatRot += dt * 0.5;
-    } else if (game.phase === 'ready') {
-      breathTimer.textContent = '—';
-      breathTimer.className = 'breath-timer';
-      ringProgress.style.strokeDashoffset = 552.92;
     }
 
     game.sailWind += (game.targetSailWind - game.sailWind) * Math.min(1, dt * 8);
@@ -2525,71 +2480,43 @@
       game.hapticPulseTimer += dt;
       if (game.hapticPulseTimer > 0.12) {
         game.hapticPulseTimer = 0;
-        const pulse = 8 + game.sailWind * 18;
-        haptic(pulse);
+        haptic(8 + game.sailWind * 18);
       }
     } else {
       game.hapticPulseTimer = 0;
     }
 
+    // Distance (only while sailing)
     if (game.sailWind > 0.05 && game.phase === 'exhale') {
       const gain = game.sailWind * dt * 4;
       game.distance += gain;
       state.totalDistance = (state.totalDistance || 0) + gain;
-      distanceStat.textContent = Math.round(state.totalDistance) + 'm';
     }
 
     game.boatBobbing = Math.sin(game.time * 2.5) * 2;
 
-    if (game.sailWind > 0.4) {
-      game.shake = Math.min(1, game.shake + dt * 3);
-    } else {
-      game.shake = Math.max(0, game.shake - dt * 2);
-    }
+    // Camera shake scales with wave intensity
+    const targetShake = Math.max(game.sailWind * 0.7, game.waveIntensity * 0.5);
+    game.shake += (targetShake - game.shake) * Math.min(1, dt * 3);
 
+    updateEnvironmentState();
+
+    // Hold button fill
     if (game.phase === 'exhale') {
-      const pace = PACES[state.pace];
       const holdFrac = Math.min(1, game.exhaleHoldTime / pace.exhale);
       holdFill.style.width = (holdFrac * 100) + '%';
-      windMeterFill.style.width = (holdFrac * 100) + '%';
-
-      if (holdFrac >= 0.99 && !windMeterFill.classList.contains('full')) {
-        windMeterFill.classList.add('full');
-        setTimeout(() => windMeterFill.classList.remove('full'), 600);
-      }
     } else {
       holdFill.style.width = '0%';
-      windMeterFill.style.width = '0%';
     }
 
+    // Particles & environment
     updateWindParticles(dt);
     updateWaterLines(dt);
     updateClouds(dt);
     updateFoam(dt);
     updateSeagulls(dt);
-  }
-
-  function updateCountdown() {
-    if (game.phase !== 'exhale') {
-      countdownEl.classList.remove('show', 'critical');
-      return;
-    }
-    if (game.exhaleLockedIn) {
-      countdownEl.classList.remove('show', 'critical');
-      return;
-    }
-    const pace = PACES[state.pace];
-    const totalExhale = pace.exhale + EXHALE_GRACE;
-    const remaining = Math.max(0, totalExhale - game.phaseElapsed);
-
-    if (remaining <= EXHALE_GRACE) {
-      countdownEl.classList.add('show', 'critical');
-      countdownEl.textContent = remaining.toFixed(1);
-      holdBtn.classList.add('critical');
-    } else {
-      countdownEl.classList.remove('show', 'critical');
-      holdBtn.classList.remove('critical');
-    }
+    updateSpray(dt);
+    updateLightning(dt);
   }
 
   function advancePhase() {
@@ -2602,24 +2529,15 @@
     }
   }
 
-  function bumpEl(el) {
-    el.classList.remove('bump');
-    void el.offsetWidth;
-    el.classList.add('bump');
-  }
-
   function updateWindParticles(dt) {
     if (game.sailWind > 0.15 && game.isHolding) {
       const emitRate = game.sailWind * 8;
       if (Math.random() < emitRate * dt) {
         const pos = getBoatScreenPos();
         game.windParticles.push({
-          x: pos.x + 20,
-          y: pos.y - 50 + Math.random() * 30,
-          vx: -120 - Math.random() * 100,
-          vy: (Math.random() - 0.5) * 30,
-          life: 1.4,
-          len: 8 + Math.random() * 16,
+          x: pos.x + 20, y: pos.y - 50 + Math.random() * 30,
+          vx: -120 - Math.random() * 100, vy: (Math.random() - 0.5) * 30,
+          life: 1.4, len: 8 + Math.random() * 16,
         });
       }
     }
@@ -2638,15 +2556,18 @@
       w.life -= dt * 0.15;
       if (w.x < -60 || w.life <= 0) game.waterLines.splice(i, 1);
     }
-    if (Math.random() < 0.5) {
+    // Spawn rate scales with wave intensity
+    const rate = 0.4 + game.waveIntensity * 1.5;
+    if (Math.random() < rate) {
       game.waterLines.push({
         x: canvasW + 30,
         y: canvasH * 0.55 + Math.random() * canvasH * 0.42,
-        len: 30 + Math.random() * 60,
-        speed: 20 + Math.random() * 40,
+        len: (30 + Math.random() * 60) * (0.6 + game.waveIntensity * 0.5),
+        speed: 20 + Math.random() * 40 * (0.8 + game.waveIntensity * 0.5),
         phase: Math.random() * Math.PI * 2,
         life: 1,
         opacity: 0.3 + Math.random() * 0.4,
+        amplitude: 2 + game.waveIntensity * 6,
       });
     }
   }
@@ -2657,14 +2578,17 @@
       c.x -= c.speed * dt;
       if (c.x < -c.w - 40) game.clouds.splice(i, 1);
     }
-    if (Math.random() < 0.01 && game.clouds.length < 5) {
+    // More clouds when wave intensity high (stormy)
+    const cloudCap = 3 + Math.round(game.waveIntensity * 4);
+    if (Math.random() < 0.015 + game.waveIntensity * 0.02 && game.clouds.length < cloudCap) {
       game.clouds.push({
         x: canvasW + 60,
-        y: 20 + Math.random() * canvasH * 0.3,
+        y: 20 + Math.random() * canvasH * 0.35,
         w: 70 + Math.random() * 90,
-        h: 20 + Math.random() * 14,
+        h: 20 + Math.random() * 16,
         speed: 8 + Math.random() * 14,
-        alpha: 0.5 + Math.random() * 0.35,
+        alpha: 0.4 + Math.random() * 0.4,
+        dark: game.waveIntensity > 0.7,
       });
     }
   }
@@ -2687,7 +2611,7 @@
   }
 
   function updateSeagulls(dt) {
-    if (Math.random() < 0.005 && game.seagulls.length < 3) {
+    if (Math.random() < 0.005 && game.seagulls.length < 3 && game.waveIntensity < 0.6) {
       game.seagulls.push({
         x: canvasW + 40,
         y: canvasH * 0.15 + Math.random() * canvasH * 0.25,
@@ -2704,21 +2628,64 @@
     }
   }
 
+  function updateSpray(dt) {
+    // Spray particles emit from boat when wave intensity is high
+    if (game.waveIntensity > 0.6 && Math.random() < game.waveIntensity * 0.5) {
+      const pos = getBoatScreenPos();
+      game.sprayParticles.push({
+        x: pos.x + (Math.random() - 0.5) * 60,
+        y: pos.y + 10,
+        vx: (Math.random() - 0.5) * 60,
+        vy: -30 - Math.random() * 50,
+        life: 0.9,
+        size: 2 + Math.random() * 3,
+      });
+    }
+    for (let i = game.sprayParticles.length - 1; i >= 0; i--) {
+      const p = game.sprayParticles[i];
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.vy += 100 * dt;
+      p.life -= dt;
+      if (p.life <= 0) game.sprayParticles.splice(i, 1);
+    }
+  }
+
+  function updateLightning(dt) {
+    // Lightning bolts during critical moments at high levels
+    const level = getLevelForExhales(game.runExhales);
+    if (level.num >= 4 && game.waveIntensity > 0.85 && Math.random() < 0.008) {
+      game.lightningBolts.push({
+        x: canvasW * (0.1 + Math.random() * 0.8),
+        y1: 0,
+        y2: canvasH * 0.45,
+        life: 0.3,
+        jitter: Array.from({length: 8}, () => (Math.random() - 0.5) * 30),
+      });
+    }
+    for (let i = game.lightningBolts.length - 1; i >= 0; i--) {
+      game.lightningBolts[i].life -= dt;
+      if (game.lightningBolts[i].life <= 0) game.lightningBolts.splice(i, 1);
+    }
+  }
+
   function getBoatScreenPos() {
-    const t = Math.min(1, game.runExhales / 30);
-    const baseX = canvasW * (0.2 + t * 0.6);
-    const baseY = canvasH * (0.82 - t * 0.3) + game.boatBobbing + game.sinkBoatY;
+    const t = Math.min(1, game.runExhales / 50);
+    const baseX = canvasW * (0.25 + t * 0.5);
+    const waveHeight = Math.sin(game.time * 2.5) * game.waveIntensity * 8;
+    const baseY = canvasH * (0.78 - t * 0.25) + game.boatBobbing + waveHeight + game.sinkBoatY;
     return { x: baseX, y: baseY, t };
   }
 
-  /* RENDER */
+  /* ====== RENDER ====== */
   function render() {
     const w = canvasW, h = canvasH;
     if (w === 0 || h === 0) return;
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const level = getLevelForExhales(game.runExhales);
 
-    const shakeAmp = game.shake * 2;
+    // Camera shake
+    const shakeAmp = game.shake * 3;
     const shakeX = shakeAmp * (Math.random() - 0.5);
     const shakeY = shakeAmp * (Math.random() - 0.5);
 
@@ -2727,23 +2694,26 @@
 
     const horizonY = h * 0.52;
 
-    // Sky
+    // Sky (tint shifts with level and wave intensity)
     const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
+    const intensity = Math.min(1, game.waveIntensity);
     if (isDark) {
-      skyGrad.addColorStop(0, '#060c18');
-      skyGrad.addColorStop(0.4, '#0d1e35');
-      skyGrad.addColorStop(0.8, '#1a3556');
-      skyGrad.addColorStop(1, '#2e5275');
+      skyGrad.addColorStop(0, shade('#060c18', intensity * 0.15));
+      skyGrad.addColorStop(0.4, shade('#0d1e35', intensity * 0.1));
+      skyGrad.addColorStop(0.8, shade('#1a3556', intensity * 0.1));
+      skyGrad.addColorStop(1, shade('#2e5275', intensity * 0.1));
     } else {
-      skyGrad.addColorStop(0, '#c3daf0');
-      skyGrad.addColorStop(0.4, '#d6e6f7');
-      skyGrad.addColorStop(0.8, '#e8f3fb');
-      skyGrad.addColorStop(1, '#f5e6d3');
+      // Darker / more orange as wave intensity grows (stormy)
+      const tint = game.waveIntensity * 0.35;
+      skyGrad.addColorStop(0, mixHex('#c3daf0', '#8a9baa', tint));
+      skyGrad.addColorStop(0.4, mixHex('#d6e6f7', '#a5b5c5', tint));
+      skyGrad.addColorStop(0.8, mixHex('#e8f3fb', '#c8b8a8', tint));
+      skyGrad.addColorStop(1, mixHex('#f5e6d3', '#d9a878', tint * 1.2));
     }
     ctx.fillStyle = skyGrad;
     ctx.fillRect(-10, -10, w + 20, horizonY + 10);
 
-    // Sun/Moon
+    // Sun/moon
     const sunX = w * 0.78;
     const sunY = horizonY - 60;
     const sunR = 26;
@@ -2753,7 +2723,7 @@
       glowGrad.addColorStop(0, 'rgba(230, 240, 255, 0.4)');
       glowGrad.addColorStop(1, 'rgba(230, 240, 255, 0)');
     } else {
-      glowGrad.addColorStop(0, 'rgba(255, 220, 130, 0.5)');
+      glowGrad.addColorStop(0, `rgba(255, 220, 130, ${0.5 - game.waveIntensity * 0.2})`);
       glowGrad.addColorStop(1, 'rgba(255, 220, 130, 0)');
     }
     ctx.fillStyle = glowGrad;
@@ -2763,20 +2733,15 @@
 
     ctx.beginPath();
     ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
-    ctx.fillStyle = isDark ? '#e8f1fc' : '#ffe9a8';
+    ctx.fillStyle = isDark ? '#e8f1fc' : mixHex('#ffe9a8', '#ffb070', game.waveIntensity);
     ctx.fill();
-
-    if (isDark) {
-      ctx.beginPath();
-      ctx.arc(sunX - 7, sunY - 4, 5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(180, 200, 230, 0.5)';
-      ctx.fill();
-    }
 
     // Clouds
     game.clouds.forEach(c => {
       ctx.globalAlpha = c.alpha;
-      ctx.fillStyle = isDark ? 'rgba(140, 180, 220, 0.4)' : 'rgba(255, 255, 255, 0.85)';
+      ctx.fillStyle = isDark
+        ? (c.dark ? 'rgba(60, 80, 110, 0.7)' : 'rgba(140, 180, 220, 0.4)')
+        : (c.dark ? 'rgba(90, 100, 120, 0.6)' : 'rgba(255, 255, 255, 0.85)');
       drawCloud(c.x, c.y, c.w, c.h);
     });
     ctx.globalAlpha = 1;
@@ -2794,18 +2759,20 @@
       ctx.stroke();
     });
 
-    // Ocean
+    // Ocean — bigger and more saturated with wave intensity
     const oceanGrad = ctx.createLinearGradient(0, horizonY, 0, h + 10);
     if (isDark) {
-      oceanGrad.addColorStop(0, '#1e4267');
-      oceanGrad.addColorStop(0.3, '#0d2f4f');
-      oceanGrad.addColorStop(0.7, '#062036');
-      oceanGrad.addColorStop(1, '#02121f');
+      const t = game.waveIntensity * 0.3;
+      oceanGrad.addColorStop(0, mixHex('#1e4267', '#3a2a4a', t));
+      oceanGrad.addColorStop(0.3, mixHex('#0d2f4f', '#1f1838', t));
+      oceanGrad.addColorStop(0.7, mixHex('#062036', '#140e20', t));
+      oceanGrad.addColorStop(1, mixHex('#02121f', '#06040a', t));
     } else {
-      oceanGrad.addColorStop(0, '#7fc4e8');
-      oceanGrad.addColorStop(0.3, '#4fc3f7');
-      oceanGrad.addColorStop(0.7, '#0288d1');
-      oceanGrad.addColorStop(1, '#01579b');
+      const t = game.waveIntensity * 0.4;
+      oceanGrad.addColorStop(0, mixHex('#7fc4e8', '#6a9ec8', t));
+      oceanGrad.addColorStop(0.3, mixHex('#4fc3f7', '#2a8bc4', t));
+      oceanGrad.addColorStop(0.7, mixHex('#0288d1', '#015070', t));
+      oceanGrad.addColorStop(1, mixHex('#01579b', '#012a4a', t));
     }
     ctx.fillStyle = oceanGrad;
     ctx.fillRect(-10, horizonY, w + 20, h - horizonY + 10);
@@ -2821,28 +2788,29 @@
       const rh = 3 + t * 2;
       ctx.fillStyle = isDark
         ? `rgba(230, 240, 255, ${0.15 * (1 - t)})`
-        : `rgba(255, 235, 160, ${0.25 * (1 - t)})`;
+        : `rgba(255, 235, 160, ${(0.25 - game.waveIntensity * 0.1) * (1 - t)})`;
       ctx.beginPath();
       ctx.ellipse(rx, ry, rw, rh, 0, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.restore();
 
-    // Water lines
+    // Waves — bigger and more frequent with intensity
     game.waterLines.forEach(w2 => {
       const depth = (w2.y - horizonY) / (h - horizonY);
       const scaleX = 0.3 + depth * 1.4;
       const opacity = w2.opacity * (0.4 + depth * 0.6);
+      const amp = w2.amplitude || 3;
       ctx.strokeStyle = isDark
-        ? `rgba(120, 200, 240, ${opacity * 0.6})`
+        ? `rgba(120, 200, 240, ${opacity * 0.7})`
         : `rgba(255, 255, 255, ${opacity})`;
-      ctx.lineWidth = 1 + depth * 2;
+      ctx.lineWidth = 1 + depth * 2 + game.waveIntensity * 1.5;
       ctx.beginPath();
-      const segments = 6;
+      const segments = 8;
       for (let i = 0; i <= segments; i++) {
         const t = i / segments;
         const x = w2.x + t * w2.len * scaleX;
-        const y = w2.y + Math.sin(w2.phase + t * Math.PI * 2) * (2 + depth * 3);
+        const y = w2.y + Math.sin(w2.phase + t * Math.PI * 2) * amp;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
@@ -2857,7 +2825,7 @@
       mistGrad.addColorStop(1, 'rgba(20, 40, 70, 0)');
     } else {
       mistGrad.addColorStop(0, 'rgba(245, 230, 210, 0)');
-      mistGrad.addColorStop(0.5, 'rgba(245, 230, 210, 0.7)');
+      mistGrad.addColorStop(0.5, `rgba(245, 230, 210, ${0.7 - game.waveIntensity * 0.3})`);
       mistGrad.addColorStop(1, 'rgba(245, 230, 210, 0)');
     }
     ctx.fillStyle = mistGrad;
@@ -2873,9 +2841,34 @@
     });
     ctx.globalAlpha = 1;
 
+    // Spray
+    game.sprayParticles.forEach(p => {
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.8)' : 'rgba(255, 255, 255, 0.9)';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // Lightning
+    game.lightningBolts.forEach(b => {
+      ctx.strokeStyle = `rgba(220, 240, 255, ${b.life * 3})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y1);
+      for (let i = 0; i < 8; i++) {
+        const j = b.jitter[i];
+        const y = b.y1 + (b.y2 - b.y1) * ((i + 1) / 8);
+        const x = b.x + j * (1 - i / 8);
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    });
+
     // Boat
     const pos = getBoatScreenPos();
-    const boatRot = game.phase === 'sinking' ? game.sinkBoatRot : 0;
+    const boatRot = game.phase === 'sinking' ? game.sinkBoatRot : Math.sin(game.time * 1.8) * 0.05 * game.waveIntensity;
     drawBoat(pos.x, pos.y, game.sailWind, isDark, boatRot, game.phase === 'sinking');
 
     // Wind particles
@@ -2891,6 +2884,41 @@
     ctx.globalAlpha = 1;
 
     ctx.restore();
+
+    // Wave overlay on top for high intensity
+    if (game.waveIntensity > 0.7) {
+      const waveAlpha = (game.waveIntensity - 0.7) * 0.5;
+      const overlayGrad = ctx.createLinearGradient(0, canvasH * 0.6, 0, canvasH);
+      overlayGrad.addColorStop(0, 'rgba(80, 130, 180, 0)');
+      overlayGrad.addColorStop(1, `rgba(80, 130, 180, ${waveAlpha})`);
+      ctx.fillStyle = overlayGrad;
+      ctx.fillRect(0, canvasH * 0.6, canvasW, canvasH * 0.4);
+    }
+  }
+
+  // Color helpers
+  function hexToRgb(hex) {
+    const h = hex.replace('#', '');
+    return {
+      r: parseInt(h.substring(0, 2), 16),
+      g: parseInt(h.substring(2, 4), 16),
+      b: parseInt(h.substring(4, 6), 16),
+    };
+  }
+  function rgbToHex(r, g, b) {
+    return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  }
+  function mixHex(a, b, t) {
+    t = Math.max(0, Math.min(1, t));
+    const A = hexToRgb(a), B = hexToRgb(b);
+    return rgbToHex(
+      A.r + (B.r - A.r) * t,
+      A.g + (B.g - A.g) * t,
+      A.b + (B.b - A.b) * t
+    );
+  }
+  function shade(hex, t) {
+    return mixHex(hex, '#000000', t);
   }
 
   function drawCloud(x, y, w, h) {
@@ -2942,13 +2970,6 @@
     ctx.quadraticCurveTo(20, -8, 38, -2);
     ctx.strokeStyle = isDark ? 'rgba(255, 220, 150, 0.4)' : 'rgba(255, 220, 150, 0.7)';
     ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(-34, -3);
-    ctx.quadraticCurveTo(0, -8, 34, -3);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.lineWidth = 1;
     ctx.stroke();
 
     const mastLean = -3;
@@ -3008,21 +3029,6 @@
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    if (sailFullness > 0.15) {
-      ctx.strokeStyle = `rgba(120, 150, 180, ${0.15 + sailFullness * 0.25})`;
-      ctx.lineWidth = 0.8;
-      for (let i = 1; i <= 3; i++) {
-        const t = i / 4;
-        ctx.beginPath();
-        ctx.moveTo(sailTopX + t * 3, sailTopY + (sailBottomY - sailTopY) * t);
-        ctx.quadraticCurveTo(
-          sailTopX + boomLen * 0.5 + billow * 0.5, sailTopY + (sailBottomY - sailTopY) * (t + 0.1),
-          sailTopX + boomLen * t, sailBottomY
-        );
-        ctx.stroke();
-      }
-    }
-
     if (sailFullness > 0.1) {
       const jibBillow = 3 + sailFullness * 20;
       ctx.beginPath();
@@ -3040,11 +3046,9 @@
       }
       ctx.fillStyle = jibGrad;
       ctx.fill();
-      ctx.strokeStyle = isDark ? 'rgba(180, 200, 220, 0.5)' : 'rgba(120, 150, 180, 0.4)';
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
     }
 
+    // Flag
     ctx.beginPath();
     ctx.moveTo(mastLean - 1, -68);
     ctx.lineTo(mastLean - 14, -63);
@@ -3053,15 +3057,6 @@
     ctx.fillStyle = sailFullness > 0.3
       ? (isDark ? '#42a5f5' : '#1976d2')
       : (isDark ? '#546e7a' : '#90a4ae');
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(-30, -8);
-    ctx.lineTo(-30, -18);
-    ctx.lineTo(-16, -20);
-    ctx.lineTo(-16, -8);
-    ctx.closePath();
-    ctx.fillStyle = isDark ? '#3e2723' : '#5d4037';
     ctx.fill();
 
     if (sinking) {
@@ -3078,7 +3073,7 @@
     ctx.restore();
   }
 
-  /* ANIMATION LOOP */
+  /* ====== LOOP ====== */
   let lastTimestamp = 0;
 
   function loop(timestamp) {
@@ -3090,11 +3085,8 @@
     requestAnimationFrame(loop);
   }
 
-  /* SETTINGS */
-  function openSettings() {
-    settingsBackdrop.classList.add('show');
-    haptic(6);
-  }
+  /* ====== SETTINGS ====== */
+  function openSettings() { settingsBackdrop.classList.add('show'); haptic(6); }
   function closeSettings() { settingsBackdrop.classList.remove('show'); }
 
   settingsBtn.addEventListener('click', openSettings);
@@ -3149,7 +3141,6 @@
     saveState();
     game.phase = 'ready';
     game.phaseElapsed = 0;
-    updateBreathBanner();
     haptic(6);
   });
 
@@ -3194,12 +3185,10 @@
   clearHistoryBtn.addEventListener('click', () => {
     if (!confirm('Reset all data & counters? This cannot be undone.')) return;
     state.totalDistance = 0;
-    state.bestRun = 0;
-    distanceStat.textContent = '0m';
-    bestStat.textContent = '0';
-    cyclesStat.textContent = '0';
+    state.bestLevel = 1;
     game.runExhales = 0;
     game.distance = 0;
+    updateVoyageProgress(0);
     saveState();
     closeSettings();
     showToast('All data reset', '🧹');
@@ -3208,41 +3197,23 @@
 
   resetSessionBtn.addEventListener('click', () => {
     if (game.runExhales > 0 && !confirm('Restart the voyage? Current run will be lost.')) return;
-    game.runExhales = 0;
-    game.distance = 0;
-    game.sailWind = 0;
-    game.targetSailWind = 0;
-    game.sinkBoatY = 0;
-    game.sinkBoatRot = 0;
-    game.windParticles = [];
-    game.foamTrail = [];
-    game.phase = 'ready';
-    game.phaseElapsed = 0;
-    cyclesStat.textContent = '0';
-    distanceStat.textContent = Math.round(state.totalDistance) + 'm';
-    sinkOverlay.classList.remove('show');
-    updateBreathBanner();
+    restartVoyage();
     showToast('New voyage started', '⛵');
     haptic(12);
-    setTimeout(() => { if (game.phase === 'ready') setPhase('inhale'); }, 500);
   });
 
   resetAllBtn.addEventListener('click', () => {
     if (!confirm('Reset everything including all-time stats?')) return;
     state.totalDistance = 0;
-    state.bestRun = 0;
+    state.bestLevel = 1;
     game.runExhales = 0;
     game.distance = 0;
-    game.sailWind = 0;
     game.sinkBoatY = 0;
     game.sinkBoatRot = 0;
     game.phase = 'ready';
     game.phaseElapsed = 0;
-    distanceStat.textContent = '0m';
-    bestStat.textContent = '0';
-    cyclesStat.textContent = '0';
+    updateVoyageProgress(0);
     sinkOverlay.classList.remove('show');
-    updateBreathBanner();
     saveState();
     showToast('Everything reset', '🧹');
     haptic(20);
@@ -3299,9 +3270,9 @@
     hapticStrengthSlider.value = state.hapticStrength;
     hapticStrengthValue.textContent = state.hapticStrength;
 
-    distanceStat.textContent = Math.round(state.totalDistance || 0) + 'm';
-    bestStat.textContent = state.bestRun || 0;
-    cyclesStat.textContent = '0';
+    buildLevelTicks();
+    updateVoyageProgress(0);
+    updateEnvironmentState();
 
     if (state.sound) {
       const startAudio = () => {
@@ -3316,9 +3287,6 @@
       setTimeout(openWelcome, 400);
     } else {
       setTimeout(() => { if (game.phase === 'ready') setPhase('inhale'); }, 800);
-      setTimeout(() => {
-        showSuggestion('Watch the ring fill — breathe out when it turns teal.', 4500);
-      }, 1200);
     }
 
     requestAnimationFrame(loop);
