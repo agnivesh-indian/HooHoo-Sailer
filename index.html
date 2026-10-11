@@ -115,7 +115,7 @@
     gap: 6px;
   }
 
-  /* ============ HEADER ============ */
+  /* ===== HEADER ===== */
   .header {
     display: flex;
     align-items: center;
@@ -186,7 +186,7 @@
   .icon-btn:hover { background: var(--surface-2); color: var(--text); }
   .icon-btn:active { transform: scale(0.92); }
 
-  /* ============ LEVEL PROGRESS BAR (VOYAGE) ============ */
+  /* ===== VOYAGE PROGRESS BAR ===== */
   .voyage-bar {
     flex-shrink: 0;
     background: var(--surface);
@@ -223,7 +223,7 @@
     height: 30px;
     background: linear-gradient(180deg, #b8e0f2 0%, #7fc4e8 60%, #4fc3f7 100%);
     border-radius: 16px;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid var(--border);
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
   }
@@ -232,8 +232,14 @@
     background: linear-gradient(180deg, #122a47 0%, #0d2f4f 60%, #01579b 100%);
   }
 
-  /* Water wave texture inside track */
-  .voyage-track::after {
+  .voyage-track-inner {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .voyage-track-inner::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -249,20 +255,17 @@
     position: absolute;
     top: 0; left: 0;
     height: 100%;
-    background: linear-gradient(90deg, rgba(0, 172, 193, 0.35), rgba(0, 229, 255, 0.5));
-    transition: width 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    width: 0%;
+    background: linear-gradient(90deg, rgba(0, 172, 193, 0.4), rgba(0, 229, 255, 0.55));
+    transition: width 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
     box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
     pointer-events: none;
   }
 
-  /* Level marker dots */
   .level-marker {
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     pointer-events: none;
     z-index: 3;
   }
@@ -271,10 +274,10 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.55);
     border: 1.5px solid rgba(255, 255, 255, 0.85);
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-    transition: all 0.4s;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .level-marker.reached .level-marker-dot {
@@ -296,46 +299,40 @@
     50% { transform: scale(1.5); }
   }
 
-  /* Moving boat indicator on track */
   .voyage-boat {
     position: absolute;
     top: 50%;
-    left: 0;
-    transform: translate(-50%, -50%) scaleX(1);
+    left: 0%;
+    transform: translate(-50%, -50%);
     font-size: 22px;
-    transition: left 0.6s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.2s;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: left 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
     z-index: 4;
     pointer-events: none;
     animation: boatBob 2s ease-in-out infinite;
   }
 
   @keyframes boatBob {
-    0%, 100% { transform: translate(-50%, -50%) rotate(-2deg); }
-    50% { transform: translate(-50%, calc(-50% - 2px)) rotate(2deg); }
-  }
-
-  /* Level tick labels */
-  .level-ticks {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+    0%, 100% { transform: translate(-50%, -50%) rotate(-3deg); }
+    50% { transform: translate(-50%, calc(-50% - 2px)) rotate(3deg); }
   }
 
   .level-tick-label {
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    bottom: -16px;
+    transform: translateX(-50%);
     font-size: 8px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.75);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    color: var(--text-3);
     letter-spacing: 0.02em;
     z-index: 2;
     pointer-events: none;
+    transition: color 0.3s;
   }
 
-  /* ============ GAME CANVAS ============ */
+  .level-tick-label.reached { color: var(--accent); }
+
+  /* ===== GAME CANVAS ===== */
   .game-wrap {
     position: relative;
     flex: 1;
@@ -355,7 +352,7 @@
     touch-action: none;
   }
 
-  /* ============ ENVIRONMENTAL STATE BADGE ============ */
+  /* ===== ENV STATE BADGE ===== */
   .env-badge {
     position: absolute;
     top: 10px;
@@ -369,7 +366,7 @@
     border-radius: 40px;
     font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     display: flex;
     align-items: center;
@@ -377,16 +374,16 @@
     pointer-events: none;
     z-index: 6;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    transition: background 0.35s, border-color 0.35s, box-shadow 0.35s;
     white-space: nowrap;
   }
 
   .env-badge .env-icon {
     font-size: 14px;
+    display: inline-block;
     transition: transform 0.4s;
   }
 
-  /* Inhale state - calm, building */
   .env-badge.inhale {
     background: rgba(25, 118, 210, 0.7);
     border-color: rgba(100, 180, 255, 0.5);
@@ -397,7 +394,6 @@
     animation: inhaleIcon 4s ease-in-out infinite;
   }
 
-  /* Exhale state - releasing power */
   .env-badge.exhale {
     background: rgba(0, 172, 193, 0.75);
     border-color: rgba(80, 230, 220, 0.6);
@@ -408,43 +404,35 @@
     animation: exhaleIcon 4s ease-in-out infinite;
   }
 
-  /* Warning state - waves building */
   .env-badge.warning {
-    background: rgba(230, 130, 40, 0.8);
+    background: rgba(230, 130, 40, 0.85);
     border-color: rgba(255, 180, 80, 0.6);
     box-shadow: 0 0 24px rgba(255, 150, 40, 0.6);
-    animation: warnPulse 0.8s ease-in-out infinite alternate;
   }
 
-  /* Critical state - sinking imminent */
   .env-badge.critical {
-    background: rgba(229, 72, 77, 0.85);
+    background: rgba(229, 72, 77, 0.9);
     border-color: rgba(255, 120, 120, 0.7);
     box-shadow: 0 0 30px rgba(255, 60, 60, 0.7);
-    animation: critPulse 0.4s ease-in-out infinite alternate;
+    animation: critPulse 0.5s ease-in-out infinite alternate;
   }
 
   @keyframes inhaleIcon {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.3) rotate(-5deg); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
   }
 
   @keyframes exhaleIcon {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(0.75) rotate(5deg); }
-  }
-
-  @keyframes warnPulse {
-    from { transform: translateX(-50%) scale(1); }
-    to { transform: translateX(-50%) scale(1.03); }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.7); }
   }
 
   @keyframes critPulse {
     from { transform: translateX(-50%) scale(1); }
-    to { transform: translateX(-50%) scale(1.06); }
+    to { transform: translateX(-50%) scale(1.05); }
   }
 
-  /* ============ WAVE POWER BAR ============ */
+  /* ===== WAVE POWER METER ===== */
   .wave-power {
     position: absolute;
     bottom: 10px;
@@ -465,7 +453,7 @@
   .wave-power-label {
     font-size: 9px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.75);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
@@ -485,8 +473,18 @@
     width: 0%;
     background: linear-gradient(90deg, #4fc3f7, #00e5ff, #a8f0e8);
     border-radius: 40px;
-    transition: width 0.15s linear;
+    transition: width 0.15s linear, background 0.3s;
     box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+  }
+
+  .wave-power-fill.warn {
+    background: linear-gradient(90deg, #ffb84d, #ff8c00, #ff6b00);
+    box-shadow: 0 0 12px rgba(255, 140, 0, 0.7);
+  }
+
+  .wave-power-fill.crit {
+    background: linear-gradient(90deg, #ff6b6b, #e5484d, #c53030);
+    box-shadow: 0 0 14px rgba(229, 72, 77, 0.8);
   }
 
   .wave-power-value {
@@ -499,7 +497,7 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 
-  /* ============ FLOAT FEEDBACK ============ */
+  /* ===== FLOAT FEEDBACK ===== */
   .float-feedback {
     position: absolute;
     left: 50%;
@@ -532,7 +530,7 @@
   .float-feedback.good { color: #7dffa8; }
   .float-feedback.miss { color: #ffa8b8; }
 
-  /* ============ LEVEL ANNOUNCE ============ */
+  /* ===== LEVEL ANNOUNCE ===== */
   .level-announce {
     position: absolute;
     inset: 0;
@@ -654,7 +652,7 @@
     100% { opacity: 0; }
   }
 
-  /* ============ SINK OVERLAY ============ */
+  /* ===== SINK OVERLAY ===== */
   .sink-overlay {
     position: absolute;
     inset: 0;
@@ -732,7 +730,7 @@
   .sink-restart:hover { transform: translateY(-1px); }
   .sink-restart:active { transform: scale(0.97); }
 
-  /* ============ HOLD BUTTON ============ */
+  /* ===== HOLD BUTTON ===== */
   .hold-wrap {
     flex-shrink: 0;
     display: flex;
@@ -894,7 +892,7 @@
 
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ============ WELCOME ============ */
+  /* ===== WELCOME ===== */
   .welcome-backdrop {
     position: fixed;
     inset: 0;
@@ -1103,7 +1101,7 @@
 
   .welcome-brand strong { color: var(--text-2); font-weight: 700; }
 
-  /* ============ SETTINGS ============ */
+  /* ===== SETTINGS ===== */
   .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -1421,6 +1419,7 @@
     .voyage-bar { padding: 6px 10px 8px; }
     .level-badge { width: 68px; height: 68px; font-size: 34px; }
     .level-announce-title { font-size: 24px; }
+    .level-tick-label { bottom: -14px; font-size: 7px; }
   }
 
   @media (max-width: 380px) {
@@ -1457,8 +1456,10 @@
       <span class="voyage-current" id="voyageCurrent">Level 1 · Open Sea</span>
     </div>
     <div class="voyage-track" id="voyageTrack">
-      <div class="voyage-progress" id="voyageProgress"></div>
-      <div class="level-ticks" id="levelTicks"></div>
+      <div class="voyage-track-inner">
+        <div class="voyage-progress" id="voyageProgress"></div>
+      </div>
+      <div id="levelTicks"></div>
       <div class="voyage-boat" id="voyageBoat">⛵</div>
     </div>
   </div>
@@ -1466,13 +1467,11 @@
   <div class="game-wrap" id="gameWrap">
     <canvas id="gameCanvas"></canvas>
 
-    <!-- Environmental state badge (replaces countdown) -->
     <div class="env-badge inhale" id="envBadge">
       <span class="env-icon" id="envIcon">🌊</span>
-      <span id="envText">Calm Seas</span>
+      <span id="envText">Calm Seas — Breathe In</span>
     </div>
 
-    <!-- Wave power meter (bottom of canvas) -->
     <div class="wave-power">
       <span class="wave-power-label">🌊 Wave</span>
       <div class="wave-power-track">
@@ -1483,7 +1482,6 @@
 
     <div class="float-feedback" id="floatFeedback"></div>
 
-    <!-- Level announce -->
     <div class="level-announce" id="levelAnnounce">
       <div class="level-badge" id="levelBadge">🌊</div>
       <div class="level-announce-title" id="levelAnnounceTitle">Open Sea</div>
@@ -1492,7 +1490,6 @@
 
     <div class="screen-flash" id="screenFlash"></div>
 
-    <!-- Sink overlay -->
     <div class="sink-overlay" id="sinkOverlay">
       <div class="sink-icon">🌊</div>
       <div class="sink-title" id="sinkTitle">Ship Sank!</div>
@@ -1556,30 +1553,29 @@
         <div class="step-item">
           <div class="step-num">1</div>
           <div class="step-text">
-            <strong>Watch the ocean.</strong> When the sea calms and the badge
-            shows <em>Calm Seas</em>, <strong>breathe in</strong> — the waves
-            will build around you.
+            <strong>Breathe in.</strong> Watch the sea calm down and the waves
+            recede — this is your prep time.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-text">
-            <strong>When waves rise high and the badge shows <em>Ride the Waves</em></strong>,
-            <strong>press and hold</strong> the button to exhale and harness their power.
+            <strong>When waves rise and the badge warns you</strong>, press and
+            hold to exhale — ride the wave's power.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num step-num warn">!</div>
           <div class="step-text">
-            <strong>Don't miss an exhale.</strong> If the storm surge overwhelms
-            the boat, your ship sinks and the voyage restarts.
+            <strong>Don't miss an exhale.</strong> If the breach hits, your ship
+            sinks and the voyage restarts.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">3</div>
           <div class="step-text">
-            <strong>Advance through levels.</strong> Each level brings bigger
-            waves and new seas — from Open Sea to the Great Unknown.
+            <strong>Advance through 9 levels.</strong> From Open Sea to Eternal
+            Voyage — each sea is wilder than the last.
           </div>
         </div>
       </div>
@@ -1696,6 +1692,9 @@
 (function() {
   'use strict';
 
+  /* ============================================================
+     STATE
+     ============================================================ */
   const state = {
     theme: 'system',
     sound: true,
@@ -1709,7 +1708,7 @@
     bestLevel: 1,
   };
 
-  const STORAGE_KEY = 'hoohooSailer.v5';
+  const STORAGE_KEY = 'hoohooSailer.v6';
 
   const PACES = {
     calm:     { inhale: 4, exhale: 6 },
@@ -1719,22 +1718,21 @@
 
   const EXHALE_GRACE = 1.5;
 
-  // Level system — each level defines ocean state at each milestone
+  // Level system — 9 levels across 100 exhales
   const LEVELS = [
-    { num: 1, name: 'Open Sea',       icon: '🌊', startAt: 0,   waveMax: 0.45, skyTint: 0,    desc: 'Level 1 — Begin your voyage' },
-    { num: 2, name: 'Windward Pass',  icon: '💨', startAt: 5,   waveMax: 0.60, skyTint: 0.05, desc: 'Level 2 — Wind picks up' },
-    { num: 3, name: 'Coral Strait',   icon: '🐠', startAt: 10,  waveMax: 0.72, skyTint: 0.1,  desc: 'Level 3 — Shallow waters' },
-    { num: 4, name: 'Storm Front',    icon: '⛈️', startAt: 15,  waveMax: 0.85, skyTint: 0.15, desc: 'Level 4 — Storm brewing' },
-    { num: 5, name: 'The Narrows',    icon: '🌪️', startAt: 20,  waveMax: 0.95, skyTint: 0.18, desc: 'Level 5 — Perilous passage' },
-    { num: 6, name: 'Titan Waters',   icon: '⚡', startAt: 30,  waveMax: 1.05, skyTint: 0.22, desc: 'Level 6 — Titans await' },
-    { num: 7, name: 'The Abyss',      icon: '🌀', startAt: 50,  waveMax: 1.15, skyTint: 0.28, desc: 'Level 7 — Beyond the deep' },
-    { num: 8, name: 'Great Unknown',  icon: '🌟', startAt: 75,  waveMax: 1.25, skyTint: 0.32, desc: 'Level 8 — Legendary seas' },
-    { num: 9, name: 'Eternal Voyage', icon: '🚀', startAt: 100, waveMax: 1.35, skyTint: 0.36, desc: 'Level 9 — No limits' },
+    { num: 1, name: 'Open Sea',       icon: '🌊', startAt: 0,   waveBase: 0.30, skyTint: 0.00 },
+    { num: 2, name: 'Windward Pass',  icon: '💨', startAt: 5,   waveBase: 0.40, skyTint: 0.04 },
+    { num: 3, name: 'Coral Strait',   icon: '🐠', startAt: 10,  waveBase: 0.50, skyTint: 0.08 },
+    { num: 4, name: 'Storm Front',    icon: '⛈️', startAt: 15,  waveBase: 0.58, skyTint: 0.12 },
+    { num: 5, name: 'The Narrows',    icon: '🌪️', startAt: 20,  waveBase: 0.66, skyTint: 0.16 },
+    { num: 6, name: 'Titan Waters',   icon: '⚡', startAt: 30,  waveBase: 0.74, skyTint: 0.20 },
+    { num: 7, name: 'The Abyss',      icon: '🌀', startAt: 50,  waveBase: 0.82, skyTint: 0.24 },
+    { num: 8, name: 'Great Unknown',  icon: '🌟', startAt: 75,  waveBase: 0.90, skyTint: 0.28 },
+    { num: 9, name: 'Eternal Voyage', icon: '🚀', startAt: 100, waveBase: 0.96, skyTint: 0.32 },
   ];
 
   const $ = id => document.getElementById(id);
 
-  const gameWrap       = $('gameWrap');
   const gameCanvas     = $('gameCanvas');
   const ctx            = gameCanvas.getContext('2d');
   const envBadge       = $('envBadge');
@@ -1782,11 +1780,14 @@
   const welcomeClose    = $('welcomeClose');
   const startBtn        = $('startBtn');
 
+  /* ============================================================
+     CANVAS
+     ============================================================ */
   let canvasW = 0, canvasH = 0, DPR = 1;
 
   function resizeCanvas() {
     const rect = gameCanvas.getBoundingClientRect();
-    DPR = window.devicePixelRatio || 1;
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
     canvasW = rect.width;
     canvasH = rect.height;
     gameCanvas.width = Math.round(canvasW * DPR);
@@ -1795,47 +1796,54 @@
   }
 
   window.addEventListener('resize', resizeCanvas);
-  window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 100));
+  window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 150));
 
+  /* ============================================================
+     GAME STATE — all environmental values use smoothing
+     ============================================================ */
   const game = {
     phase: 'ready',
     phaseElapsed: 0,
     phaseDuration: 0,
     runExhales: 0,
-    currentLevel: 1,
+
     isHolding: false,
     exhaleHoldTime: 0,
     exhaleLockedIn: false,
+
+    // Smoothed environmental values
+    waveIntensity: 0.30,        // smoothly interpolated
+    targetWaveIntensity: 0.30,
     sailWind: 0,
     targetSailWind: 0,
-    distance: 0,
+
     time: 0,
-
-    windParticles: [],
-    waterLines: [],
-    clouds: [],
-    seagulls: [],
-    foamTrail: [],
-    sprayParticles: [],
-    lightningBolts: [],
-
     boatBobbing: 0,
+
+    // Sink animation
+    sinking: false,
+    sinkY: 0,
+    sinkRot: 0,
+
+    // Sound
     sailingSoundOn: false,
     hapticPulseTimer: 0,
-    shake: 0,
 
-    sinkProgress: 0,
-    sinkBoatY: 0,
-    sinkBoatRot: 0,
+    // Particles
+    particles: [],
+    spray: [],
+    clouds: [],
+    waterLines: [],
+    seagulls: [],
+    foam: [],
 
-    // Environment
-    waveIntensity: 0.3,      // Current wave size/energy 0..1.3
-    targetWaveIntensity: 0.3,
-    stormSurge: 0,           // 0..1 — how urgent the miss window is (during grace)
-    skyTint: 0,
+    // Level
+    currentLevelNum: 1,
   };
 
-  /* ====== HAPTIC ====== */
+  /* ============================================================
+     HAPTIC
+     ============================================================ */
   function haptic(durationMs) {
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
@@ -1852,7 +1860,9 @@
     if (navigator.vibrate) { try { navigator.vibrate(0); } catch (e) {} }
   }
 
-  /* ====== AUDIO ====== */
+  /* ============================================================
+     AUDIO
+     ============================================================ */
   let audioCtx = null;
   let ambientNodes = null;
   let ambientGain = null;
@@ -1990,7 +2000,7 @@
     } catch (e) {}
   }
 
-  function playChime(notes, baseVol = 0.08, spacing = 0.08) {
+  function playChime(notes, baseVol, spacing) {
     if (!state.sound) return;
     const ctx = ensureAudio();
     if (!ctx) return;
@@ -2036,23 +2046,12 @@
         osc.start(now + i * 0.15);
         osc.stop(now + i * 0.15 + 0.65);
       });
-      const noise = ctx.createBufferSource();
-      noise.buffer = makeNoiseBuffer(ctx, 0.8);
-      const lp = ctx.createBiquadFilter();
-      lp.type = 'lowpass';
-      lp.frequency.setValueAtTime(1200, now + 0.4);
-      lp.frequency.exponentialRampToValueAtTime(200, now + 1.2);
-      const ng = ctx.createGain();
-      ng.gain.setValueAtTime(0, now + 0.4);
-      ng.gain.linearRampToValueAtTime(0.15 * (state.volume/100), now + 0.45);
-      ng.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-      noise.connect(lp).connect(ng).connect(ctx.destination);
-      noise.start(now + 0.4);
-      noise.stop(now + 1.3);
     } catch (e) {}
   }
 
-  /* ====== TOAST ====== */
+  /* ============================================================
+     TOAST & FEEDBACK
+     ============================================================ */
   let toastTimer = null;
   function showToast(msg, emoji = '✨') {
     toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
@@ -2061,7 +2060,6 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
-  /* ====== FLOAT FEEDBACK ====== */
   function showFloat(text, cls) {
     floatFeedback.textContent = text;
     floatFeedback.className = 'float-feedback ' + (cls || '');
@@ -2069,7 +2067,9 @@
     floatFeedback.classList.add('show');
   }
 
-  /* ====== LEVEL MANAGEMENT ====== */
+  /* ============================================================
+     LEVEL LOGIC
+     ============================================================ */
   function getLevelForExhales(n) {
     let level = LEVELS[0];
     for (const L of LEVELS) {
@@ -2081,8 +2081,9 @@
   function buildLevelTicks() {
     levelTicks.innerHTML = '';
     const maxExhales = 100;
-    LEVELS.forEach((L, i) => {
-      if (L.startAt === 0) return; // skip level 1 at 0
+    // Markers
+    LEVELS.forEach((L) => {
+      if (L.startAt === 0) return;
       const pct = Math.min(100, (L.startAt / maxExhales) * 100);
       const marker = document.createElement('div');
       marker.className = 'level-marker';
@@ -2092,13 +2093,13 @@
       marker.innerHTML = `<div class="level-marker-dot"></div>`;
       levelTicks.appendChild(marker);
     });
-
-    // Also add a tick label for each level
+    // Labels
     LEVELS.forEach((L) => {
       if (L.startAt === 0) return;
       const pct = Math.min(100, (L.startAt / maxExhales) * 100);
       const label = document.createElement('div');
       label.className = 'level-tick-label';
+      label.dataset.at = L.startAt;
       label.style.left = pct + '%';
       label.textContent = L.num;
       levelTicks.appendChild(label);
@@ -2111,13 +2112,15 @@
     voyageProgress.style.width = pct + '%';
     voyageBoat.style.left = pct + '%';
 
-    // Update markers reached
     levelTicks.querySelectorAll('.level-marker').forEach(m => {
       const at = parseInt(m.dataset.at, 10);
       m.classList.toggle('reached', exhales >= at);
     });
+    levelTicks.querySelectorAll('.level-tick-label').forEach(l => {
+      const at = parseInt(l.dataset.at, 10);
+      l.classList.toggle('reached', exhales >= at);
+    });
 
-    // Current level marker highlight
     const currentLevel = getLevelForExhales(exhales);
     levelTicks.querySelectorAll('.level-marker').forEach(m => {
       m.classList.toggle('current', parseInt(m.dataset.level, 10) === currentLevel.num);
@@ -2127,10 +2130,9 @@
   }
 
   function triggerLevelUp(level) {
-    // Full cinematic
     levelBadge.textContent = level.icon;
     levelAnnounceTitle.textContent = level.name;
-    levelAnnounceSub.textContent = level.desc;
+    levelAnnounceSub.textContent = `Level ${level.num} — ${level.name}`;
 
     levelAnnounce.classList.remove('show');
     void levelAnnounce.offsetWidth;
@@ -2140,14 +2142,13 @@
     void screenFlash.offsetWidth;
     screenFlash.classList.add('show');
 
-    // Radial burst
     const isBig = level.num >= 5;
-    const count = isBig ? 28 : 20;
+    const count = isBig ? 26 : 18;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'burst-particle';
       const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
-      const dist = (isBig ? 200 : 140) + Math.random() * 60;
+      const dist = (isBig ? 190 : 130) + Math.random() * 60;
       p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
       p.style.width = (isBig ? 10 : 7) + Math.random() * 4 + 'px';
@@ -2170,11 +2171,12 @@
       saveState();
     }
 
-    // Update the wave max for the level
-    game.skyTint = level.skyTint;
+    game.currentLevelNum = level.num;
   }
 
-  /* ====== THEME ====== */
+  /* ============================================================
+     THEME
+     ============================================================ */
   function applyTheme() {
     const root = document.documentElement;
     let effective = state.theme;
@@ -2200,7 +2202,9 @@
     haptic(8);
   });
 
-  /* ====== STORAGE ====== */
+  /* ============================================================
+     STORAGE
+     ============================================================ */
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -2225,7 +2229,9 @@
     } catch (e) {}
   }
 
-  /* ====== PHASE LOGIC ====== */
+  /* ============================================================
+     PHASE LOGIC
+     ============================================================ */
   function setPhase(phase) {
     game.phase = phase;
     game.phaseElapsed = 0;
@@ -2242,11 +2248,9 @@
       updateHoldLabel();
     } else if (phase === 'inhale') {
       holdBtn.classList.remove('ready', 'charging', 'critical');
-      holdLabel.textContent = 'Wait for exhale';
+      holdLabel.textContent = 'Breathe in...';
       stopSailingSound();
       stopHaptic();
-      // Reset surge
-      game.stormSurge = 0;
     }
   }
 
@@ -2260,66 +2264,101 @@
     }
   }
 
-  /* ====== ENVIRONMENTAL STATE ====== */
-  function updateEnvironmentState() {
-    // Determines the environmental badge state
+  /* ============================================================
+     ENVIRONMENT STATE
+     — this is called every frame but only sets TARGET values;
+       actual waveIntensity smoothly interpolates toward it
+     ============================================================ */
+  function computeEnvironmentTargets() {
     const level = getLevelForExhales(game.runExhales);
-    const waveMax = level.waveMax;
+    const baseWave = level.waveBase;
+    const pace = PACES[state.pace];
 
-    if (game.phase === 'inhale') {
-      // Calm seas building
-      envBadge.className = 'env-badge inhale';
-      envIcon.textContent = '🌊';
-      envText.textContent = 'Calm Seas — Breathe In';
-      game.targetWaveIntensity = 0.25 + waveMax * 0.15;
+    if (game.phase === 'ready') {
+      game.targetWaveIntensity = 0.20;
+    } else if (game.phase === 'inhale') {
+      // During inhale: seas calm, waves recede
+      const inhaleProg = Math.min(1, game.phaseElapsed / pace.inhale);
+      // Start at prev wave, end at low calm
+      game.targetWaveIntensity = baseWave - (baseWave * 0.6) * inhaleProg;
     } else if (game.phase === 'exhale') {
       if (game.exhaleLockedIn) {
-        // Successfully riding the wave
-        envBadge.className = 'env-badge exhale';
+        // Riding wave — full power
+        const holdProg = Math.min(1, game.exhaleHoldTime / pace.exhale);
+        game.targetWaveIntensity = baseWave + holdProg * 0.4;
+      } else {
+        // Not holding yet — storm builds as grace elapses
+        const totalExhale = pace.exhale + EXHALE_GRACE;
+        const graceProgress = Math.min(1, game.phaseElapsed / totalExhale);
+        game.targetWaveIntensity = baseWave + graceProgress * 0.55;
+      }
+    } else if (game.phase === 'sinking') {
+      game.targetWaveIntensity = 1.3;
+    }
+
+    // Clamp
+    game.targetWaveIntensity = Math.max(0.15, Math.min(1.35, game.targetWaveIntensity));
+  }
+
+  function updateEnvUI() {
+    // Update wave power meter
+    const wavePercent = Math.min(100, Math.round((game.waveIntensity / 1.35) * 100));
+    wavePowerFill.style.width = wavePercent + '%';
+    wavePowerValue.textContent = wavePercent + '%';
+
+    // Update fill color class based on danger
+    wavePowerFill.classList.remove('warn', 'crit');
+    if (wavePercent >= 80) wavePowerFill.classList.add('crit');
+    else if (wavePercent >= 60) wavePowerFill.classList.add('warn');
+
+    // Update badge
+    envBadge.classList.remove('inhale', 'exhale', 'warning', 'critical');
+    if (game.phase === 'ready') {
+      envBadge.classList.add('inhale');
+      envIcon.textContent = '🌊';
+      envText.textContent = 'Ready — Breathe In';
+    } else if (game.phase === 'inhale') {
+      envBadge.classList.add('inhale');
+      envIcon.textContent = '🌊';
+      envText.textContent = 'Calm Seas — Breathe In';
+    } else if (game.phase === 'exhale') {
+      if (game.exhaleLockedIn) {
+        envBadge.classList.add('exhale');
         envIcon.textContent = '🌊';
         envText.textContent = 'Riding the Wave';
-        game.targetWaveIntensity = 0.6 + waveMax * 0.3;
       } else {
-        // Not yet holding — the storm builds
-        const totalExhale = PACES[state.pace].exhale + EXHALE_GRACE;
-        const elapsed = game.phaseElapsed;
-        const remaining = Math.max(0, totalExhale - elapsed);
-
+        const pace = PACES[state.pace];
+        const totalExhale = pace.exhale + EXHALE_GRACE;
+        const remaining = Math.max(0, totalExhale - game.phaseElapsed);
         if (remaining <= EXHALE_GRACE) {
-          // Critical: waves rising dangerously
-          envBadge.className = 'env-badge critical';
+          envBadge.classList.add('critical');
           envIcon.textContent = '🌊';
-          envText.textContent = 'BREACH! Hold NOW!';
-          game.targetWaveIntensity = 0.9 + waveMax * 0.4;
+          envText.textContent = 'BREACH — Hold NOW';
           holdBtn.classList.add('critical');
         } else {
-          // Warning: storm building
-          envBadge.className = 'env-badge warning';
+          envBadge.classList.add('warning');
           envIcon.textContent = '⛅';
           envText.textContent = 'Waves Rising — Get Ready';
-          game.targetWaveIntensity = 0.5 + waveMax * 0.25;
           holdBtn.classList.remove('critical');
         }
       }
+    } else if (game.phase === 'sinking') {
+      envBadge.classList.add('critical');
+      envIcon.textContent = '🌊';
+      envText.textContent = 'SINKING';
     }
-
-    // Smoothly approach target
-    game.waveIntensity += (game.targetWaveIntensity - game.waveIntensity) * 0.05;
-
-    // Update wave power meter
-    const wavePercent = Math.min(100, Math.round((game.waveIntensity / 1.4) * 100));
-    wavePowerFill.style.width = wavePercent + '%';
-    wavePowerValue.textContent = wavePercent + '%';
   }
 
-  /* ====== EVALUATE EXHALE ====== */
+  /* ============================================================
+     EVALUATE EXHALE
+     ============================================================ */
   function evaluateExhale() {
     const pace = PACES[state.pace];
     const held = game.exhaleHoldTime;
     const quality = Math.min(1, held / pace.exhale);
 
     if (!game.exhaleLockedIn || held < 0.5) {
-      sinkShip('missed');
+      sinkShip();
       return false;
     }
 
@@ -2329,11 +2368,10 @@
     const prevLevel = getLevelForExhales(game.runExhales - 1);
     const newLevel = getLevelForExhales(game.runExhales);
     if (newLevel.num > prevLevel.num) {
-      // Big moment — level up!
-      setTimeout(() => triggerLevelUp(newLevel), 300);
+      setTimeout(() => triggerLevelUp(newLevel), 250);
     }
 
-    // Feedback tiers
+    // Feedback
     if (quality >= 0.95) {
       showFloat('PERFECT! 🏆', 'golden');
       playGoldenChime();
@@ -2353,19 +2391,18 @@
       haptic(20);
     }
 
-    // Update progress UI
     updateVoyageProgress(game.runExhales);
-    updateEnvironmentState();
-
     return true;
   }
 
-  /* ====== SINK ====== */
+  /* ============================================================
+     SINK
+     ============================================================ */
   function sinkShip() {
     game.phase = 'sinking';
-    game.sinkProgress = 0;
-    game.sinkBoatY = 0;
-    game.sinkBoatRot = 0;
+    game.sinking = true;
+    game.sinkY = 0;
+    game.sinkRot = 0;
 
     stopSailingSound();
     stopHaptic();
@@ -2376,7 +2413,7 @@
     const level = getLevelForExhales(game.runExhales);
     sinkTitle.textContent = 'Ship Sank! 🌊';
     sinkSub.textContent = `The waves overwhelmed you in ${level.name}.`;
-    sinkProgress.textContent = `You reached level ${level.num} with ${game.runExhales} exhale${game.runExhales === 1 ? '' : 's'}.`;
+    sinkProgress.textContent = `You reached Level ${level.num} with ${game.runExhales} exhale${game.runExhales === 1 ? '' : 's'}.`;
 
     sinkOverlay.classList.add('show');
   }
@@ -2384,31 +2421,33 @@
   function restartVoyage() {
     sinkOverlay.classList.remove('show');
     game.runExhales = 0;
-    game.distance = 0;
     game.sailWind = 0;
     game.targetSailWind = 0;
-    game.sinkBoatY = 0;
-    game.sinkBoatRot = 0;
-    game.windParticles = [];
-    game.foamTrail = [];
-    game.sprayParticles = [];
-    game.lightningBolts = [];
+    game.waveIntensity = 0.30;
+    game.targetWaveIntensity = 0.30;
+    game.sinking = false;
+    game.sinkY = 0;
+    game.sinkRot = 0;
     game.phase = 'ready';
     game.phaseElapsed = 0;
-    game.currentLevel = 1;
-    game.skyTint = 0;
+    game.currentLevelNum = 1;
+    game.particles = [];
+    game.spray = [];
+    game.foam = [];
 
     updateVoyageProgress(0);
-    updateEnvironmentState();
+    updateEnvUI();
 
     setTimeout(() => {
       if (game.phase === 'ready') setPhase('inhale');
-    }, 500);
+    }, 400);
   }
 
   sinkRestart.addEventListener('click', restartVoyage);
 
-  /* ====== HOLD ====== */
+  /* ============================================================
+     HOLD BUTTON
+     ============================================================ */
   function startHold(e) {
     if (e) e.preventDefault();
     if (game.phase !== 'exhale') { haptic(6); return; }
@@ -2440,23 +2479,26 @@
   holdBtn.addEventListener('pointerleave', endHold);
   holdBtn.addEventListener('contextmenu', e => e.preventDefault());
 
-  /* ====== UPDATE ====== */
+  /* ============================================================
+     UPDATE — single source of truth, all smoothing here
+     ============================================================ */
   function update(dt) {
     game.time += dt;
 
+    // ---------- PHASE PROGRESSION ----------
     if (game.phase === 'inhale' || game.phase === 'exhale') {
       game.phaseElapsed += dt;
       const pace = PACES[state.pace];
 
-      if (game.phase === 'inhale') {
-        game.targetSailWind = 0;
-      } else if (game.phase === 'exhale') {
+      if (game.phase === 'exhale') {
         if (game.isHolding) {
           game.exhaleHoldTime += dt;
           game.targetSailWind = Math.min(1, game.exhaleHoldTime / pace.exhale);
         } else {
           game.targetSailWind = 0;
         }
+      } else {
+        game.targetSailWind = 0;
       }
 
       if (game.phaseElapsed >= game.phaseDuration) {
@@ -2467,18 +2509,31 @@
         advancePhase();
       }
     } else if (game.phase === 'sinking') {
-      game.sinkProgress += dt * 0.6;
-      game.sinkBoatY += dt * 35;
-      game.sinkBoatRot += dt * 0.5;
+      game.sinkY += dt * 30;
+      game.sinkRot += dt * 0.4;
     }
 
+    // ---------- SMOOTHING ----------
+    // Wave intensity eases slowly toward target (creates the "building swell" feel)
+    computeEnvironmentTargets();
+    const waveEase = game.phase === 'sinking' ? 3 : 1.4;
+    game.waveIntensity += (game.targetWaveIntensity - game.waveIntensity) * Math.min(1, dt * waveEase);
+
+    // Sail wind eases toward target
     game.sailWind += (game.targetSailWind - game.sailWind) * Math.min(1, dt * 8);
 
-    if (game.sailingSoundOn) updateSailingSoundIntensity(game.sailWind);
+    // Boat bobbing — amplitude scales with wave intensity
+    game.boatBobbing = Math.sin(game.time * 2.2) * (2 + game.waveIntensity * 4);
 
+    // ---------- SOUND ----------
+    if (game.sailingSoundOn) {
+      updateSailingSoundIntensity(game.sailWind);
+    }
+
+    // ---------- HAPTIC PULSING WHILE SAILING ----------
     if (game.isHolding && game.sailWind > 0.1 && state.haptics) {
       game.hapticPulseTimer += dt;
-      if (game.hapticPulseTimer > 0.12) {
+      if (game.hapticPulseTimer > 0.13) {
         game.hapticPulseTimer = 0;
         haptic(8 + game.sailWind * 18);
       }
@@ -2486,22 +2541,13 @@
       game.hapticPulseTimer = 0;
     }
 
-    // Distance (only while sailing)
+    // ---------- DISTANCE ----------
     if (game.sailWind > 0.05 && game.phase === 'exhale') {
       const gain = game.sailWind * dt * 4;
-      game.distance += gain;
       state.totalDistance = (state.totalDistance || 0) + gain;
     }
 
-    game.boatBobbing = Math.sin(game.time * 2.5) * 2;
-
-    // Camera shake scales with wave intensity
-    const targetShake = Math.max(game.sailWind * 0.7, game.waveIntensity * 0.5);
-    game.shake += (targetShake - game.shake) * Math.min(1, dt * 3);
-
-    updateEnvironmentState();
-
-    // Hold button fill
+    // ---------- HOLD FILL ----------
     if (game.phase === 'exhale') {
       const holdFrac = Math.min(1, game.exhaleHoldTime / pace.exhale);
       holdFill.style.width = (holdFrac * 100) + '%';
@@ -2509,14 +2555,16 @@
       holdFill.style.width = '0%';
     }
 
-    // Particles & environment
-    updateWindParticles(dt);
+    // ---------- UI ----------
+    updateEnvUI();
+
+    // ---------- PARTICLES ----------
+    updateParticles(dt);
     updateWaterLines(dt);
     updateClouds(dt);
+    updateSpray(dt);
     updateFoam(dt);
     updateSeagulls(dt);
-    updateSpray(dt);
-    updateLightning(dt);
   }
 
   function advancePhase() {
@@ -2529,46 +2577,49 @@
     }
   }
 
-  function updateWindParticles(dt) {
+  function updateParticles(dt) {
+    // Wind particles emit while sailing
     if (game.sailWind > 0.15 && game.isHolding) {
       const emitRate = game.sailWind * 8;
       if (Math.random() < emitRate * dt) {
-        const pos = getBoatScreenPos();
-        game.windParticles.push({
-          x: pos.x + 20, y: pos.y - 50 + Math.random() * 30,
+        const pos = getBoatPos();
+        game.particles.push({
+          x: pos.x + 20, y: pos.y - 40 + Math.random() * 20,
           vx: -120 - Math.random() * 100, vy: (Math.random() - 0.5) * 30,
-          life: 1.4, len: 8 + Math.random() * 16,
+          life: 1.2, len: 8 + Math.random() * 16,
         });
       }
     }
-    for (let i = game.windParticles.length - 1; i >= 0; i--) {
-      const p = game.windParticles[i];
+    for (let i = game.particles.length - 1; i >= 0; i--) {
+      const p = game.particles[i];
       p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
-      if (p.life <= 0 || p.x < -30) game.windParticles.splice(i, 1);
+      if (p.life <= 0 || p.x < -30) game.particles.splice(i, 1);
     }
   }
 
   function updateWaterLines(dt) {
-    for (let i = game.waterLines.length - 1; i >= 0; i--) {
-      const w = game.waterLines[i];
-      w.x -= (30 + w.speed) * dt;
-      w.phase += dt * 1.5;
-      w.life -= dt * 0.15;
-      if (w.x < -60 || w.life <= 0) game.waterLines.splice(i, 1);
-    }
-    // Spawn rate scales with wave intensity
-    const rate = 0.4 + game.waveIntensity * 1.5;
-    if (Math.random() < rate) {
+    // Emit water lines based on current wave intensity
+    const emitRate = 2 + game.waveIntensity * 8;
+    while (Math.random() < emitRate * dt) {
       game.waterLines.push({
-        x: canvasW + 30,
+        x: canvasW + 20,
         y: canvasH * 0.55 + Math.random() * canvasH * 0.42,
-        len: (30 + Math.random() * 60) * (0.6 + game.waveIntensity * 0.5),
-        speed: 20 + Math.random() * 40 * (0.8 + game.waveIntensity * 0.5),
+        len: (25 + Math.random() * 50) * (0.6 + game.waveIntensity * 0.6),
+        speed: 20 + Math.random() * 40 + game.waveIntensity * 40,
         phase: Math.random() * Math.PI * 2,
         life: 1,
-        opacity: 0.3 + Math.random() * 0.4,
-        amplitude: 2 + game.waveIntensity * 6,
+        opacity: 0.25 + Math.random() * 0.4,
+        amplitude: 2 + game.waveIntensity * 8,
+        baseY: 0,
       });
+      if (game.waterLines.length > 60) break;
+    }
+    for (let i = game.waterLines.length - 1; i >= 0; i--) {
+      const w = game.waterLines[i];
+      w.x -= w.speed * dt;
+      w.phase += dt * 2;
+      w.life -= dt * 0.15;
+      if (w.x < -80 || w.life <= 0) game.waterLines.splice(i, 1);
     }
   }
 
@@ -2578,43 +2629,63 @@
       c.x -= c.speed * dt;
       if (c.x < -c.w - 40) game.clouds.splice(i, 1);
     }
-    // More clouds when wave intensity high (stormy)
     const cloudCap = 3 + Math.round(game.waveIntensity * 4);
-    if (Math.random() < 0.015 + game.waveIntensity * 0.02 && game.clouds.length < cloudCap) {
+    if (Math.random() < 0.012 && game.clouds.length < cloudCap) {
       game.clouds.push({
         x: canvasW + 60,
-        y: 20 + Math.random() * canvasH * 0.35,
+        y: 20 + Math.random() * canvasH * 0.32,
         w: 70 + Math.random() * 90,
-        h: 20 + Math.random() * 16,
+        h: 20 + Math.random() * 14,
         speed: 8 + Math.random() * 14,
         alpha: 0.4 + Math.random() * 0.4,
-        dark: game.waveIntensity > 0.7,
+        dark: game.waveIntensity > 0.75,
       });
+    }
+  }
+
+  function updateSpray(dt) {
+    if (game.waveIntensity > 0.65 && Math.random() < game.waveIntensity * 0.6) {
+      const pos = getBoatPos();
+      game.spray.push({
+        x: pos.x + (Math.random() - 0.5) * 60,
+        y: pos.y + 10,
+        vx: (Math.random() - 0.5) * 60,
+        vy: -30 - Math.random() * 60,
+        life: 0.8,
+        size: 2 + Math.random() * 3,
+      });
+    }
+    for (let i = game.spray.length - 1; i >= 0; i--) {
+      const p = game.spray[i];
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      p.vy += 120 * dt;
+      p.life -= dt;
+      if (p.life <= 0) game.spray.splice(i, 1);
     }
   }
 
   function updateFoam(dt) {
     if (game.sailWind > 0.2 && game.isHolding && Math.random() < game.sailWind * 1.5) {
-      const pos = getBoatScreenPos();
-      game.foamTrail.push({
-        x: pos.x - 30, y: pos.y + 8,
-        size: 3 + Math.random() * 5, life: 1.5,
+      const pos = getBoatPos();
+      game.foam.push({
+        x: pos.x - 25, y: pos.y + 8,
+        size: 3 + Math.random() * 5, life: 1.3,
         vx: -40 - Math.random() * 40, vy: 5 + Math.random() * 10,
       });
     }
-    for (let i = game.foamTrail.length - 1; i >= 0; i--) {
-      const f = game.foamTrail[i];
+    for (let i = game.foam.length - 1; i >= 0; i--) {
+      const f = game.foam[i];
       f.x += f.vx * dt; f.y += f.vy * dt;
       f.life -= dt * 0.7; f.size *= 0.98;
-      if (f.life <= 0) game.foamTrail.splice(i, 1);
+      if (f.life <= 0) game.foam.splice(i, 1);
     }
   }
 
   function updateSeagulls(dt) {
-    if (Math.random() < 0.005 && game.seagulls.length < 3 && game.waveIntensity < 0.6) {
+    if (game.waveIntensity < 0.7 && Math.random() < 0.004 && game.seagulls.length < 3) {
       game.seagulls.push({
         x: canvasW + 40,
-        y: canvasH * 0.15 + Math.random() * canvasH * 0.25,
+        y: canvasH * 0.15 + Math.random() * canvasH * 0.22,
         vx: -40 - Math.random() * 30,
         bobPhase: Math.random() * Math.PI * 2,
         scale: 0.6 + Math.random() * 0.5,
@@ -2628,102 +2699,51 @@
     }
   }
 
-  function updateSpray(dt) {
-    // Spray particles emit from boat when wave intensity is high
-    if (game.waveIntensity > 0.6 && Math.random() < game.waveIntensity * 0.5) {
-      const pos = getBoatScreenPos();
-      game.sprayParticles.push({
-        x: pos.x + (Math.random() - 0.5) * 60,
-        y: pos.y + 10,
-        vx: (Math.random() - 0.5) * 60,
-        vy: -30 - Math.random() * 50,
-        life: 0.9,
-        size: 2 + Math.random() * 3,
-      });
-    }
-    for (let i = game.sprayParticles.length - 1; i >= 0; i--) {
-      const p = game.sprayParticles[i];
-      p.x += p.vx * dt; p.y += p.vy * dt;
-      p.vy += 100 * dt;
-      p.life -= dt;
-      if (p.life <= 0) game.sprayParticles.splice(i, 1);
-    }
-  }
-
-  function updateLightning(dt) {
-    // Lightning bolts during critical moments at high levels
-    const level = getLevelForExhales(game.runExhales);
-    if (level.num >= 4 && game.waveIntensity > 0.85 && Math.random() < 0.008) {
-      game.lightningBolts.push({
-        x: canvasW * (0.1 + Math.random() * 0.8),
-        y1: 0,
-        y2: canvasH * 0.45,
-        life: 0.3,
-        jitter: Array.from({length: 8}, () => (Math.random() - 0.5) * 30),
-      });
-    }
-    for (let i = game.lightningBolts.length - 1; i >= 0; i--) {
-      game.lightningBolts[i].life -= dt;
-      if (game.lightningBolts[i].life <= 0) game.lightningBolts.splice(i, 1);
-    }
-  }
-
-  function getBoatScreenPos() {
+  function getBoatPos() {
     const t = Math.min(1, game.runExhales / 50);
-    const baseX = canvasW * (0.25 + t * 0.5);
-    const waveHeight = Math.sin(game.time * 2.5) * game.waveIntensity * 8;
-    const baseY = canvasH * (0.78 - t * 0.25) + game.boatBobbing + waveHeight + game.sinkBoatY;
+    const baseX = canvasW * (0.30 + t * 0.42);
+    const waveY = Math.sin(game.time * 2.2) * (2 + game.waveIntensity * 5);
+    const baseY = canvasH * 0.76 - t * canvasH * 0.18 + game.boatBobbing + game.sinkY;
     return { x: baseX, y: baseY, t };
   }
 
-  /* ====== RENDER ====== */
+  /* ============================================================
+     RENDER — smooth, single-pass, cheap operations only
+     ============================================================ */
   function render() {
     const w = canvasW, h = canvasH;
     if (w === 0 || h === 0) return;
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const level = getLevelForExhales(game.runExhales);
+    const waveT = Math.min(1, game.waveIntensity);
 
-    // Camera shake
-    const shakeAmp = game.shake * 3;
-    const shakeX = shakeAmp * (Math.random() - 0.5);
-    const shakeY = shakeAmp * (Math.random() - 0.5);
-
-    ctx.save();
-    ctx.translate(shakeX, shakeY);
-
+    // ---------- SKY ----------
     const horizonY = h * 0.52;
-
-    // Sky (tint shifts with level and wave intensity)
     const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
-    const intensity = Math.min(1, game.waveIntensity);
     if (isDark) {
-      skyGrad.addColorStop(0, shade('#060c18', intensity * 0.15));
-      skyGrad.addColorStop(0.4, shade('#0d1e35', intensity * 0.1));
-      skyGrad.addColorStop(0.8, shade('#1a3556', intensity * 0.1));
-      skyGrad.addColorStop(1, shade('#2e5275', intensity * 0.1));
+      skyGrad.addColorStop(0, mix('#060c18', '#1a0830', waveT * 0.5));
+      skyGrad.addColorStop(0.5, mix('#0d1e35', '#2a1530', waveT * 0.4));
+      skyGrad.addColorStop(1, mix('#2e5275', '#4a2545', waveT * 0.4));
     } else {
-      // Darker / more orange as wave intensity grows (stormy)
-      const tint = game.waveIntensity * 0.35;
-      skyGrad.addColorStop(0, mixHex('#c3daf0', '#8a9baa', tint));
-      skyGrad.addColorStop(0.4, mixHex('#d6e6f7', '#a5b5c5', tint));
-      skyGrad.addColorStop(0.8, mixHex('#e8f3fb', '#c8b8a8', tint));
-      skyGrad.addColorStop(1, mixHex('#f5e6d3', '#d9a878', tint * 1.2));
+      skyGrad.addColorStop(0, mix('#c3daf0', '#8a8a9c', waveT * 0.5));
+      skyGrad.addColorStop(0.5, mix('#d6e6f7', '#a89898', waveT * 0.5));
+      skyGrad.addColorStop(1, mix('#f5e6d3', '#d9a878', waveT * 0.6));
     }
     ctx.fillStyle = skyGrad;
-    ctx.fillRect(-10, -10, w + 20, horizonY + 10);
+    ctx.fillRect(0, 0, w, horizonY);
 
-    // Sun/moon
+    // ---------- SUN/MOON ----------
     const sunX = w * 0.78;
-    const sunY = horizonY - 60;
-    const sunR = 26;
+    const sunY = horizonY - 55;
+    const sunR = 24;
 
+    // Glow
     const glowGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR * 3);
     if (isDark) {
-      glowGrad.addColorStop(0, 'rgba(230, 240, 255, 0.4)');
+      glowGrad.addColorStop(0, 'rgba(230, 240, 255, 0.35)');
       glowGrad.addColorStop(1, 'rgba(230, 240, 255, 0)');
     } else {
-      glowGrad.addColorStop(0, `rgba(255, 220, 130, ${0.5 - game.waveIntensity * 0.2})`);
+      glowGrad.addColorStop(0, `rgba(255, 220, 130, ${0.5 - waveT * 0.25})`);
       glowGrad.addColorStop(1, 'rgba(255, 220, 130, 0)');
     }
     ctx.fillStyle = glowGrad;
@@ -2731,148 +2751,140 @@
     ctx.arc(sunX, sunY, sunR * 3, 0, Math.PI * 2);
     ctx.fill();
 
+    // Sun body
     ctx.beginPath();
     ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
-    ctx.fillStyle = isDark ? '#e8f1fc' : mixHex('#ffe9a8', '#ffb070', game.waveIntensity);
+    ctx.fillStyle = isDark ? '#e8f1fc' : mix('#ffe9a8', '#ff9060', waveT * 0.8);
     ctx.fill();
 
-    // Clouds
-    game.clouds.forEach(c => {
+    // ---------- CLOUDS ----------
+    ctx.globalAlpha = 1;
+    for (const c of game.clouds) {
       ctx.globalAlpha = c.alpha;
       ctx.fillStyle = isDark
         ? (c.dark ? 'rgba(60, 80, 110, 0.7)' : 'rgba(140, 180, 220, 0.4)')
-        : (c.dark ? 'rgba(90, 100, 120, 0.6)' : 'rgba(255, 255, 255, 0.85)');
-      drawCloud(c.x, c.y, c.w, c.h);
-    });
+        : (c.dark ? 'rgba(90, 100, 120, 0.65)' : 'rgba(255, 255, 255, 0.85)');
+      ctx.beginPath();
+      ctx.ellipse(c.x + c.w * 0.3, c.y + c.h * 0.6, c.h * 0.7, c.h * 0.6, 0, 0, Math.PI * 2);
+      ctx.ellipse(c.x + c.w * 0.55, c.y + c.h * 0.4, c.h * 0.85, c.h * 0.75, 0, 0, Math.PI * 2);
+      ctx.ellipse(c.x + c.w * 0.75, c.y + c.h * 0.6, c.h * 0.65, c.h * 0.55, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.globalAlpha = 1;
 
-    // Seagulls
-    game.seagulls.forEach(g => {
+    // ---------- SEAGULLS ----------
+    if (game.seagulls.length > 0) {
       ctx.strokeStyle = isDark ? 'rgba(200, 220, 240, 0.7)' : 'rgba(90, 90, 110, 0.7)';
       ctx.lineWidth = 1.5;
-      const bob = Math.sin(g.bobPhase) * 3;
-      const s = g.scale;
-      ctx.beginPath();
-      ctx.moveTo(g.x - 10 * s, g.y + bob);
-      ctx.quadraticCurveTo(g.x - 5 * s, g.y - 3 * s + bob, g.x, g.y + bob);
-      ctx.quadraticCurveTo(g.x + 5 * s, g.y - 3 * s + bob, g.x + 10 * s, g.y + bob);
-      ctx.stroke();
-    });
+      for (const g of game.seagulls) {
+        const bob = Math.sin(g.bobPhase) * 3;
+        const s = g.scale;
+        ctx.beginPath();
+        ctx.moveTo(g.x - 10 * s, g.y + bob);
+        ctx.quadraticCurveTo(g.x - 5 * s, g.y - 3 * s + bob, g.x, g.y + bob);
+        ctx.quadraticCurveTo(g.x + 5 * s, g.y - 3 * s + bob, g.x + 10 * s, g.y + bob);
+        ctx.stroke();
+      }
+    }
 
-    // Ocean — bigger and more saturated with wave intensity
-    const oceanGrad = ctx.createLinearGradient(0, horizonY, 0, h + 10);
+    // ---------- OCEAN ----------
+    const oceanGrad = ctx.createLinearGradient(0, horizonY, 0, h);
     if (isDark) {
-      const t = game.waveIntensity * 0.3;
-      oceanGrad.addColorStop(0, mixHex('#1e4267', '#3a2a4a', t));
-      oceanGrad.addColorStop(0.3, mixHex('#0d2f4f', '#1f1838', t));
-      oceanGrad.addColorStop(0.7, mixHex('#062036', '#140e20', t));
-      oceanGrad.addColorStop(1, mixHex('#02121f', '#06040a', t));
+      oceanGrad.addColorStop(0, mix('#1e4267', '#3a1e5a', waveT * 0.5));
+      oceanGrad.addColorStop(0.5, mix('#0d2f4f', '#1a0f30', waveT * 0.6));
+      oceanGrad.addColorStop(1, mix('#02121f', '#0a0418', waveT * 0.7));
     } else {
-      const t = game.waveIntensity * 0.4;
-      oceanGrad.addColorStop(0, mixHex('#7fc4e8', '#6a9ec8', t));
-      oceanGrad.addColorStop(0.3, mixHex('#4fc3f7', '#2a8bc4', t));
-      oceanGrad.addColorStop(0.7, mixHex('#0288d1', '#015070', t));
-      oceanGrad.addColorStop(1, mixHex('#01579b', '#012a4a', t));
+      oceanGrad.addColorStop(0, mix('#7fc4e8', '#5a8ab8', waveT * 0.6));
+      oceanGrad.addColorStop(0.4, mix('#4fc3f7', '#2a7ac0', waveT * 0.7));
+      oceanGrad.addColorStop(1, mix('#01579b', '#013060', waveT * 0.8));
     }
     ctx.fillStyle = oceanGrad;
-    ctx.fillRect(-10, horizonY, w + 20, h - horizonY + 10);
+    ctx.fillRect(0, horizonY, w, h - horizonY);
 
-    // Sun reflection
+    // ---------- SUN REFLECTION ----------
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    for (let i = 0; i < 20; i++) {
-      const t = i / 20;
-      const rx = sunX + Math.sin(game.time * 1.5 + i) * 12;
-      const ry = horizonY + t * (h - horizonY) * 0.7;
-      const rw = 20 - t * 14;
-      const rh = 3 + t * 2;
+    const reflAlpha = isDark ? 0.12 : (0.22 - waveT * 0.1);
+    for (let i = 0; i < 14; i++) {
+      const t = i / 14;
+      const rx = sunX + Math.sin(game.time * 1.5 + i) * 10;
+      const ry = horizonY + 8 + t * (h - horizonY) * 0.6;
+      const rw = 18 - t * 12;
+      const rh = 2 + t * 2;
       ctx.fillStyle = isDark
-        ? `rgba(230, 240, 255, ${0.15 * (1 - t)})`
-        : `rgba(255, 235, 160, ${(0.25 - game.waveIntensity * 0.1) * (1 - t)})`;
+        ? `rgba(230, 240, 255, ${reflAlpha * (1 - t)})`
+        : `rgba(255, 235, 160, ${reflAlpha * (1 - t)})`;
       ctx.beginPath();
       ctx.ellipse(rx, ry, rw, rh, 0, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.restore();
 
-    // Waves — bigger and more frequent with intensity
-    game.waterLines.forEach(w2 => {
-      const depth = (w2.y - horizonY) / (h - horizonY);
+    // ---------- WATER LINES (waves) ----------
+    ctx.lineCap = 'round';
+    for (const wl of game.waterLines) {
+      const depth = (wl.y - horizonY) / (h - horizonY);
       const scaleX = 0.3 + depth * 1.4;
-      const opacity = w2.opacity * (0.4 + depth * 0.6);
-      const amp = w2.amplitude || 3;
+      const opacity = wl.opacity * (0.35 + depth * 0.65);
+      const amp = wl.amplitude;
+
       ctx.strokeStyle = isDark
-        ? `rgba(120, 200, 240, ${opacity * 0.7})`
+        ? `rgba(140, 200, 240, ${opacity * 0.75})`
         : `rgba(255, 255, 255, ${opacity})`;
-      ctx.lineWidth = 1 + depth * 2 + game.waveIntensity * 1.5;
+      ctx.lineWidth = 1 + depth * 2 + waveT * 1.5;
+
       ctx.beginPath();
-      const segments = 8;
+      const segments = 6;
       for (let i = 0; i <= segments; i++) {
         const t = i / segments;
-        const x = w2.x + t * w2.len * scaleX;
-        const y = w2.y + Math.sin(w2.phase + t * Math.PI * 2) * amp;
+        const x = wl.x + t * wl.len * scaleX;
+        const y = wl.y + Math.sin(wl.phase + t * Math.PI * 2) * amp;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
-    });
+    }
 
-    // Horizon mist
-    const mistGrad = ctx.createLinearGradient(0, horizonY - 20, 0, horizonY + 20);
+    // ---------- HORIZON MIST ----------
+    const mistGrad = ctx.createLinearGradient(0, horizonY - 15, 0, horizonY + 15);
     if (isDark) {
       mistGrad.addColorStop(0, 'rgba(20, 40, 70, 0)');
-      mistGrad.addColorStop(0.5, 'rgba(30, 60, 100, 0.5)');
+      mistGrad.addColorStop(0.5, 'rgba(30, 60, 100, 0.4)');
       mistGrad.addColorStop(1, 'rgba(20, 40, 70, 0)');
     } else {
       mistGrad.addColorStop(0, 'rgba(245, 230, 210, 0)');
-      mistGrad.addColorStop(0.5, `rgba(245, 230, 210, ${0.7 - game.waveIntensity * 0.3})`);
+      mistGrad.addColorStop(0.5, `rgba(245, 230, 210, ${0.6 - waveT * 0.3})`);
       mistGrad.addColorStop(1, 'rgba(245, 230, 210, 0)');
     }
     ctx.fillStyle = mistGrad;
-    ctx.fillRect(-10, horizonY - 20, w + 20, 40);
+    ctx.fillRect(0, horizonY - 15, w, 30);
 
-    // Foam
-    game.foamTrail.forEach(f => {
-      ctx.globalAlpha = f.life * 0.5;
+    // ---------- FOAM TRAIL ----------
+    for (const f of game.foam) {
+      ctx.globalAlpha = Math.min(1, f.life) * 0.5;
       ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.6)' : 'rgba(255, 255, 255, 0.85)';
       ctx.beginPath();
       ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
       ctx.fill();
-    });
+    }
     ctx.globalAlpha = 1;
 
-    // Spray
-    game.sprayParticles.forEach(p => {
-      ctx.globalAlpha = p.life;
+    // ---------- SPRAY ----------
+    for (const p of game.spray) {
+      ctx.globalAlpha = Math.min(1, p.life);
       ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.8)' : 'rgba(255, 255, 255, 0.9)';
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fill();
-    });
+    }
     ctx.globalAlpha = 1;
 
-    // Lightning
-    game.lightningBolts.forEach(b => {
-      ctx.strokeStyle = `rgba(220, 240, 255, ${b.life * 3})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(b.x, b.y1);
-      for (let i = 0; i < 8; i++) {
-        const j = b.jitter[i];
-        const y = b.y1 + (b.y2 - b.y1) * ((i + 1) / 8);
-        const x = b.x + j * (1 - i / 8);
-        ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-    });
+    // ---------- BOAT ----------
+    const pos = getBoatPos();
+    drawBoat(pos.x, pos.y, game.sailWind, isDark, game.sinkRot);
 
-    // Boat
-    const pos = getBoatScreenPos();
-    const boatRot = game.phase === 'sinking' ? game.sinkBoatRot : Math.sin(game.time * 1.8) * 0.05 * game.waveIntensity;
-    drawBoat(pos.x, pos.y, game.sailWind, isDark, boatRot, game.phase === 'sinking');
-
-    // Wind particles
-    game.windParticles.forEach(p => {
+    // ---------- WIND PARTICLES ----------
+    for (const p of game.particles) {
       ctx.globalAlpha = Math.min(1, p.life);
       ctx.strokeStyle = isDark ? 'rgba(180, 220, 255, 0.85)' : 'rgba(255, 255, 255, 0.9)';
       ctx.lineWidth = 1.5;
@@ -2880,212 +2892,163 @@
       ctx.moveTo(p.x, p.y);
       ctx.lineTo(p.x + p.len, p.y);
       ctx.stroke();
-    });
-    ctx.globalAlpha = 1;
-
-    ctx.restore();
-
-    // Wave overlay on top for high intensity
-    if (game.waveIntensity > 0.7) {
-      const waveAlpha = (game.waveIntensity - 0.7) * 0.5;
-      const overlayGrad = ctx.createLinearGradient(0, canvasH * 0.6, 0, canvasH);
-      overlayGrad.addColorStop(0, 'rgba(80, 130, 180, 0)');
-      overlayGrad.addColorStop(1, `rgba(80, 130, 180, ${waveAlpha})`);
-      ctx.fillStyle = overlayGrad;
-      ctx.fillRect(0, canvasH * 0.6, canvasW, canvasH * 0.4);
     }
+    ctx.globalAlpha = 1;
   }
 
-  // Color helpers
-  function hexToRgb(hex) {
+  // Fast color mixing (hex → rgb, cached)
+  const colorCache = new Map();
+  function parseHex(hex) {
+    if (colorCache.has(hex)) return colorCache.get(hex);
     const h = hex.replace('#', '');
-    return {
+    const c = {
       r: parseInt(h.substring(0, 2), 16),
       g: parseInt(h.substring(2, 4), 16),
       b: parseInt(h.substring(4, 6), 16),
     };
+    colorCache.set(hex, c);
+    return c;
   }
-  function rgbToHex(r, g, b) {
-    return '#' + [r, g, b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
-  }
-  function mixHex(a, b, t) {
-    t = Math.max(0, Math.min(1, t));
-    const A = hexToRgb(a), B = hexToRgb(b);
-    return rgbToHex(
-      A.r + (B.r - A.r) * t,
-      A.g + (B.g - A.g) * t,
-      A.b + (B.b - A.b) * t
-    );
-  }
-  function shade(hex, t) {
-    return mixHex(hex, '#000000', t);
+  function mix(a, b, t) {
+    if (t <= 0) return a;
+    if (t >= 1) return b;
+    const A = parseHex(a), B = parseHex(b);
+    const r = Math.round(A.r + (B.r - A.r) * t);
+    const g = Math.round(A.g + (B.g - A.g) * t);
+    const bl = Math.round(A.b + (B.b - A.b) * t);
+    return '#' + ((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1);
   }
 
-  function drawCloud(x, y, w, h) {
-    ctx.beginPath();
-    ctx.ellipse(x + w * 0.3, y + h * 0.6, h * 0.7, h * 0.6, 0, 0, Math.PI * 2);
-    ctx.ellipse(x + w * 0.55, y + h * 0.4, h * 0.85, h * 0.75, 0, 0, Math.PI * 2);
-    ctx.ellipse(x + w * 0.75, y + h * 0.6, h * 0.65, h * 0.55, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function drawBoat(x, y, sailWind, isDark, rotation, sinking) {
+  function drawBoat(x, y, sailWind, isDark, rotation) {
     const sailFullness = sailWind;
     ctx.save();
     ctx.translate(x, y);
-    if (rotation) ctx.rotate(rotation);
+    // Sway with waves
+    const sway = Math.sin(game.time * 1.6) * 0.06 * game.waveIntensity;
+    ctx.rotate(sway + rotation);
 
-    ctx.globalAlpha = 0.35;
+    // Reflection
+    ctx.globalAlpha = 0.25;
     ctx.fillStyle = isDark ? '#014361' : '#0288d1';
     ctx.beginPath();
-    ctx.ellipse(0, 10, 42, 8, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 10, 38, 6, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    const hullGrad = ctx.createLinearGradient(-40, -5, 40, 15);
+    // Hull
+    const hullGrad = ctx.createLinearGradient(-38, -5, 38, 15);
     if (isDark) {
       hullGrad.addColorStop(0, '#5d4037');
-      hullGrad.addColorStop(0.5, '#4e342e');
       hullGrad.addColorStop(1, '#2d1f1a');
     } else {
       hullGrad.addColorStop(0, '#8d6e63');
-      hullGrad.addColorStop(0.5, '#6d4c41');
       hullGrad.addColorStop(1, '#3e2723');
     }
-
     ctx.beginPath();
-    ctx.moveTo(-38, -2);
-    ctx.quadraticCurveTo(-42, 8, -28, 14);
-    ctx.quadraticCurveTo(0, 20, 28, 14);
-    ctx.quadraticCurveTo(42, 8, 38, -2);
-    ctx.quadraticCurveTo(20, -8, 0, -8);
-    ctx.quadraticCurveTo(-20, -8, -38, -2);
+    ctx.moveTo(-36, -2);
+    ctx.quadraticCurveTo(-40, 8, -26, 13);
+    ctx.quadraticCurveTo(0, 18, 26, 13);
+    ctx.quadraticCurveTo(40, 8, 36, -2);
+    ctx.quadraticCurveTo(18, -7, 0, -7);
+    ctx.quadraticCurveTo(-18, -7, -36, -2);
     ctx.closePath();
     ctx.fillStyle = hullGrad;
     ctx.fill();
 
+    // Hull rim
     ctx.beginPath();
-    ctx.moveTo(-38, -2);
-    ctx.quadraticCurveTo(-20, -8, 0, -8);
-    ctx.quadraticCurveTo(20, -8, 38, -2);
+    ctx.moveTo(-36, -2);
+    ctx.quadraticCurveTo(-18, -7, 0, -7);
+    ctx.quadraticCurveTo(18, -7, 36, -2);
     ctx.strokeStyle = isDark ? 'rgba(255, 220, 150, 0.4)' : 'rgba(255, 220, 150, 0.7)';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    const mastLean = -3;
+    // Mast
+    const mastX = -2;
     ctx.strokeStyle = isDark ? '#a1887f' : '#5d4037';
     ctx.lineWidth = 3.5;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(0, -5);
-    ctx.lineTo(mastLean, -68);
+    ctx.lineTo(mastX, -64);
     ctx.stroke();
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(-1, -5);
-    ctx.lineTo(mastLean - 1, -68);
-    ctx.stroke();
+    // Sail
+    const sailTopY = -62;
+    const sailBottomY = -13;
+    const boomLen = 38 + sailFullness * 12;
+    const billow = 6 + sailFullness * 40;
 
-    const boomLen = 40 + sailFullness * 12;
-    ctx.strokeStyle = isDark ? '#8d6e63' : '#5d4037';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(mastLean - 2, -12);
-    ctx.lineTo(mastLean + boomLen, -12);
-    ctx.stroke();
-
-    const sailTopX = mastLean;
-    const sailTopY = -66;
-    const sailBottomY = -14;
-    const billow = 8 + sailFullness * 42;
-
-    const sailGrad = ctx.createLinearGradient(sailTopX, sailTopY, sailTopX + billow, sailBottomY);
+    const sailGrad = ctx.createLinearGradient(mastX, sailTopY, mastX + billow, sailBottomY);
     if (isDark) {
       sailGrad.addColorStop(0, '#f4f8fd');
-      sailGrad.addColorStop(0.6, '#c9dcef');
       sailGrad.addColorStop(1, '#8fa9c4');
     } else {
       sailGrad.addColorStop(0, '#ffffff');
-      sailGrad.addColorStop(0.6, '#eaf2fb');
       sailGrad.addColorStop(1, '#b8cee2');
     }
 
     ctx.beginPath();
-    ctx.moveTo(sailTopX, sailTopY);
-    ctx.lineTo(sailTopX + 1, sailBottomY);
-    ctx.lineTo(sailTopX + boomLen, sailBottomY);
+    ctx.moveTo(mastX, sailTopY);
+    ctx.lineTo(mastX + 1, sailBottomY);
+    ctx.lineTo(mastX + boomLen, sailBottomY);
     ctx.bezierCurveTo(
-      sailTopX + boomLen * 0.7 + billow * 0.4, sailTopY + (sailBottomY - sailTopY) * 0.55,
-      sailTopX + boomLen * 0.3 + billow * 0.7, sailTopY + (sailBottomY - sailTopY) * 0.25,
-      sailTopX, sailTopY
+      mastX + boomLen * 0.7 + billow * 0.4, sailTopY + (sailBottomY - sailTopY) * 0.55,
+      mastX + boomLen * 0.3 + billow * 0.7, sailTopY + (sailBottomY - sailTopY) * 0.25,
+      mastX, sailTopY
     );
     ctx.closePath();
     ctx.fillStyle = sailGrad;
     ctx.fill();
-
     ctx.strokeStyle = isDark ? 'rgba(180, 200, 220, 0.6)' : 'rgba(120, 150, 180, 0.45)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    if (sailFullness > 0.1) {
-      const jibBillow = 3 + sailFullness * 20;
-      ctx.beginPath();
-      ctx.moveTo(mastLean - 2, -50);
-      ctx.lineTo(mastLean - 22, -10);
-      ctx.quadraticCurveTo(mastLean - 20 + jibBillow * 0.6, -30, mastLean - 2, -50);
-      ctx.closePath();
-      const jibGrad = ctx.createLinearGradient(mastLean - 25, -50, mastLean - 5, -10);
-      if (isDark) {
-        jibGrad.addColorStop(0, '#dce9f6');
-        jibGrad.addColorStop(1, '#9ab3cc');
-      } else {
-        jibGrad.addColorStop(0, '#ffffff');
-        jibGrad.addColorStop(1, '#c6d9ec');
-      }
-      ctx.fillStyle = jibGrad;
-      ctx.fill();
-    }
+    // Boom
+    ctx.strokeStyle = isDark ? '#8d6e63' : '#5d4037';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(mastX - 1, -13);
+    ctx.lineTo(mastX + boomLen, -13);
+    ctx.stroke();
 
     // Flag
     ctx.beginPath();
-    ctx.moveTo(mastLean - 1, -68);
-    ctx.lineTo(mastLean - 14, -63);
-    ctx.lineTo(mastLean - 1, -58);
+    ctx.moveTo(mastX, -64);
+    ctx.lineTo(mastX - 12, -60);
+    ctx.lineTo(mastX, -56);
     ctx.closePath();
     ctx.fillStyle = sailFullness > 0.3
       ? (isDark ? '#42a5f5' : '#1976d2')
       : (isDark ? '#546e7a' : '#90a4ae');
     ctx.fill();
 
-    if (sinking) {
-      for (let i = 0; i < 6; i++) {
-        const bx = -30 + Math.random() * 60;
-        const by = -20 + Math.random() * 40;
-        ctx.beginPath();
-        ctx.arc(bx, by - game.sinkBoatY * 0.5, 2 + Math.random() * 3, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(180, 220, 255, 0.6)';
-        ctx.fill();
-      }
-    }
-
     ctx.restore();
   }
 
-  /* ====== LOOP ====== */
+  /* ============================================================
+     ANIMATION LOOP — uses requestAnimationFrame cleanly
+     ============================================================ */
   let lastTimestamp = 0;
+  let rafId = null;
 
   function loop(timestamp) {
+    rafId = requestAnimationFrame(loop);
     if (!lastTimestamp) lastTimestamp = timestamp;
-    const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+    let dt = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp;
+    // Clamp dt to avoid huge jumps
+    if (dt > 0.06) dt = 0.06;
+    if (dt < 0) dt = 0;
+
     update(dt);
     render();
-    requestAnimationFrame(loop);
   }
 
-  /* ====== SETTINGS ====== */
+  /* ============================================================
+     SETTINGS UI
+     ============================================================ */
   function openSettings() { settingsBackdrop.classList.add('show'); haptic(6); }
   function closeSettings() { settingsBackdrop.classList.remove('show'); }
 
@@ -3108,7 +3071,6 @@
     if (on) { startAmbient(); updateAmbientMix(); }
     else { stopAmbient(); stopSailingSound(); }
   });
-
   bindToggle(toggleHaptics, 'haptics');
 
   function refreshSoundPicker() {
@@ -3116,7 +3078,6 @@
       b.classList.toggle('active', b.dataset.sound === state.soundType);
     });
   }
-
   soundPicker.addEventListener('click', (e) => {
     const btn = e.target.closest('.option-btn');
     if (!btn) return;
@@ -3132,7 +3093,6 @@
       b.classList.toggle('active', b.dataset.pace === state.pace);
     });
   }
-
   pacePicker.addEventListener('click', (e) => {
     const btn = e.target.closest('.option-btn');
     if (!btn) return;
@@ -3187,7 +3147,6 @@
     state.totalDistance = 0;
     state.bestLevel = 1;
     game.runExhales = 0;
-    game.distance = 0;
     updateVoyageProgress(0);
     saveState();
     closeSettings();
@@ -3207,9 +3166,12 @@
     state.totalDistance = 0;
     state.bestLevel = 1;
     game.runExhales = 0;
-    game.distance = 0;
-    game.sinkBoatY = 0;
-    game.sinkBoatRot = 0;
+    game.sailWind = 0;
+    game.waveIntensity = 0.30;
+    game.targetWaveIntensity = 0.30;
+    game.sinking = false;
+    game.sinkY = 0;
+    game.sinkRot = 0;
     game.phase = 'ready';
     game.phaseElapsed = 0;
     updateVoyageProgress(0);
@@ -3230,7 +3192,9 @@
   startBtn.addEventListener('click', () => {
     closeWelcome();
     haptic(10);
-    setTimeout(() => { if (game.phase === 'ready') setPhase('inhale'); }, 400);
+    setTimeout(() => {
+      if (game.phase === 'ready') setPhase('inhale');
+    }, 350);
   });
   welcomeBackdrop.addEventListener('click', (e) => {
     if (e.target === welcomeBackdrop) closeWelcome();
@@ -3253,10 +3217,15 @@
     }
   });
 
+  /* ============================================================
+     INIT
+     ============================================================ */
   function init() {
     loadState();
     applyTheme();
     resizeCanvas();
+    // Extra resize after layout settles
+    setTimeout(resizeCanvas, 100);
 
     toggleSound.classList.toggle('on', state.sound);
     toggleHaptics.classList.toggle('on', state.haptics);
@@ -3272,7 +3241,20 @@
 
     buildLevelTicks();
     updateVoyageProgress(0);
-    updateEnvironmentState();
+    updateEnvUI();
+
+    // Pre-seed clouds
+    for (let i = 0; i < 3; i++) {
+      game.clouds.push({
+        x: Math.random() * (canvasW || 400),
+        y: 20 + Math.random() * 100,
+        w: 70 + Math.random() * 90,
+        h: 20 + Math.random() * 14,
+        speed: 8 + Math.random() * 14,
+        alpha: 0.5 + Math.random() * 0.35,
+        dark: false,
+      });
+    }
 
     if (state.sound) {
       const startAudio = () => {
@@ -3286,21 +3268,15 @@
     if (!state.hasSeenWelcome) {
       setTimeout(openWelcome, 400);
     } else {
-      setTimeout(() => { if (game.phase === 'ready') setPhase('inhale'); }, 800);
+      setTimeout(() => {
+        if (game.phase === 'ready') setPhase('inhale');
+      }, 700);
     }
 
-    requestAnimationFrame(loop);
-
-    for (let i = 0; i < 3; i++) {
-      game.clouds.push({
-        x: Math.random() * canvasW,
-        y: 20 + Math.random() * canvasH * 0.3,
-        w: 70 + Math.random() * 90,
-        h: 20 + Math.random() * 14,
-        speed: 8 + Math.random() * 14,
-        alpha: 0.5 + Math.random() * 0.35,
-      });
-    }
+    // Start animation
+    if (rafId) cancelAnimationFrame(rafId);
+    lastTimestamp = 0;
+    rafId = requestAnimationFrame(loop);
   }
 
   if (document.readyState === 'loading') {
