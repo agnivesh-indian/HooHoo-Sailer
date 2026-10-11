@@ -192,7 +192,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 8px 12px 10px;
+    padding: 8px 12px 12px;
     box-shadow: var(--shadow-xs);
   }
 
@@ -342,7 +342,6 @@
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border);
     background: #7fc4e8;
-    transition: background 0.8s;
   }
 
   canvas {
@@ -1419,7 +1418,6 @@
     .voyage-bar { padding: 6px 10px 8px; }
     .level-badge { width: 68px; height: 68px; font-size: 34px; }
     .level-announce-title { font-size: 24px; }
-    .level-tick-label { bottom: -14px; font-size: 7px; }
   }
 
   @media (max-width: 380px) {
@@ -1449,7 +1447,6 @@
     </div>
   </header>
 
-  <!-- VOYAGE PROGRESS BAR -->
   <div class="voyage-bar">
     <div class="voyage-header">
       <span class="voyage-label">🗺️ Voyage</span>
@@ -1535,7 +1532,7 @@
 
     <div class="welcome-icon">⛵</div>
     <h1 class="welcome-title">HooHoo Sailer</h1>
-    <p class="welcome-tagline">Only the exhale moves the boat.</p>
+    <p class="welcome-tagline">Only the exhale moves the sea.</p>
 
     <div class="welcome-section">
       <div class="welcome-section-title"><span>📖</span> About</div>
@@ -1553,15 +1550,15 @@
         <div class="step-item">
           <div class="step-num">1</div>
           <div class="step-text">
-            <strong>Breathe in.</strong> Watch the sea calm down and the waves
-            recede — this is your prep time.
+            <strong>Breathe in.</strong> The sea calms and waves recede —
+            this is your prep time.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-text">
-            <strong>When waves rise and the badge warns you</strong>, press and
-            hold to exhale — ride the wave's power.
+            <strong>When the waves rise and the badge warns you</strong>, press
+            and hold to exhale — the sea surges forward with your breath.
           </div>
         </div>
         <div class="step-item">
@@ -1674,8 +1671,9 @@
       <div class="about-text">
         <strong>HooHoo Sailer</strong> uses slow-paced breathing at ~6 breaths
         per minute, a protocol shown in HRV research to increase vagal tone,
-        reduce cortisol, and support emotional regulation. The boat moves
-        <strong>only during your exhale</strong>.
+        reduce cortisol, and support emotional regulation. The sea responds to
+        <strong>your exhale</strong> — the boat stays anchored while the ocean
+        surges forward with the power of your breath.
         <br><br>
         Not a replacement for professional care. If stress is persistent,
         please reach out to a licensed mental health professional.
@@ -1692,9 +1690,6 @@
 (function() {
   'use strict';
 
-  /* ============================================================
-     STATE
-     ============================================================ */
   const state = {
     theme: 'system',
     sound: true,
@@ -1708,7 +1703,7 @@
     bestLevel: 1,
   };
 
-  const STORAGE_KEY = 'hoohooSailer.v6';
+  const STORAGE_KEY = 'hoohooSailer.v7';
 
   const PACES = {
     calm:     { inhale: 4, exhale: 6 },
@@ -1718,7 +1713,6 @@
 
   const EXHALE_GRACE = 1.5;
 
-  // Level system — 9 levels across 100 exhales
   const LEVELS = [
     { num: 1, name: 'Open Sea',       icon: '🌊', startAt: 0,   waveBase: 0.30, skyTint: 0.00 },
     { num: 2, name: 'Windward Pass',  icon: '💨', startAt: 5,   waveBase: 0.40, skyTint: 0.04 },
@@ -1799,7 +1793,7 @@
   window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 150));
 
   /* ============================================================
-     GAME STATE — all environmental values use smoothing
+     GAME STATE
      ============================================================ */
   const game = {
     phase: 'ready',
@@ -1811,14 +1805,13 @@
     exhaleHoldTime: 0,
     exhaleLockedIn: false,
 
-    // Smoothed environmental values
-    waveIntensity: 0.30,        // smoothly interpolated
+    // Environment — smoothly interpolated
+    waveIntensity: 0.30,
     targetWaveIntensity: 0.30,
     sailWind: 0,
     targetSailWind: 0,
 
     time: 0,
-    boatBobbing: 0,
 
     // Sink animation
     sinking: false,
@@ -1829,7 +1822,7 @@
     sailingSoundOn: false,
     hapticPulseTimer: 0,
 
-    // Particles
+    // Particles & scene
     particles: [],
     spray: [],
     clouds: [],
@@ -1837,7 +1830,6 @@
     seagulls: [],
     foam: [],
 
-    // Level
     currentLevelNum: 1,
   };
 
@@ -2081,7 +2073,6 @@
   function buildLevelTicks() {
     levelTicks.innerHTML = '';
     const maxExhales = 100;
-    // Markers
     LEVELS.forEach((L) => {
       if (L.startAt === 0) return;
       const pct = Math.min(100, (L.startAt / maxExhales) * 100);
@@ -2093,7 +2084,6 @@
       marker.innerHTML = `<div class="level-marker-dot"></div>`;
       levelTicks.appendChild(marker);
     });
-    // Labels
     LEVELS.forEach((L) => {
       if (L.startAt === 0) return;
       const pct = Math.min(100, (L.startAt / maxExhales) * 100);
@@ -2170,7 +2160,6 @@
       state.bestLevel = level.num;
       saveState();
     }
-
     game.currentLevelNum = level.num;
   }
 
@@ -2265,9 +2254,7 @@
   }
 
   /* ============================================================
-     ENVIRONMENT STATE
-     — this is called every frame but only sets TARGET values;
-       actual waveIntensity smoothly interpolates toward it
+     ENVIRONMENT TARGETS
      ============================================================ */
   function computeEnvironmentTargets() {
     const level = getLevelForExhales(game.runExhales);
@@ -2277,17 +2264,13 @@
     if (game.phase === 'ready') {
       game.targetWaveIntensity = 0.20;
     } else if (game.phase === 'inhale') {
-      // During inhale: seas calm, waves recede
       const inhaleProg = Math.min(1, game.phaseElapsed / pace.inhale);
-      // Start at prev wave, end at low calm
       game.targetWaveIntensity = baseWave - (baseWave * 0.6) * inhaleProg;
     } else if (game.phase === 'exhale') {
       if (game.exhaleLockedIn) {
-        // Riding wave — full power
         const holdProg = Math.min(1, game.exhaleHoldTime / pace.exhale);
         game.targetWaveIntensity = baseWave + holdProg * 0.4;
       } else {
-        // Not holding yet — storm builds as grace elapses
         const totalExhale = pace.exhale + EXHALE_GRACE;
         const graceProgress = Math.min(1, game.phaseElapsed / totalExhale);
         game.targetWaveIntensity = baseWave + graceProgress * 0.55;
@@ -2296,22 +2279,18 @@
       game.targetWaveIntensity = 1.3;
     }
 
-    // Clamp
     game.targetWaveIntensity = Math.max(0.15, Math.min(1.35, game.targetWaveIntensity));
   }
 
   function updateEnvUI() {
-    // Update wave power meter
     const wavePercent = Math.min(100, Math.round((game.waveIntensity / 1.35) * 100));
     wavePowerFill.style.width = wavePercent + '%';
     wavePowerValue.textContent = wavePercent + '%';
 
-    // Update fill color class based on danger
     wavePowerFill.classList.remove('warn', 'crit');
     if (wavePercent >= 80) wavePowerFill.classList.add('crit');
     else if (wavePercent >= 60) wavePowerFill.classList.add('warn');
 
-    // Update badge
     envBadge.classList.remove('inhale', 'exhale', 'warning', 'critical');
     if (game.phase === 'ready') {
       envBadge.classList.add('inhale');
@@ -2364,14 +2343,12 @@
 
     game.runExhales++;
 
-    // Check for level up
     const prevLevel = getLevelForExhales(game.runExhales - 1);
     const newLevel = getLevelForExhales(game.runExhales);
     if (newLevel.num > prevLevel.num) {
       setTimeout(() => triggerLevelUp(newLevel), 250);
     }
 
-    // Feedback
     if (quality >= 0.95) {
       showFloat('PERFECT! 🏆', 'golden');
       playGoldenChime();
@@ -2446,7 +2423,7 @@
   sinkRestart.addEventListener('click', restartVoyage);
 
   /* ============================================================
-     HOLD BUTTON
+     HOLD
      ============================================================ */
   function startHold(e) {
     if (e) e.preventDefault();
@@ -2480,7 +2457,9 @@
   holdBtn.addEventListener('contextmenu', e => e.preventDefault());
 
   /* ============================================================
-     UPDATE — single source of truth, all smoothing here
+     UPDATE
+     — The boat is ANCHORED. It does NOT move horizontally.
+     — The SEA moves past it, driven by wave intensity.
      ============================================================ */
   function update(dt) {
     game.time += dt;
@@ -2509,28 +2488,22 @@
         advancePhase();
       }
     } else if (game.phase === 'sinking') {
-      game.sinkY += dt * 30;
-      game.sinkRot += dt * 0.4;
+      game.sinkY += dt * 25;
+      game.sinkRot += dt * 0.35;
     }
 
     // ---------- SMOOTHING ----------
-    // Wave intensity eases slowly toward target (creates the "building swell" feel)
     computeEnvironmentTargets();
     const waveEase = game.phase === 'sinking' ? 3 : 1.4;
     game.waveIntensity += (game.targetWaveIntensity - game.waveIntensity) * Math.min(1, dt * waveEase);
-
-    // Sail wind eases toward target
     game.sailWind += (game.targetSailWind - game.sailWind) * Math.min(1, dt * 8);
-
-    // Boat bobbing — amplitude scales with wave intensity
-    game.boatBobbing = Math.sin(game.time * 2.2) * (2 + game.waveIntensity * 4);
 
     // ---------- SOUND ----------
     if (game.sailingSoundOn) {
       updateSailingSoundIntensity(game.sailWind);
     }
 
-    // ---------- HAPTIC PULSING WHILE SAILING ----------
+    // ---------- HAPTIC PULSE ----------
     if (game.isHolding && game.sailWind > 0.1 && state.haptics) {
       game.hapticPulseTimer += dt;
       if (game.hapticPulseTimer > 0.13) {
@@ -2541,10 +2514,9 @@
       game.hapticPulseTimer = 0;
     }
 
-    // ---------- DISTANCE ----------
+    // ---------- DISTANCE (data only) ----------
     if (game.sailWind > 0.05 && game.phase === 'exhale') {
-      const gain = game.sailWind * dt * 4;
-      state.totalDistance = (state.totalDistance || 0) + gain;
+      state.totalDistance = (state.totalDistance || 0) + game.sailWind * dt * 4;
     }
 
     // ---------- HOLD FILL ----------
@@ -2558,12 +2530,16 @@
     // ---------- UI ----------
     updateEnvUI();
 
-    // ---------- PARTICLES ----------
+    // ---------- PARTICLES / SCENE ----------
+    // The wave "speed" is what makes the sea feel like it's moving past the boat.
+    // Base speed always > 0 (sea never stops). Sail wind ADDS speed.
+    const seaSpeed = 0.4 + game.waveIntensity * 1.4 + game.sailWind * 1.8;
+
+    updateWaterLines(dt, seaSpeed);
+    updateFoam(dt, seaSpeed);
+    updateSpray(dt, seaSpeed);
     updateParticles(dt);
-    updateWaterLines(dt);
     updateClouds(dt);
-    updateSpray(dt);
-    updateFoam(dt);
     updateSeagulls(dt);
   }
 
@@ -2577,49 +2553,106 @@
     }
   }
 
+  /* --- WATER LINES (waves sweeping past the anchored boat) --- */
+  function updateWaterLines(dt, seaSpeed) {
+    // Always emit — the sea never stops
+    const emitRate = 1.5 + game.waveIntensity * 5;
+    while (Math.random() < emitRate * dt) {
+      const spawnY = canvasH * 0.56 + Math.random() * canvasH * 0.4;
+      const depth = (spawnY - canvasH * 0.52) / (canvasH * 0.48);
+      game.waterLines.push({
+        x: canvasW + 30,
+        y: spawnY,
+        len: (22 + Math.random() * 45) * (0.5 + game.waveIntensity * 0.7),
+        speed: (28 + Math.random() * 40) * seaSpeed * (0.7 + depth * 0.6),
+        phase: Math.random() * Math.PI * 2,
+        life: 1,
+        opacity: 0.25 + Math.random() * 0.4,
+        amplitude: 1.5 + game.waveIntensity * 7 + depth * 2,
+      });
+      if (game.waterLines.length > 70) break;
+    }
+    for (let i = game.waterLines.length - 1; i >= 0; i--) {
+      const w = game.waterLines[i];
+      w.x -= w.speed * dt;
+      w.phase += dt * 2.5;
+      w.life -= dt * 0.12;
+      if (w.x < -80 || w.life <= 0) game.waterLines.splice(i, 1);
+    }
+  }
+
+  /* --- FOAM (whitecaps trailing behind the boat) --- */
+  function updateFoam(dt, seaSpeed) {
+    // Foam emits from behind the boat proportional to sea energy + sail wind
+    const emitRate = 1 + game.waveIntensity * 4 + game.sailWind * 6;
+    while (Math.random() < emitRate * dt) {
+      const pos = getBoatPos();
+      game.foam.push({
+        x: pos.x - 30 + Math.random() * 10,
+        y: pos.y + 6 + Math.random() * 8,
+        size: 3 + Math.random() * 5,
+        life: 1.3,
+        vx: -50 - Math.random() * 50 - game.sailWind * 80,
+        vy: 4 + Math.random() * 8,
+      });
+      if (game.foam.length > 50) break;
+    }
+    for (let i = game.foam.length - 1; i >= 0; i--) {
+      const f = game.foam[i];
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
+      f.life -= dt * 0.7;
+      f.size *= 0.985;
+      if (f.life <= 0) game.foam.splice(i, 1);
+    }
+  }
+
+  /* --- SPRAY (water kicked up by waves hitting the boat) --- */
+  function updateSpray(dt, seaSpeed) {
+    const sprayChance = (game.waveIntensity - 0.4) * 2 + game.sailWind * 1.5;
+    if (sprayChance > 0 && Math.random() < sprayChance * dt * 3) {
+      const pos = getBoatPos();
+      game.spray.push({
+        x: pos.x + (Math.random() - 0.5) * 50,
+        y: pos.y + 5,
+        vx: (Math.random() - 0.5) * 60 - game.sailWind * 30,
+        vy: -30 - Math.random() * 70,
+        life: 0.85,
+        size: 2 + Math.random() * 3,
+      });
+    }
+    for (let i = game.spray.length - 1; i >= 0; i--) {
+      const p = game.spray[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += 130 * dt;
+      p.life -= dt;
+      if (p.life <= 0) game.spray.splice(i, 1);
+    }
+  }
+
+  /* --- WIND STREAKS (only when actually sailing) --- */
   function updateParticles(dt) {
-    // Wind particles emit while sailing
     if (game.sailWind > 0.15 && game.isHolding) {
-      const emitRate = game.sailWind * 8;
+      const emitRate = game.sailWind * 7;
       if (Math.random() < emitRate * dt) {
         const pos = getBoatPos();
         game.particles.push({
-          x: pos.x + 20, y: pos.y - 40 + Math.random() * 20,
-          vx: -120 - Math.random() * 100, vy: (Math.random() - 0.5) * 30,
-          life: 1.2, len: 8 + Math.random() * 16,
+          x: pos.x + 18,
+          y: pos.y - 35 + Math.random() * 20,
+          vx: -130 - Math.random() * 100 - game.sailWind * 60,
+          vy: (Math.random() - 0.5) * 30,
+          life: 1.2,
+          len: 8 + Math.random() * 16,
         });
       }
     }
     for (let i = game.particles.length - 1; i >= 0; i--) {
       const p = game.particles[i];
-      p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.life -= dt;
       if (p.life <= 0 || p.x < -30) game.particles.splice(i, 1);
-    }
-  }
-
-  function updateWaterLines(dt) {
-    // Emit water lines based on current wave intensity
-    const emitRate = 2 + game.waveIntensity * 8;
-    while (Math.random() < emitRate * dt) {
-      game.waterLines.push({
-        x: canvasW + 20,
-        y: canvasH * 0.55 + Math.random() * canvasH * 0.42,
-        len: (25 + Math.random() * 50) * (0.6 + game.waveIntensity * 0.6),
-        speed: 20 + Math.random() * 40 + game.waveIntensity * 40,
-        phase: Math.random() * Math.PI * 2,
-        life: 1,
-        opacity: 0.25 + Math.random() * 0.4,
-        amplitude: 2 + game.waveIntensity * 8,
-        baseY: 0,
-      });
-      if (game.waterLines.length > 60) break;
-    }
-    for (let i = game.waterLines.length - 1; i >= 0; i--) {
-      const w = game.waterLines[i];
-      w.x -= w.speed * dt;
-      w.phase += dt * 2;
-      w.life -= dt * 0.15;
-      if (w.x < -80 || w.life <= 0) game.waterLines.splice(i, 1);
     }
   }
 
@@ -2643,44 +2676,6 @@
     }
   }
 
-  function updateSpray(dt) {
-    if (game.waveIntensity > 0.65 && Math.random() < game.waveIntensity * 0.6) {
-      const pos = getBoatPos();
-      game.spray.push({
-        x: pos.x + (Math.random() - 0.5) * 60,
-        y: pos.y + 10,
-        vx: (Math.random() - 0.5) * 60,
-        vy: -30 - Math.random() * 60,
-        life: 0.8,
-        size: 2 + Math.random() * 3,
-      });
-    }
-    for (let i = game.spray.length - 1; i >= 0; i--) {
-      const p = game.spray[i];
-      p.x += p.vx * dt; p.y += p.vy * dt;
-      p.vy += 120 * dt;
-      p.life -= dt;
-      if (p.life <= 0) game.spray.splice(i, 1);
-    }
-  }
-
-  function updateFoam(dt) {
-    if (game.sailWind > 0.2 && game.isHolding && Math.random() < game.sailWind * 1.5) {
-      const pos = getBoatPos();
-      game.foam.push({
-        x: pos.x - 25, y: pos.y + 8,
-        size: 3 + Math.random() * 5, life: 1.3,
-        vx: -40 - Math.random() * 40, vy: 5 + Math.random() * 10,
-      });
-    }
-    for (let i = game.foam.length - 1; i >= 0; i--) {
-      const f = game.foam[i];
-      f.x += f.vx * dt; f.y += f.vy * dt;
-      f.life -= dt * 0.7; f.size *= 0.98;
-      if (f.life <= 0) game.foam.splice(i, 1);
-    }
-  }
-
   function updateSeagulls(dt) {
     if (game.waveIntensity < 0.7 && Math.random() < 0.004 && game.seagulls.length < 3) {
       game.seagulls.push({
@@ -2699,16 +2694,20 @@
     }
   }
 
+  /* --- BOAT: anchored in place, only rocks + bobs --- */
   function getBoatPos() {
-    const t = Math.min(1, game.runExhales / 50);
-    const baseX = canvasW * (0.30 + t * 0.42);
-    const waveY = Math.sin(game.time * 2.2) * (2 + game.waveIntensity * 5);
-    const baseY = canvasH * 0.76 - t * canvasH * 0.18 + game.boatBobbing + game.sinkY;
-    return { x: baseX, y: baseY, t };
+    // Fixed horizontal position — the boat stays put
+    const baseX = canvasW * 0.5;
+    // Rocking: amplitude scales with wave intensity, plus a slight sail-driven heave
+    const bobAmp = 2 + game.waveIntensity * 4 + game.sailWind * 2;
+    const bobY = Math.sin(game.time * 1.6) * bobAmp
+               + Math.sin(game.time * 3.1) * bobAmp * 0.35;
+    const baseY = canvasH * 0.72 + bobY + game.sinkY;
+    return { x: baseX, y: baseY };
   }
 
   /* ============================================================
-     RENDER — smooth, single-pass, cheap operations only
+     RENDER
      ============================================================ */
   function render() {
     const w = canvasW, h = canvasH;
@@ -2737,7 +2736,6 @@
     const sunY = horizonY - 55;
     const sunR = 24;
 
-    // Glow
     const glowGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR * 3);
     if (isDark) {
       glowGrad.addColorStop(0, 'rgba(230, 240, 255, 0.35)');
@@ -2751,14 +2749,12 @@
     ctx.arc(sunX, sunY, sunR * 3, 0, Math.PI * 2);
     ctx.fill();
 
-    // Sun body
     ctx.beginPath();
     ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
     ctx.fillStyle = isDark ? '#e8f1fc' : mix('#ffe9a8', '#ff9060', waveT * 0.8);
     ctx.fill();
 
     // ---------- CLOUDS ----------
-    ctx.globalAlpha = 1;
     for (const c of game.clouds) {
       ctx.globalAlpha = c.alpha;
       ctx.fillStyle = isDark
@@ -2820,7 +2816,7 @@
     }
     ctx.restore();
 
-    // ---------- WATER LINES (waves) ----------
+    // ---------- WATER LINES ----------
     ctx.lineCap = 'round';
     for (const wl of game.waterLines) {
       const depth = (wl.y - horizonY) / (h - horizonY);
@@ -2859,7 +2855,7 @@
     ctx.fillStyle = mistGrad;
     ctx.fillRect(0, horizonY - 15, w, 30);
 
-    // ---------- FOAM TRAIL ----------
+    // ---------- FOAM ----------
     for (const f of game.foam) {
       ctx.globalAlpha = Math.min(1, f.life) * 0.5;
       ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.6)' : 'rgba(255, 255, 255, 0.85)';
@@ -2879,11 +2875,11 @@
     }
     ctx.globalAlpha = 1;
 
-    // ---------- BOAT ----------
+    // ---------- BOAT (anchored, only rocking) ----------
     const pos = getBoatPos();
     drawBoat(pos.x, pos.y, game.sailWind, isDark, game.sinkRot);
 
-    // ---------- WIND PARTICLES ----------
+    // ---------- WIND STREAKS ----------
     for (const p of game.particles) {
       ctx.globalAlpha = Math.min(1, p.life);
       ctx.strokeStyle = isDark ? 'rgba(180, 220, 255, 0.85)' : 'rgba(255, 255, 255, 0.9)';
@@ -2896,7 +2892,6 @@
     ctx.globalAlpha = 1;
   }
 
-  // Fast color mixing (hex → rgb, cached)
   const colorCache = new Map();
   function parseHex(hex) {
     if (colorCache.has(hex)) return colorCache.get(hex);
@@ -2923,15 +2918,15 @@
     const sailFullness = sailWind;
     ctx.save();
     ctx.translate(x, y);
-    // Sway with waves
-    const sway = Math.sin(game.time * 1.6) * 0.06 * game.waveIntensity;
+    // Rocking sway — amplitude scales with wave intensity
+    const sway = Math.sin(game.time * 1.6) * (0.03 + game.waveIntensity * 0.09);
     ctx.rotate(sway + rotation);
 
     // Reflection
     ctx.globalAlpha = 0.25;
     ctx.fillStyle = isDark ? '#014361' : '#0288d1';
     ctx.beginPath();
-    ctx.ellipse(0, 10, 38, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, 12, 40, 7, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
 
@@ -2945,21 +2940,20 @@
       hullGrad.addColorStop(1, '#3e2723');
     }
     ctx.beginPath();
-    ctx.moveTo(-36, -2);
-    ctx.quadraticCurveTo(-40, 8, -26, 13);
-    ctx.quadraticCurveTo(0, 18, 26, 13);
-    ctx.quadraticCurveTo(40, 8, 36, -2);
-    ctx.quadraticCurveTo(18, -7, 0, -7);
-    ctx.quadraticCurveTo(-18, -7, -36, -2);
+    ctx.moveTo(-38, -2);
+    ctx.quadraticCurveTo(-42, 8, -28, 14);
+    ctx.quadraticCurveTo(0, 20, 28, 14);
+    ctx.quadraticCurveTo(42, 8, 38, -2);
+    ctx.quadraticCurveTo(20, -8, 0, -8);
+    ctx.quadraticCurveTo(-20, -8, -38, -2);
     ctx.closePath();
     ctx.fillStyle = hullGrad;
     ctx.fill();
 
-    // Hull rim
     ctx.beginPath();
-    ctx.moveTo(-36, -2);
-    ctx.quadraticCurveTo(-18, -7, 0, -7);
-    ctx.quadraticCurveTo(18, -7, 36, -2);
+    ctx.moveTo(-38, -2);
+    ctx.quadraticCurveTo(-20, -8, 0, -8);
+    ctx.quadraticCurveTo(20, -8, 38, -2);
     ctx.strokeStyle = isDark ? 'rgba(255, 220, 150, 0.4)' : 'rgba(255, 220, 150, 0.7)';
     ctx.lineWidth = 1.5;
     ctx.stroke();
@@ -2971,14 +2965,14 @@
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(0, -5);
-    ctx.lineTo(mastX, -64);
+    ctx.lineTo(mastX, -68);
     ctx.stroke();
 
     // Sail
-    const sailTopY = -62;
-    const sailBottomY = -13;
-    const boomLen = 38 + sailFullness * 12;
-    const billow = 6 + sailFullness * 40;
+    const sailTopY = -66;
+    const sailBottomY = -14;
+    const boomLen = 42 + sailFullness * 12;
+    const billow = 6 + sailFullness * 44;
 
     const sailGrad = ctx.createLinearGradient(mastX, sailTopY, mastX + billow, sailBottomY);
     if (isDark) {
@@ -3009,15 +3003,15 @@
     ctx.strokeStyle = isDark ? '#8d6e63' : '#5d4037';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(mastX - 1, -13);
-    ctx.lineTo(mastX + boomLen, -13);
+    ctx.moveTo(mastX - 1, -14);
+    ctx.lineTo(mastX + boomLen, -14);
     ctx.stroke();
 
     // Flag
     ctx.beginPath();
-    ctx.moveTo(mastX, -64);
-    ctx.lineTo(mastX - 12, -60);
-    ctx.lineTo(mastX, -56);
+    ctx.moveTo(mastX, -68);
+    ctx.lineTo(mastX - 12, -64);
+    ctx.lineTo(mastX, -60);
     ctx.closePath();
     ctx.fillStyle = sailFullness > 0.3
       ? (isDark ? '#42a5f5' : '#1976d2')
@@ -3028,7 +3022,7 @@
   }
 
   /* ============================================================
-     ANIMATION LOOP — uses requestAnimationFrame cleanly
+     ANIMATION LOOP
      ============================================================ */
   let lastTimestamp = 0;
   let rafId = null;
@@ -3038,7 +3032,6 @@
     if (!lastTimestamp) lastTimestamp = timestamp;
     let dt = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp;
-    // Clamp dt to avoid huge jumps
     if (dt > 0.06) dt = 0.06;
     if (dt < 0) dt = 0;
 
@@ -3047,7 +3040,7 @@
   }
 
   /* ============================================================
-     SETTINGS UI
+     SETTINGS
      ============================================================ */
   function openSettings() { settingsBackdrop.classList.add('show'); haptic(6); }
   function closeSettings() { settingsBackdrop.classList.remove('show'); }
@@ -3224,7 +3217,6 @@
     loadState();
     applyTheme();
     resizeCanvas();
-    // Extra resize after layout settles
     setTimeout(resizeCanvas, 100);
 
     toggleSound.classList.toggle('on', state.sound);
@@ -3243,7 +3235,6 @@
     updateVoyageProgress(0);
     updateEnvUI();
 
-    // Pre-seed clouds
     for (let i = 0; i < 3; i++) {
       game.clouds.push({
         x: Math.random() * (canvasW || 400),
@@ -3273,7 +3264,6 @@
       }, 700);
     }
 
-    // Start animation
     if (rafId) cancelAnimationFrame(rafId);
     lastTimestamp = 0;
     rafId = requestAnimationFrame(loop);
