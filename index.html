@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a1428" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#eaf2fb" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Breeze · Breathe to Sail</title>
+<style>
+  /* ============ THEME TOKENS ============ */
+  :root {
+    --bg: #eaf2fb;
+    --bg-grad-1: #d6e6f7;
+    --bg-grad-2: #c3daf0;
+    --surface: #ffffff;
+    --surface-2: #eef5fc;
+    --surface-3: #dde9f6;
+    --border: rgba(50, 90, 140, 0.12);
+    --border-strong: rgba(50, 90, 140, 0.22);
+    --text: #0a1f38;
+    --text-2: #3d5876;
+    --text-3: #7f98b5;
+    --accent: #1976d2;
+    --accent-2: #00acc1;
+    --accent-grad: linear-gradient(135deg, #1976d2, #00acc1);
+    --success: #0d9d5c;
+    --danger: #e5484d;
+    --water-1: #4fc3f7;
+    --water-2: #0288d1;
+    --water-3: #01579b;
+    --sky-1: #e1f3fc;
+    --sky-2: #b8e0f2;
+    --sky-3: #7fc4e8;
+    --sail: #ffffff;
+    --boat-hull: #5d4037;
+    --wind-color: rgba(255, 255, 255, 0.7);
+    --shadow-xs: 0 1px 2px rgba(20, 50, 90, 0.06);
+    --shadow-sm: 0 2px 6px rgba(20, 50, 90, 0.1);
+    --shadow-md: 0 8px 20px -6px rgba(20, 50, 90, 0.18);
+    --shadow-lg: 0 20px 40px -12px rgba(20, 50, 90, 0.28);
+    --shadow-xl: 0 30px 60px -20px rgba(20, 50, 90, 0.38);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 26px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a1428;
+    --bg-grad-1: #0f1e38;
+    --bg-grad-2: #060c18;
+    --surface: #142338;
+    --surface-2: #1c2f4a;
+    --surface-3: #253c5c;
+    --border: rgba(130, 170, 220, 0.14);
+    --border-strong: rgba(130, 170, 220, 0.26);
+    --text: #e8f1fc;
+    --text-2: #a3bcd9;
+    --text-3: #687fa3;
+    --accent: #42a5f5;
+    --accent-2: #26c6da;
+    --accent-grad: linear-gradient(135deg, #42a5f5, #26c6da);
+    --success: #34d399;
+    --danger: #f87171;
+    --water-1: #29b6f6;
+    --water-2: #0277bd;
+    --water-3: #014361;
+    --sky-1: #0d1e35;
+    --sky-2: #122a47;
+    --sky-3: #1e4267;
+    --sail: #f0f6fc;
+    --boat-hull: #3e2723;
+    --wind-color: rgba(200, 230, 255, 0.7);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 8px 20px -6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 30px 60px -20px rgba(0, 0, 0, 0.85);
+    color-scheme: dark;
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 12% 15%, var(--bg-grad-1) 0%, transparent 42%),
+      radial-gradient(circle at 88% 80%, var(--bg-grad-2) 0%, transparent 48%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s, color 0.3s;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* ============ APP SHELL ============ */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding:
+      calc(var(--safe-top) + 10px)
+      calc(var(--safe-right) + 14px)
+      calc(var(--safe-bottom) + 6px)
+      calc(var(--safe-left) + 14px);
+    gap: 8px;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--accent-grad);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    box-shadow: 0 6px 16px -6px var(--accent);
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  .brand-sub {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    font-size: 17px;
+    font-family: inherit;
+  }
+
+  .icon-btn:hover { background: var(--surface-2); color: var(--text); }
+  .icon-btn:active { transform: scale(0.92); }
+
+  /* ============ STATS STRIP ============ */
+  .stats {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    box-shadow: var(--shadow-xs);
+    min-width: 0;
+  }
+
+  .stat-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
+  }
+
+  .stat-value.bump { animation: bump 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  @keyframes bump {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.22); color: var(--success); }
+    100% { transform: scale(1); }
+  }
+
+  /* ============ GAME CANVAS ============ */
+  .game-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 220px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    background: var(--sky-2);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+  }
+
+  /* Breath instruction overlay */
+  .breath-overlay {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .breath-overlay.inhale {
+    background: rgba(25, 118, 210, 0.55);
+  }
+
+  .breath-overlay.exhale {
+    background: rgba(0, 172, 193, 0.6);
+  }
+
+  .breath-overlay .breath-icon {
+    font-size: 15px;
+    animation: breatheIcon 4s ease-in-out infinite;
+  }
+
+  .breath-overlay.inhale .breath-icon {
+    animation: inhaleIcon 4s ease-in-out infinite;
+  }
+
+  .breath-overlay.exhale .breath-icon {
+    animation: exhaleIcon 4s ease-in-out infinite;
+  }
+
+  @keyframes inhaleIcon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.35); }
+  }
+
+  @keyframes exhaleIcon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.65); }
+  }
+
+  /* ============ HOLD BUTTON ============ */
+  .hold-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0 6px;
+  }
+
+  .hold-btn {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    height: 76px;
+    border-radius: 22px;
+    background: var(--surface);
+    border: 2px solid var(--border-strong);
+    color: var(--text-2);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.15s, border-color 0.25s, box-shadow 0.25s, color 0.2s;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    box-shadow: var(--shadow-md);
+  }
+
+  .hold-btn:active { transform: scale(0.985); }
+
+  .hold-btn.charging {
+    border-color: var(--accent-2);
+    color: white;
+    box-shadow: 0 0 35px -5px var(--accent-2), var(--shadow-lg);
+  }
+
+  .hold-btn.ready {
+    border-color: var(--accent);
+    animation: holdPulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes holdPulse {
+    0%, 100% { box-shadow: 0 0 20px -5px var(--accent), var(--shadow-md); }
+    50% { box-shadow: 0 0 40px -3px var(--accent-2), var(--shadow-lg); }
+  }
+
+  /* Wind fill meter */
+  .hold-fill {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    background: var(--accent-grad);
+    transition: width 0.1s linear;
+    border-radius: 20px;
+    pointer-events: none;
+  }
+
+  .hold-btn.charging .hold-fill {
+    transition: none;
+  }
+
+  .hold-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .hold-icon {
+    font-size: 22px;
+    transition: transform 0.2s;
+  }
+
+  .hold-btn.charging .hold-icon { transform: scale(1.15); }
+
+  .hold-label { white-space: nowrap; }
+
+  /* Wind strength indicator beneath */
+  .wind-meter {
+    width: 100%;
+    max-width: 340px;
+    height: 6px;
+    background: var(--surface-3);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+
+  .wind-meter-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), #00e5ff);
+    border-radius: 40px;
+    transition: width 0.15s linear;
+    box-shadow: 0 0 12px -2px var(--accent-2);
+  }
+
+  .wind-meter-fill.full {
+    animation: windFull 0.5s ease-out;
+  }
+
+  @keyframes windFull {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.6); }
+    100% { filter: brightness(1); }
+  }
+
+  /* ============ QUICK ACTIONS BAR ============ */
+  .quick-bar {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .quick-btn {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 10px 8px;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s, color 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+  }
+
+  .quick-btn:hover { background: var(--surface-2); color: var(--text); }
+  .quick-btn:active { transform: scale(0.97); }
+  .quick-btn.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 4px 0 2px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+  }
+
+  .footer strong {
+    font-weight: 700;
+    color: var(--text-2);
+  }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed;
+    bottom: calc(var(--safe-bottom) + 60px);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ============ WELCOME MODAL ============ */
+  .welcome-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 20, 40, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 3000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .welcome-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .welcome {
+    background: var(--surface);
+    border-radius: 26px;
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding: 26px 22px 22px;
+    transform: scale(0.92) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  .welcome-backdrop.show .welcome { transform: scale(1) translateY(0); }
+
+  .welcome-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    font-size: 16px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+    line-height: 1;
+  }
+
+  .welcome-close:hover { background: var(--surface-3); }
+  .welcome-close:active { transform: scale(0.9); }
+
+  .welcome-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: var(--accent-grad);
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+    box-shadow: 0 12px 30px -10px var(--accent);
+    margin: 0 auto 16px;
+  }
+
+  .welcome-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .welcome-tagline {
+    font-size: 13px;
+    color: var(--text-3);
+    text-align: center;
+    margin-bottom: 22px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .welcome-section { margin-bottom: 18px; }
+
+  .welcome-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .welcome-body {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .welcome-body strong { color: var(--text); font-weight: 600; }
+
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    background: var(--surface-2);
+    border-radius: 13px;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+  }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: var(--accent-grad);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px -4px var(--accent);
+  }
+
+  .step-text {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  .step-text strong { color: var(--text); font-weight: 600; }
+
+  .welcome-note {
+    font-size: 11.5px;
+    color: var(--text-3);
+    line-height: 1.55;
+    background: var(--surface-2);
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-top: 6px;
+  }
+
+  .welcome-note strong { color: var(--text-2); }
+
+  .start-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent-grad);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.25s;
+    box-shadow: 0 10px 24px -10px var(--accent);
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .start-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -10px var(--accent); }
+  .start-btn:active { transform: translateY(0) scale(0.985); }
+
+  .welcome-brand {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+
+  .welcome-brand strong { color: var(--text-2); font-weight: 700; }
+
+  /* ============ SETTINGS MODAL ============ */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 540px;
+    padding: 12px 20px calc(var(--safe-bottom) + 22px);
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 -12px 45px rgba(0,0,0,0.35);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-backdrop.show .modal { transform: translateY(0); }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border-strong);
+    border-radius: 4px;
+    margin: 0 auto 16px;
+  }
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-sub {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+
+  .setting-group { margin-bottom: 22px; }
+  .setting-group:last-child { margin-bottom: 0; }
+
+  .setting-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent;
+    gap: 12px;
+  }
+
+  .setting-row:hover { background: var(--surface-3); }
+
+  .setting-row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .setting-row-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .setting-row-desc {
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.35;
+  }
+
+  .toggle {
+    width: 42px;
+    height: 25px;
+    background: var(--surface-3);
+    border-radius: 40px;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 19px; height: 19px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle.on { background: var(--accent); border-color: var(--accent); }
+  .toggle.on::after { transform: translateX(17px); }
+
+  .theme-segmented {
+    display: flex;
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .theme-opt {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+  }
+
+  .theme-opt.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+  }
+
+  /* Option picker */
+  .option-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 6px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .option-btn {
+    padding: 10px 8px;
+    border-radius: 9px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+  }
+
+  .option-btn:hover { color: var(--text); }
+  .option-btn:active { transform: scale(0.96); }
+  .option-btn.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-xs);
+  }
+  .option-btn .opt-icon { font-size: 14px; }
+
+  /* Strength slider */
+  .strength-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 12px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .strength-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    min-width: 62px;
+  }
+
+  .strength-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 40px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .strength-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent);
+  }
+
+  .strength-slider::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid var(--accent);
+  }
+
+  .strength-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 38px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .test-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 11px;
+    border-radius: 11px;
+    background: var(--surface-2);
+    border: 1px dashed var(--border-strong);
+    color: var(--text-2);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .test-btn:hover { background: var(--surface-3); color: var(--text); border-color: var(--accent); }
+  .test-btn:active { transform: scale(0.98); }
+
+  .about-text {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
+    background: var(--surface-2);
+    padding: 14px;
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .about-text strong { color: var(--text); }
+
+  .danger-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .danger-btn:hover { background: rgba(229, 72, 77, 0.08); }
+  .danger-btn:active { transform: scale(0.98); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-height: 700px) {
+    .stats { display: none; }
+    .hold-btn { height: 66px; }
+    .game-wrap { min-height: 180px; }
+  }
+
+  @media (max-width: 380px) {
+    .brand-sub { display: none; }
+    .hold-btn { font-size: 13px; height: 68px; }
+    .hold-icon { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">⛵</div>
+      <div class="brand-text">
+        <div class="brand-title">Breeze</div>
+        <div class="brand-sub">breathe to sail</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Distance</div>
+      <div class="stat-value" id="distanceStat">0m</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cycles</div>
+      <div class="stat-value" id="cyclesStat">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Coherence</div>
+      <div class="stat-value" id="coherenceStat">—</div>
+    </div>
+  </div>
+
+  <!-- GAME CANVAS -->
+  <div class="game-wrap">
+    <canvas id="gameCanvas"></canvas>
+    <div class="breath-overlay" id="breathOverlay">
+      <span class="breath-icon">🌬️</span>
+      <span id="breathText">Ready</span>
+    </div>
+  </div>
+
+  <!-- HOLD BUTTON -->
+  <div class="hold-wrap">
+    <button class="hold-btn" id="holdBtn" aria-label="Hold to exhale">
+      <div class="hold-fill" id="holdFill"></div>
+      <div class="hold-content">
+        <span class="hold-icon">💨</span>
+        <span class="hold-label" id="holdLabel">Hold to exhale</span>
+      </div>
+    </button>
+    <div class="wind-meter">
+      <div class="wind-meter-fill" id="windMeterFill"></div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="quick-bar">
+    <button class="quick-btn" id="resetSessionBtn">
+      <span>↻</span> New voyage
+    </button>
+    <button class="quick-btn danger" id="resetAllBtn">
+      <span>🗑️</span> Reset all
+    </button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    Copyright &copy; <strong>Lumina Psychological Solutions</strong>
+  </footer>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     WELCOME MODAL
+     ============================================================ -->
+<div class="welcome-backdrop" id="welcomeBackdrop">
+  <div class="welcome" role="dialog" aria-modal="true" aria-label="Welcome">
+    <button class="welcome-close" id="welcomeClose" aria-label="Close">✕</button>
+
+    <div class="welcome-icon">⛵</div>
+    <h1 class="welcome-title">Breeze</h1>
+    <p class="welcome-tagline">Breathe in. Sail out.</p>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>📖</span> About</div>
+      <div class="welcome-body">
+        <strong>Breeze</strong> is a slow-breathing biofeedback game grounded in
+        <strong>heart-rate variability (HRV) research</strong>. Breathing at
+        roughly <strong>6 breaths per minute</strong> (4s in, 6s out) has been
+        shown to increase vagal tone, reduce cortisol, and shift the nervous
+        system toward a calm, focused state. You sail by exhaling — the calmer
+        and steadier your breath, the further you go.
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <div class="welcome-section-title"><span>🎯</span> How to play</div>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <strong>Breathe in</strong> when the banner says
+            <em>Breathe in</em>. Let your chest expand naturally for 4 seconds.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>Hold the button</strong> when the banner says
+            <em>Breathe out</em> — keep holding for the entire 6-second exhale.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Watch your boat sail.</strong> Steady, full exhales generate
+            the most wind. Release too early and the sail goes flat.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <strong>Complete cycles</strong> to build coherence. Aim for a full
+            sail at the end of each exhale.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-note">
+      <strong>Not a replacement for professional care.</strong>
+      If stress becomes persistent or overwhelming, please reach out to a
+      licensed mental health professional.
+    </div>
+
+    <button class="start-btn" id="startBtn">
+      <span>🚀</span> Set sail
+    </button>
+
+    <div class="welcome-brand">
+      Powered by <strong>Lumina Psychological Solutions</strong>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-backdrop" id="settingsBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Settings</div>
+    <div class="modal-sub">Customize your voyage</div>
+
+    <!-- APPEARANCE -->
+    <div class="setting-group">
+      <span class="setting-label">Appearance</span>
+      <div class="theme-segmented" id="themeSegmented">
+        <button class="theme-opt" data-theme="light">☀️ Light</button>
+        <button class="theme-opt" data-theme="dark">🌙 Dark</button>
+        <button class="theme-opt" data-theme="system">⚙️ Auto</button>
+      </div>
+    </div>
+
+    <!-- SOUND -->
+    <div class="setting-group">
+      <span class="setting-label">Sound</span>
+      <div class="setting-row" data-setting="sound">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Ambient sound</span>
+          <span class="setting-row-desc">Ocean waves and wind</span>
+        </div>
+        <div class="toggle" id="toggleSound"></div>
+      </div>
+
+      <div class="option-picker" id="soundPicker" style="margin-top:6px;">
+        <button class="option-btn" data-sound="ocean">
+          <span class="opt-icon">🌊</span> Ocean
+        </button>
+        <button class="option-btn" data-sound="wind">
+          <span class="opt-icon">🌬️</span> Wind
+        </button>
+        <button class="option-btn" data-sound="both">
+          <span class="opt-icon">🎵</span> Both
+        </button>
+      </div>
+
+      <div class="strength-row">
+        <span class="strength-label">Volume</span>
+        <input type="range" class="strength-slider" id="volumeSlider" min="0" max="100" value="60">
+        <span class="strength-value" id="volumeValue">60%</span>
+      </div>
+
+      <button class="test-btn" id="testSoundBtn">
+        <span>🔊</span> Test ambient sound
+      </button>
+    </div>
+
+    <!-- VIBRATION -->
+    <div class="setting-group">
+      <span class="setting-label">Haptic Feedback</span>
+      <div class="setting-row" data-setting="haptics">
+        <div class="setting-row-text">
+          <span class="setting-row-title">Haptic feedback</span>
+          <span class="setting-row-desc">Subtle vibration on exhale</span>
+        </div>
+        <div class="toggle" id="toggleHaptics"></div>
+      </div>
+
+      <div class="strength-row">
+        <span class="strength-label">Strength</span>
+        <input type="range" class="strength-slider" id="hapticStrengthSlider" min="1" max="10" value="5">
+        <span class="strength-value" id="hapticStrengthValue">5</span>
+      </div>
+
+      <button class="test-btn" id="testHapticBtn">
+        <span>📳</span> Test vibration
+      </button>
+    </div>
+
+    <!-- BREATHING -->
+    <div class="setting-group">
+      <span class="setting-label">Breathing Pace</span>
+      <div class="option-picker" id="pacePicker">
+        <button class="option-btn" data-pace="calm">
+          <span class="opt-icon">🧘</span> Calm
+        </button>
+        <button class="option-btn" data-pace="balanced">
+          <span class="opt-icon">⚖️</span> Balanced
+        </button>
+        <button class="option-btn" data-pace="deep">
+          <span class="opt-icon">💨</span> Deep
+        </button>
+      </div>
+      <div style="font-size:11px; color:var(--text-3); margin-top:8px; line-height:1.5; padding:0 4px;">
+        <strong style="color:var(--text-2);">Calm</strong> 4s in · 6s out &nbsp;·&nbsp;
+        <strong style="color:var(--text-2);">Balanced</strong> 4s in · 4s out &nbsp;·&nbsp;
+        <strong style="color:var(--text-2);">Deep</strong> 5s in · 7s out
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="setting-group">
+      <span class="setting-label">About</span>
+      <div class="about-text">
+        <strong>Breeze</strong> uses slow-paced breathing at ~6 breaths per
+        minute, a protocol shown in HRV research to increase vagal tone,
+        reduce cortisol, and support emotional regulation. The game mechanic —
+        exhale to fill the sail — encourages long, steady exhales, which are
+        particularly effective for parasympathetic activation. <br><br>
+        Not a replacement for professional care. If stress is persistent,
+        please reach out to a licensed mental health professional.
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <button class="danger-btn" id="clearHistoryBtn">
+        🗑️ Reset all data & counters
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  const state = {
+    theme: 'system',
+    sound: true,
+    soundType: 'ocean',
+    volume: 60,
+    haptics: true,
+    hapticStrength: 5,
+    pace: 'calm',
+    hasSeenWelcome: false,
+    totalDistance: 0,
+    totalCycles: 0,
+  };
+
+  const STORAGE_KEY = 'breezeGame.v1';
+
+  // Breathing pace configs (seconds)
+  const PACES = {
+    calm:     { inhale: 4, exhale: 6, label: 'Calm' },
+    balanced: { inhale: 4, exhale: 4, label: 'Balanced' },
+    deep:     { inhale: 5, exhale: 7, label: 'Deep' },
+  };
+
+  /* ============================================================
+     DOM REFS
+     ============================================================ */
+  const $ = id => document.getElementById(id);
+
+  const gameCanvas     = $('gameCanvas');
+  const ctx            = gameCanvas.getContext('2d');
+  const breathOverlay  = $('breathOverlay');
+  const breathText     = $('breathText');
+  const holdBtn        = $('holdBtn');
+  const holdFill       = $('holdFill');
+  const holdLabel      = $('holdLabel');
+  const windMeterFill  = $('windMeterFill');
+  const distanceStat   = $('distanceStat');
+  const cyclesStat     = $('cyclesStat');
+  const coherenceStat  = $('coherenceStat');
+  const toast          = $('toast');
+
+  const settingsBtn    = $('settingsBtn');
+  const settingsBackdrop = $('settingsBackdrop');
+  const themeSegmented = $('themeSegmented');
+  const toggleSound    = $('toggleSound');
+  const toggleHaptics  = $('toggleHaptics');
+  const soundPicker    = $('soundPicker');
+  const pacePicker     = $('pacePicker');
+  const volumeSlider   = $('volumeSlider');
+  const volumeValue    = $('volumeValue');
+  const hapticStrengthSlider = $('hapticStrengthSlider');
+  const hapticStrengthValue = $('hapticStrengthValue');
+  const testSoundBtn   = $('testSoundBtn');
+  const testHapticBtn  = $('testHapticBtn');
+  const clearHistoryBtn = $('clearHistoryBtn');
+
+  const resetSessionBtn = $('resetSessionBtn');
+  const resetAllBtn     = $('resetAllBtn');
+
+  const welcomeBackdrop = $('welcomeBackdrop');
+  const welcomeClose    = $('welcomeClose');
+  const startBtn        = $('startBtn');
+
+  /* ============================================================
+     CANVAS SIZING
+     ============================================================ */
+  let canvasW = 0, canvasH = 0, DPR = 1;
+
+  function resizeCanvas() {
+    const rect = gameCanvas.getBoundingClientRect();
+    DPR = window.devicePixelRatio || 1;
+    canvasW = rect.width;
+    canvasH = rect.height;
+    gameCanvas.width = Math.round(canvasW * DPR);
+    gameCanvas.height = Math.round(canvasH * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 100));
+
+  /* ============================================================
+     GAME STATE
+     ============================================================ */
+  const game = {
+    // Breathing cycle
+    phase: 'ready',          // ready | inhale | exhale | pause
+    phaseElapsed: 0,
+    phaseDuration: 0,
+    cycleCount: 0,
+
+    // Exhale tracking
+    isHolding: false,
+    exhaleHoldTime: 0,       // seconds held during current exhale
+    exhaleQuality: 0,        // 0..1, how much of exhale was held
+    lastQuality: 0,
+    qualitySum: 0,
+    qualityCount: 0,
+
+    // World
+    boatX: 0,                // 0..1 progress along course
+    boatBobbing: 0,
+    sailWind: 0,             // 0..1 current sail fullness
+    targetSailWind: 0,
+    windParticles: [],
+    waterWaves: [],
+    clouds: [],
+    distance: 0,             // meters traveled in session
+    time: 0,
+  };
+
+  /* ============================================================
+     HAPTIC ENGINE
+     ============================================================ */
+  function haptic(durationMs) {
+    if (!state.haptics) return;
+    if (!navigator.vibrate) return;
+    const strength = state.hapticStrength;
+    const scale = 0.3 + (strength / 10) * 1.7;
+    try {
+      navigator.vibrate(Math.round(durationMs * scale));
+    } catch (e) {}
+  }
+
+  /* ============================================================
+     AUDIO ENGINE
+     ============================================================ */
+  let audioCtx = null;
+  let ambientNodes = null;
+  let ambientGain = null;
+  let windGain = null;
+  let oceanGain = null;
+
+  function ensureAudio() {
+    try {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        audioCtx = new Ctx();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    } catch (e) { return null; }
+  }
+
+  function makeNoiseBuffer(ctx, duration) {
+    const size = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    const buffer = ctx.createBuffer(1, size, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < size; i++) data[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+
+  function startAmbient() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    if (ambientNodes) return;
+
+    try {
+      // Master gain
+      ambientGain = ctx.createGain();
+      ambientGain.gain.value = (state.volume / 100) * 0.5;
+      ambientGain.connect(ctx.destination);
+
+      // Ocean noise (brown-ish noise filtered low)
+      const oceanSrc = ctx.createBufferSource();
+      oceanSrc.buffer = makeNoiseBuffer(ctx, 4);
+      oceanSrc.loop = true;
+
+      const oceanLP = ctx.createBiquadFilter();
+      oceanLP.type = 'lowpass';
+      oceanLP.frequency.value = 500;
+      oceanLP.Q.value = 0.7;
+
+      oceanGain = ctx.createGain();
+      oceanGain.gain.value = (state.soundType === 'wind') ? 0 : 0.5;
+
+      oceanSrc.connect(oceanLP).connect(oceanGain).connect(ambientGain);
+      oceanSrc.start();
+
+      // Wind noise (filtered higher, modulated)
+      const windSrc = ctx.createBufferSource();
+      windSrc.buffer = makeNoiseBuffer(ctx, 4);
+      windSrc.loop = true;
+
+      const windBP = ctx.createBiquadFilter();
+      windBP.type = 'bandpass';
+      windBP.frequency.value = 900;
+      windBP.Q.value = 0.5;
+
+      windGain = ctx.createGain();
+      windGain.gain.value = (state.soundType === 'ocean') ? 0 : 0.25;
+
+      windSrc.connect(windBP).connect(windGain).connect(ambientGain);
+      windSrc.start();
+
+      ambientNodes = { oceanSrc, windSrc, oceanLP, windBP };
+    } catch (e) { /* ignore */ }
+  }
+
+  function stopAmbient() {
+    if (ambientNodes) {
+      try {
+        ambientNodes.oceanSrc.stop();
+        ambientNodes.windSrc.stop();
+      } catch (e) {}
+      ambientNodes = null;
+    }
+    if (ambientGain) {
+      try { ambientGain.disconnect(); } catch (e) {}
+      ambientGain = null;
+    }
+  }
+
+  function updateAmbientMix() {
+    if (!ambientGain) return;
+    ambientGain.gain.value = (state.volume / 100) * 0.5;
+    if (oceanGain) oceanGain.gain.value = (state.soundType === 'wind') ? 0 : 0.5;
+    if (windGain) windGain.gain.value = (state.soundType === 'ocean') ? 0 : 0.25;
+  }
+
+  function playChime() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      [659.25, 830.61, 987.77].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const vol = (state.volume / 100) * 0.08;
+        gain.gain.setValueAtTime(0, now + i * 0.09);
+        gain.gain.linearRampToValueAtTime(vol, now + i * 0.09 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.5);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i * 0.09);
+        osc.stop(now + i * 0.09 + 0.55);
+      });
+    } catch (e) {}
+  }
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  let toastTimer = null;
+  function showToast(msg, emoji = '✨') {
+    toast.innerHTML = `<span>${emoji}</span><span>${msg}</span>`;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  /* ============================================================
+     THEME
+     ============================================================ */
+  function applyTheme() {
+    const root = document.documentElement;
+    let effective = state.theme;
+    if (state.theme === 'system') {
+      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    root.setAttribute('data-theme', effective);
+    themeSegmented.querySelectorAll('.theme-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.theme === state.theme);
+    });
+  }
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (state.theme === 'system') applyTheme();
+  });
+
+  themeSegmented.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-opt');
+    if (!btn) return;
+    state.theme = btn.dataset.theme;
+    applyTheme();
+    saveState();
+    haptic(8);
+  });
+
+  /* ============================================================
+     STORAGE
+     ============================================================ */
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        Object.assign(state, saved);
+      }
+    } catch (e) {}
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        theme: state.theme,
+        sound: state.sound,
+        soundType: state.soundType,
+        volume: state.volume,
+        haptics: state.haptics,
+        hapticStrength: state.hapticStrength,
+        pace: state.pace,
+        hasSeenWelcome: state.hasSeenWelcome,
+        totalDistance: state.totalDistance,
+        totalCycles: state.totalCycles,
+      }));
+    } catch (e) {}
+  }
+
+  /* ============================================================
+     BREATHING CYCLE LOGIC
+     ============================================================ */
+  function setPhase(phase) {
+    game.phase = phase;
+    game.phaseElapsed = 0;
+    const pace = PACES[state.pace];
+    game.phaseDuration = phase === 'inhale' ? pace.inhale : (phase === 'exhale' ? pace.exhale : 1);
+
+    // Reset exhale tracking when entering exhale
+    if (phase === 'exhale') {
+      game.exhaleHoldTime = 0;
+      game.qualityCount = 0;
+      // Short haptic pulse to signal exhale start
+      haptic(20);
+    }
+
+    // Update banner
+    updateBreathBanner();
+  }
+
+  function updateBreathBanner() {
+    breathOverlay.classList.remove('inhale', 'exhale');
+    if (game.phase === 'inhale') {
+      breathOverlay.classList.add('inhale');
+      breathText.textContent = 'Breathe in';
+    } else if (game.phase === 'exhale') {
+      breathOverlay.classList.add('exhale');
+      breathText.textContent = 'Breathe out & hold';
+    } else {
+      breathText.textContent = 'Ready';
+    }
+  }
+
+  function advancePhase() {
+    if (game.phase === 'ready' || game.phase === 'pause') {
+      setPhase('inhale');
+    } else if (game.phase === 'inhale') {
+      setPhase('exhale');
+    } else if (game.phase === 'exhale') {
+      // Evaluate exhale quality
+      const pace = PACES[state.pace];
+      const quality = game.exhaleHoldTime / pace.exhale;
+      game.lastQuality = quality;
+      game.qualitySum += quality;
+      game.qualityCount++;
+      game.cycleCount++;
+      state.totalCycles = (state.totalCycles || 0) + 1;
+
+      // Coherence display
+      const avgCoherence = (game.qualitySum / game.qualityCount) * 100;
+      coherenceStat.textContent = Math.round(avgCoherence) + '%';
+
+      // Bonus sail wind for high quality
+      if (quality > 0.9) {
+        // Excellent exhale
+        haptic(30);
+      } else if (quality > 0.6) {
+        haptic(15);
+      }
+
+      cyclesStat.textContent = game.cycleCount;
+      saveState();
+
+      setPhase('inhale');
+    }
+  }
+
+  /* ============================================================
+     HOLD BUTTON
+     ============================================================ */
+  function startHold(e) {
+    e.preventDefault();
+    if (game.phase !== 'exhale') {
+      // Only allow holding during exhale
+      haptic(8);
+      return;
+    }
+    game.isHolding = true;
+    game.exhaleHoldTime = 0;
+    holdBtn.classList.add('charging');
+    holdLabel.textContent = 'Exhaling...';
+    haptic(15);
+  }
+
+  function endHold(e) {
+    if (e) e.preventDefault();
+    if (!game.isHolding) return;
+    game.isHolding = false;
+    holdBtn.classList.remove('charging');
+    holdLabel.textContent = 'Hold to exhale';
+    haptic(6);
+  }
+
+  holdBtn.addEventListener('pointerdown', startHold);
+  holdBtn.addEventListener('pointerup', endHold);
+  holdBtn.addEventListener('pointercancel', endHold);
+  holdBtn.addEventListener('pointerleave', endHold);
+  holdBtn.addEventListener('contextmenu', e => e.preventDefault());
+
+  /* ============================================================
+     GAME LOOP
+     ============================================================ */
+  let lastTimestamp = 0;
+
+  function update(dt) {
+    game.time += dt;
+
+    // ===== BREATHING CYCLE =====
+    if (game.phase !== 'ready') {
+      game.phaseElapsed += dt;
+
+      // Compute inhale progress for banner animation (CSS handles the icon)
+      if (game.phase === 'inhale') {
+        // Sail wind builds during inhale (preparation)
+        game.targetSailWind = 0.15;
+      } else if (game.phase === 'exhale') {
+        // Track hold time during exhale
+        if (game.isHolding) {
+          game.exhaleHoldTime += dt;
+        }
+        // Sail wind tied to hold time
+        const pace = PACES[state.pace];
+        const holdFrac = Math.min(1, game.exhaleHoldTime / pace.exhale);
+        game.targetSailWind = holdFrac;
+      }
+
+      if (game.phaseElapsed >= game.phaseDuration) {
+        advancePhase();
+      }
+    }
+
+    // Smooth sail wind
+    game.sailWind += (game.targetSailWind - game.sailWind) * Math.min(1, dt * 6);
+
+    // ===== BOAT MOVEMENT =====
+    // Speed proportional to sail wind (only meaningful during exhale)
+    const speedFactor = game.sailWind * (game.phase === 'exhale' ? 1 : 0.3);
+    const pixelsPerSecond = 80;
+    game.boatX += (speedFactor * pixelsPerSecond * dt) / canvasW;
+    if (game.boatX > 1.05) {
+      game.boatX = -0.05; // wrap around for endless sailing
+    }
+
+    // Distance counter
+    game.distance += speedFactor * dt * 3; // arbitrary scale
+    state.totalDistance = (state.totalDistance || 0) + speedFactor * dt * 3;
+    distanceStat.textContent = Math.round(state.totalDistance) + 'm';
+
+    // Boat bobbing
+    game.boatBobbing = Math.sin(game.time * 2.5) * 3;
+
+    // ===== UI UPDATE: HOLD BUTTON FILL =====
+    if (game.phase === 'exhale') {
+      const pace = PACES[state.pace];
+      const holdFrac = Math.min(1, game.exhaleHoldTime / pace.exhale);
+      holdFill.style.width = (holdFrac * 100) + '%';
+      windMeterFill.style.width = (holdFrac * 100) + '%';
+
+      if (holdFrac >= 0.99 && !windMeterFill.classList.contains('full')) {
+        windMeterFill.classList.add('full');
+        setTimeout(() => windMeterFill.classList.remove('full'), 600);
+      }
+
+      // Button hint
+      if (!game.isHolding && game.exhaleHoldTime === 0) {
+        holdBtn.classList.add('ready');
+      } else {
+        holdBtn.classList.remove('ready');
+      }
+    } else {
+      holdFill.style.width = '0%';
+      windMeterFill.style.width = '0%';
+      holdBtn.classList.remove('ready', 'charging');
+    }
+
+    // ===== PARTICLES =====
+    updateWindParticles(dt);
+    updateWaterWaves(dt);
+    updateClouds(dt);
+  }
+
+  function updateWindParticles(dt) {
+    // Spawn wind particles proportional to sail wind
+    if (game.sailWind > 0.05 && Math.random() < game.sailWind * 0.6) {
+      const boatX = game.boatX * canvasW;
+      const boatY = canvasH * 0.65;
+      game.windParticles.push({
+        x: boatX + 30,
+        y: boatY - 20 + Math.random() * 15,
+        vx: -80 - Math.random() * 60,
+        vy: (Math.random() - 0.5) * 20,
+        life: 1.2,
+        size: 2 + Math.random() * 3,
+      });
+    }
+
+    for (let i = game.windParticles.length - 1; i >= 0; i--) {
+      const p = game.windParticles[i];
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.life -= dt;
+      if (p.life <= 0 || p.x < -20) {
+        game.windParticles.splice(i, 1);
+      }
+    }
+  }
+
+  function updateWaterWaves(dt) {
+    // Waves move right-to-left relative to boat
+    for (let i = game.waterWaves.length - 1; i >= 0; i--) {
+      const w = game.waterWaves[i];
+      w.x -= (40 + w.speed) * dt;
+      w.phase += dt * 1.5;
+      if (w.x < -50) {
+        game.waterWaves.splice(i, 1);
+      }
+    }
+
+    // Spawn new waves
+    if (Math.random() < 0.4) {
+      game.waterWaves.push({
+        x: canvasW + 20,
+        y: canvasH * 0.68 + Math.random() * canvasH * 0.25,
+        len: 20 + Math.random() * 40,
+        speed: 20 + Math.random() * 40,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+
+  function updateClouds(dt) {
+    for (let i = game.clouds.length - 1; i >= 0; i--) {
+      const c = game.clouds[i];
+      c.x -= c.speed * dt;
+      if (c.x < -c.w - 40) {
+        game.clouds.splice(i, 1);
+      }
+    }
+    if (Math.random() < 0.008 && game.clouds.length < 5) {
+      game.clouds.push({
+        x: canvasW + 60,
+        y: 30 + Math.random() * canvasH * 0.3,
+        w: 60 + Math.random() * 80,
+        h: 18 + Math.random() * 12,
+        speed: 8 + Math.random() * 12,
+        alpha: 0.5 + Math.random() * 0.3,
+      });
+    }
+  }
+
+  /* ============================================================
+     RENDER
+     ============================================================ */
+  function render() {
+    const w = canvasW;
+    const h = canvasH;
+    if (w === 0 || h === 0) return;
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+    // ===== SKY GRADIENT =====
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.7);
+    if (isDark) {
+      skyGrad.addColorStop(0, '#0a1428');
+      skyGrad.addColorStop(0.5, '#122a47');
+      skyGrad.addColorStop(1, '#1e4267');
+    } else {
+      skyGrad.addColorStop(0, '#e1f3fc');
+      skyGrad.addColorStop(0.5, '#b8e0f2');
+      skyGrad.addColorStop(1, '#7fc4e8');
+    }
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, w, h * 0.7);
+
+    // ===== SUN / MOON =====
+    const sunX = w * 0.8;
+    const sunY = h * 0.15;
+    const sunR = 30;
+    if (isDark) {
+      // Moon
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(220, 235, 255, 0.9)';
+      ctx.shadowColor = 'rgba(200, 220, 255, 0.6)';
+      ctx.shadowBlur = 30;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Moon crater
+      ctx.beginPath();
+      ctx.arc(sunX - 8, sunY - 5, 6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(180, 200, 230, 0.5)';
+      ctx.fill();
+    } else {
+      // Sun
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 235, 150, 0.95)';
+      ctx.shadowColor = 'rgba(255, 220, 100, 0.7)';
+      ctx.shadowBlur = 40;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    // ===== CLOUDS =====
+    game.clouds.forEach(c => {
+      ctx.globalAlpha = c.alpha;
+      ctx.fillStyle = isDark ? 'rgba(180, 210, 240, 0.4)' : 'rgba(255, 255, 255, 0.85)';
+      roundRect(ctx, c.x, c.y, c.w, c.h, c.h / 2);
+      ctx.fill();
+      // Fluff
+      ctx.beginPath();
+      ctx.arc(c.x + c.w * 0.3, c.y - 4, c.h * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(c.x + c.w * 0.6, c.y - 6, c.h * 0.7, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // ===== WATER =====
+    const waterGrad = ctx.createLinearGradient(0, h * 0.7, 0, h);
+    if (isDark) {
+      waterGrad.addColorStop(0, '#0277bd');
+      waterGrad.addColorStop(0.5, '#01579b');
+      waterGrad.addColorStop(1, '#014361');
+    } else {
+      waterGrad.addColorStop(0, '#4fc3f7');
+      waterGrad.addColorStop(0.5, '#0288d1');
+      waterGrad.addColorStop(1, '#01579b');
+    }
+    ctx.fillStyle = waterGrad;
+    ctx.fillRect(0, h * 0.7, w, h * 0.3);
+
+    // ===== WAVES =====
+    ctx.strokeStyle = isDark ? 'rgba(120, 200, 240, 0.35)' : 'rgba(255, 255, 255, 0.5)';
+    ctx.lineWidth = 2;
+    game.waterWaves.forEach(w2 => {
+      ctx.beginPath();
+      ctx.moveTo(w2.x, w2.y);
+      const segments = 8;
+      for (let i = 0; i <= segments; i++) {
+        const t = i / segments;
+        const x = w2.x + t * w2.len;
+        const y = w2.y + Math.sin(w2.phase + t * Math.PI * 2) * 3;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    });
+
+    // ===== BOAT =====
+    const boatScreenX = game.boatX * w;
+    const boatScreenY = h * 0.68 + game.boatBobbing;
+
+    ctx.save();
+    ctx.translate(boatScreenX, boatScreenY);
+
+    // Water reflection
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = isDark ? '#01579b' : '#0288d1';
+    ctx.beginPath();
+    ctx.ellipse(0, 8, 40, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Mast
+    ctx.strokeStyle = isDark ? '#8d6e63' : '#5d4037';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -55);
+    ctx.stroke();
+
+    // Sail — curved triangle whose fullness grows with sailWind
+    const sailW = 8 + game.sailWind * 42;
+    const sailH = 50;
+    const sailGrad = ctx.createLinearGradient(0, -sailH, sailW, 0);
+    if (isDark) {
+      sailGrad.addColorStop(0, '#e8f1fc');
+      sailGrad.addColorStop(1, '#a3bcd9');
+    } else {
+      sailGrad.addColorStop(0, '#ffffff');
+      sailGrad.addColorStop(1, '#d6e6f7');
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(2, -52);
+    ctx.quadraticCurveTo(sailW * 0.6, -28, 2, -4);
+    ctx.quadraticCurveTo(sailW * 0.4, -28, 2, -52);
+    ctx.closePath();
+    ctx.fillStyle = sailGrad;
+    ctx.fill();
+    ctx.strokeStyle = isDark ? 'rgba(200, 220, 240, 0.7)' : 'rgba(120, 160, 200, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Sail fullness lines (wind streaks inside the sail)
+    if (game.sailWind > 0.2) {
+      ctx.strokeStyle = `rgba(255, 255, 255, ${game.sailWind * 0.5})`;
+      ctx.lineWidth = 1.2;
+      for (let i = 1; i <= 3; i++) {
+        const t = i / 4;
+        ctx.beginPath();
+        ctx.moveTo(2, -52 + t * sailH * 0.9);
+        ctx.quadraticCurveTo(sailW * 0.5, -28 + t * 10, 2, -52 + t * sailH * 0.9 + 6);
+        ctx.stroke();
+      }
+    }
+
+    // Hull
+    ctx.fillStyle = isDark ? '#3e2723' : '#5d4037';
+    ctx.beginPath();
+    ctx.moveTo(-35, 0);
+    ctx.quadraticCurveTo(-30, 12, 0, 12);
+    ctx.quadraticCurveTo(30, 12, 35, 0);
+    ctx.lineTo(30, -3);
+    ctx.lineTo(-30, -3);
+    ctx.closePath();
+    ctx.fill();
+
+    // Hull highlight
+    ctx.fillStyle = isDark ? 'rgba(120, 90, 70, 0.6)' : 'rgba(120, 80, 60, 0.5)';
+    ctx.beginPath();
+    ctx.moveTo(-32, -2);
+    ctx.lineTo(32, -2);
+    ctx.lineTo(28, 0);
+    ctx.lineTo(-28, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+
+    // ===== WIND PARTICLES =====
+    game.windParticles.forEach(p => {
+      ctx.globalAlpha = Math.min(1, p.life);
+      ctx.strokeStyle = isDark ? 'rgba(180, 220, 255, 0.7)' : 'rgba(255, 255, 255, 0.8)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + 12, p.y);
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  /* ============================================================
+     ANIMATION LOOP
+     ============================================================ */
+  function loop(timestamp) {
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+    lastTimestamp = timestamp;
+
+    update(dt);
+    render();
+
+    requestAnimationFrame(loop);
+  }
+
+  /* ============================================================
+     SETTINGS HANDLERS
+     ============================================================ */
+  function openSettings() {
+    settingsBackdrop.classList.add('show');
+    haptic(6);
+  }
+
+  function closeSettings() {
+    settingsBackdrop.classList.remove('show');
+  }
+
+  settingsBtn.addEventListener('click', openSettings);
+  settingsBackdrop.addEventListener('click', (e) => {
+    if (e.target === settingsBackdrop) closeSettings();
+  });
+
+  function bindToggle(el, key, onCb) {
+    el.parentElement.addEventListener('click', () => {
+      state[key] = !state[key];
+      el.classList.toggle('on', state[key]);
+      saveState();
+      haptic(8);
+      if (onCb) onCb(state[key]);
+      const labels = { sound: ['Sound on', 'Sound off'], haptics: ['Haptics on', 'Haptics off'] };
+      const icons = { sound: '🔊', haptics: '📳' };
+      const iconsOff = { sound: '🔇', haptics: '📴' };
+      if (labels[key]) {
+        if (state[key]) showToast(labels[key][0], icons[key]);
+        else showToast(labels[key][1], iconsOff[key]);
+      }
+    });
+  }
+
+  bindToggle(toggleSound, 'sound', (on) => {
+    if (on) { startAmbient(); updateAmbientMix(); }
+    else stopAmbient();
+  });
+
+  bindToggle(toggleHaptics, 'haptics');
+
+  // Sound type picker
+  function refreshSoundPicker() {
+    soundPicker.querySelectorAll('.option-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.sound === state.soundType);
+    });
+  }
+
+  soundPicker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.option-btn');
+    if (!btn) return;
+    state.soundType = btn.dataset.sound;
+    refreshSoundPicker();
+    saveState();
+    updateAmbientMix();
+    haptic(6);
+    const names = { ocean: 'Ocean', wind: 'Wind', both: 'Ocean + Wind' };
+    showToast(`${names[state.soundType]} sound`, '🔊');
+  });
+
+  // Pace picker
+  function refreshPacePicker() {
+    pacePicker.querySelectorAll('.option-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.pace === state.pace);
+    });
+  }
+
+  pacePicker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.option-btn');
+    if (!btn) return;
+    state.pace = btn.dataset.pace;
+    refreshPacePicker();
+    saveState();
+    // Reset cycle
+    game.phase = 'ready';
+    game.phaseElapsed = 0;
+    updateBreathBanner();
+    haptic(6);
+    const names = { calm: 'Calm 4s/6s', balanced: 'Balanced 4s/4s', deep: 'Deep 5s/7s' };
+    showToast(`${names[state.pace]} pace`, '🧘');
+  });
+
+  // Sliders
+  volumeSlider.addEventListener('input', () => {
+    state.volume = parseInt(volumeSlider.value, 10);
+    volumeValue.textContent = state.volume + '%';
+    updateAmbientMix();
+    saveState();
+  });
+
+  hapticStrengthSlider.addEventListener('input', () => {
+    state.hapticStrength = parseInt(hapticStrengthSlider.value, 10);
+    hapticStrengthValue.textContent = state.hapticStrength;
+    saveState();
+  });
+  hapticStrengthSlider.addEventListener('change', () => { haptic(60); });
+
+  // Test buttons
+  testSoundBtn.addEventListener('click', () => {
+    const prev = state.sound;
+    state.sound = true;
+    startAmbient();
+    updateAmbientMix();
+    setTimeout(() => {
+      if (!prev) { stopAmbient(); }
+    }, 3000);
+    haptic(6);
+    showToast('Testing ambient sound for 3s', '🔊');
+  });
+
+  testHapticBtn.addEventListener('click', () => {
+    const prev = state.haptics;
+    state.haptics = true;
+    haptic(80);
+    haptic(60);
+    state.haptics = prev;
+    showToast('Testing vibration', '📳');
+  });
+
+  clearHistoryBtn.addEventListener('click', () => {
+    if (!confirm('Reset all data & counters? This cannot be undone.')) return;
+    state.totalDistance = 0;
+    state.totalCycles = 0;
+    distanceStat.textContent = '0m';
+    cyclesStat.textContent = '0';
+    coherenceStat.textContent = '—';
+    game.distance = 0;
+    game.cycleCount = 0;
+    game.qualitySum = 0;
+    game.qualityCount = 0;
+    saveState();
+    closeSettings();
+    showToast('All data reset', '🧹');
+    haptic(20);
+  });
+
+  /* ============================================================
+     QUICK ACTIONS
+     ============================================================ */
+  resetSessionBtn.addEventListener('click', () => {
+    if (!confirm('Start a new voyage? Session counters will reset.')) return;
+    game.distance = 0;
+    game.cycleCount = 0;
+    game.qualitySum = 0;
+    game.qualityCount = 0;
+    game.boatX = 0;
+    game.sailWind = 0;
+    game.targetSailWind = 0;
+    game.phase = 'ready';
+    game.phaseElapsed = 0;
+    distanceStat.textContent = '0m';
+    cyclesStat.textContent = '0';
+    coherenceStat.textContent = '—';
+    updateBreathBanner();
+    showToast('New voyage started', '⛵');
+    haptic(12);
+  });
+
+  resetAllBtn.addEventListener('click', () => {
+    if (!confirm('Reset everything including all-time stats?')) return;
+    state.totalDistance = 0;
+    state.totalCycles = 0;
+    game.distance = 0;
+    game.cycleCount = 0;
+    game.qualitySum = 0;
+    game.qualityCount = 0;
+    game.boatX = 0;
+    game.sailWind = 0;
+    game.phase = 'ready';
+    game.phaseElapsed = 0;
+    distanceStat.textContent = '0m';
+    cyclesStat.textContent = '0';
+    coherenceStat.textContent = '—';
+    updateBreathBanner();
+    saveState();
+    showToast('Everything reset', '🧹');
+    haptic(20);
+  });
+
+  /* ============================================================
+     WELCOME MODAL
+     ============================================================ */
+  function openWelcome() {
+    welcomeBackdrop.classList.add('show');
+  }
+
+  function closeWelcome() {
+    welcomeBackdrop.classList.remove('show');
+    state.hasSeenWelcome = true;
+    saveState();
+  }
+
+  welcomeClose.addEventListener('click', closeWelcome);
+  startBtn.addEventListener('click', () => {
+    closeWelcome();
+    haptic(10);
+    setTimeout(() => {
+      // Auto-start breathing cycle
+      if (game.phase === 'ready') {
+        setPhase('inhale');
+      }
+    }, 400);
+  });
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if (e.target === welcomeBackdrop) closeWelcome();
+  });
+
+  /* ============================================================
+     KEYBOARD
+     ============================================================ */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (settingsBackdrop.classList.contains('show')) closeSettings();
+      else if (welcomeBackdrop.classList.contains('show')) closeWelcome();
+    }
+    // Spacebar to hold
+    if (e.code === 'Space' && !e.repeat) {
+      e.preventDefault();
+      startHold(e);
+    }
+  });
+  document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      endHold(e);
+    }
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init() {
+    loadState();
+    applyTheme();
+    resizeCanvas();
+
+    toggleSound.classList.toggle('on', state.sound);
+    toggleHaptics.classList.toggle('on', state.haptics);
+
+    refreshSoundPicker();
+    refreshPacePicker();
+
+    volumeSlider.value = state.volume;
+    volumeValue.textContent = state.volume + '%';
+
+    hapticStrengthSlider.value = state.hapticStrength;
+    hapticStrengthValue.textContent = state.hapticStrength;
+
+    // Show all-time stats initially
+    distanceStat.textContent = Math.round(state.totalDistance || 0) + 'm';
+    cyclesStat.textContent = state.totalCycles || 0;
+
+    // Start ambient sound if enabled (on first user interaction)
+    if (state.sound) {
+      const startAudio = () => {
+        startAmbient();
+        updateAmbientMix();
+        document.removeEventListener('pointerdown', startAudio);
+      };
+      document.addEventListener('pointerdown', startAudio, { once: true });
+    }
+
+    // Welcome modal
+    if (!state.hasSeenWelcome) {
+      setTimeout(openWelcome, 400);
+    } else {
+      // Auto-start breathing after a short delay
+      setTimeout(() => {
+        if (game.phase === 'ready') setPhase('inhale');
+      }, 800);
+      setTimeout(() => {
+        showToast('Hold the button when breathing out', '🌬️');
+      }, 1400);
+    }
+
+    // Begin animation loop
+    requestAnimationFrame(loop);
+
+    // Pre-populate clouds
+    for (let i = 0; i < 3; i++) {
+      game.clouds.push({
+        x: Math.random() * canvasW,
+        y: 30 + Math.random() * canvasH * 0.3,
+        w: 60 + Math.random() * 80,
+        h: 18 + Math.random() * 12,
+        speed: 8 + Math.random() * 12,
+        alpha: 0.5 + Math.random() * 0.3,
+      });
+    }
+  }
+
+  // Start when DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+</body>
+</html>
