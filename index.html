@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="format-detection" content="telephone=no">
-<title>Breeze · Breathe to Sail</title>
+<title>HooHoo Sailer · Breathe to Sail</title>
 <style>
   /* ============ THEME TOKENS ============ */
   :root {
@@ -28,15 +28,6 @@
     --accent-grad: linear-gradient(135deg, #1976d2, #00acc1);
     --success: #0d9d5c;
     --danger: #e5484d;
-    --water-1: #4fc3f7;
-    --water-2: #0288d1;
-    --water-3: #01579b;
-    --sky-1: #e1f3fc;
-    --sky-2: #b8e0f2;
-    --sky-3: #7fc4e8;
-    --sail: #ffffff;
-    --boat-hull: #5d4037;
-    --wind-color: rgba(255, 255, 255, 0.7);
     --shadow-xs: 0 1px 2px rgba(20, 50, 90, 0.06);
     --shadow-sm: 0 2px 6px rgba(20, 50, 90, 0.1);
     --shadow-md: 0 8px 20px -6px rgba(20, 50, 90, 0.18);
@@ -70,15 +61,6 @@
     --accent-grad: linear-gradient(135deg, #42a5f5, #26c6da);
     --success: #34d399;
     --danger: #f87171;
-    --water-1: #29b6f6;
-    --water-2: #0277bd;
-    --water-3: #014361;
-    --sky-1: #0d1e35;
-    --sky-2: #122a47;
-    --sky-3: #1e4267;
-    --sail: #f0f6fc;
-    --boat-hull: #3e2723;
-    --wind-color: rgba(200, 230, 255, 0.7);
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
     --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.45);
     --shadow-md: 0 8px 20px -6px rgba(0, 0, 0, 0.6);
@@ -160,7 +142,7 @@
     background: var(--accent-grad);
     display: grid;
     place-items: center;
-    font-size: 18px;
+    font-size: 20px;
     box-shadow: 0 6px 16px -6px var(--accent);
     flex-shrink: 0;
   }
@@ -260,7 +242,7 @@
     overflow: hidden;
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border);
-    background: var(--sky-2);
+    background: #7fc4e8;
   }
 
   canvas {
@@ -292,6 +274,7 @@
     pointer-events: none;
     transition: opacity 0.3s, transform 0.3s;
     border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 5;
   }
 
   .breath-overlay.inhale {
@@ -376,7 +359,6 @@
     50% { box-shadow: 0 0 40px -3px var(--accent-2), var(--shadow-lg); }
   }
 
-  /* Wind fill meter */
   .hold-fill {
     position: absolute;
     inset: 0;
@@ -412,7 +394,6 @@
 
   .hold-label { white-space: nowrap; }
 
-  /* Wind strength indicator beneath */
   .wind-meter {
     width: 100%;
     max-width: 340px;
@@ -589,7 +570,7 @@
     background: var(--accent-grad);
     display: grid;
     place-items: center;
-    font-size: 30px;
+    font-size: 32px;
     box-shadow: 0 12px 30px -10px var(--accent);
     margin: 0 auto 16px;
   }
@@ -886,7 +867,6 @@
     box-shadow: var(--shadow-xs);
   }
 
-  /* Option picker */
   .option-picker {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
@@ -924,7 +904,6 @@
   }
   .option-btn .opt-icon { font-size: 14px; }
 
-  /* Strength slider */
   .strength-row {
     display: flex;
     align-items: center;
@@ -1062,7 +1041,7 @@
     <div class="brand">
       <div class="brand-icon">⛵</div>
       <div class="brand-text">
-        <div class="brand-title">Breeze</div>
+        <div class="brand-title">HooHoo Sailer</div>
         <div class="brand-sub">breathe to sail</div>
       </div>
     </div>
@@ -1138,14 +1117,14 @@
     <button class="welcome-close" id="welcomeClose" aria-label="Close">✕</button>
 
     <div class="welcome-icon">⛵</div>
-    <h1 class="welcome-title">Breeze</h1>
+    <h1 class="welcome-title">HooHoo Sailer</h1>
     <p class="welcome-tagline">Breathe in. Sail out.</p>
 
     <div class="welcome-section">
       <div class="welcome-section-title"><span>📖</span> About</div>
       <div class="welcome-body">
-        <strong>Breeze</strong> is a slow-breathing biofeedback game grounded in
-        <strong>heart-rate variability (HRV) research</strong>. Breathing at
+        <strong>HooHoo Sailer</strong> is a slow-breathing biofeedback game grounded
+        in <strong>heart-rate variability (HRV) research</strong>. Breathing at
         roughly <strong>6 breaths per minute</strong> (4s in, 6s out) has been
         shown to increase vagal tone, reduce cortisol, and shift the nervous
         system toward a calm, focused state. You sail by exhaling — the calmer
@@ -1154,7 +1133,7 @@
     </div>
 
     <div class="welcome-section">
-      <div class="welcome-section-title"><span>🎯</span> How to play</div>
+      <div class="welcome-section-title"><span>🎯</span> How to sail</div>
       <div class="step-list">
         <div class="step-item">
           <div class="step-num">1</div>
@@ -1301,7 +1280,7 @@
     <div class="setting-group">
       <span class="setting-label">About</span>
       <div class="about-text">
-        <strong>Breeze</strong> uses slow-paced breathing at ~6 breaths per
+        <strong>HooHoo Sailer</strong> uses slow-paced breathing at ~6 breaths per
         minute, a protocol shown in HRV research to increase vagal tone,
         reduce cortisol, and support emotional regulation. The game mechanic —
         exhale to fill the sail — encourages long, steady exhales, which are
@@ -1339,9 +1318,8 @@
     totalCycles: 0,
   };
 
-  const STORAGE_KEY = 'breezeGame.v1';
+  const STORAGE_KEY = 'hoohooSailer.v1';
 
-  // Breathing pace configs (seconds)
   const PACES = {
     calm:     { inhale: 4, exhale: 6, label: 'Calm' },
     balanced: { inhale: 4, exhale: 4, label: 'Balanced' },
@@ -1407,33 +1385,35 @@
   window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 100));
 
   /* ============================================================
-     GAME STATE
+     GAME STATE — New 3/4 perspective
      ============================================================ */
   const game = {
-    // Breathing cycle
-    phase: 'ready',          // ready | inhale | exhale | pause
+    phase: 'ready',
     phaseElapsed: 0,
     phaseDuration: 0,
     cycleCount: 0,
 
-    // Exhale tracking
     isHolding: false,
-    exhaleHoldTime: 0,       // seconds held during current exhale
-    exhaleQuality: 0,        // 0..1, how much of exhale was held
+    exhaleHoldTime: 0,
+    exhaleQuality: 0,
     lastQuality: 0,
     qualitySum: 0,
     qualityCount: 0,
 
-    // World
-    boatX: 0,                // 0..1 progress along course
+    // Boat moves along the diagonal course (from bottom-left → top-right)
+    boatProgress: 0,          // 0..1
     boatBobbing: 0,
-    sailWind: 0,             // 0..1 current sail fullness
+    sailWind: 0,
     targetSailWind: 0,
-    windParticles: [],
-    waterWaves: [],
-    clouds: [],
-    distance: 0,             // meters traveled in session
+    distance: 0,
     time: 0,
+
+    // Particles & scene
+    windParticles: [],
+    waterLines: [],
+    clouds: [],
+    seagulls: [],
+    foamTrail: [],
   };
 
   /* ============================================================
@@ -1485,45 +1465,36 @@
     if (ambientNodes) return;
 
     try {
-      // Master gain
       ambientGain = ctx.createGain();
       ambientGain.gain.value = (state.volume / 100) * 0.5;
       ambientGain.connect(ctx.destination);
 
-      // Ocean noise (brown-ish noise filtered low)
       const oceanSrc = ctx.createBufferSource();
       oceanSrc.buffer = makeNoiseBuffer(ctx, 4);
       oceanSrc.loop = true;
-
       const oceanLP = ctx.createBiquadFilter();
       oceanLP.type = 'lowpass';
       oceanLP.frequency.value = 500;
       oceanLP.Q.value = 0.7;
-
       oceanGain = ctx.createGain();
       oceanGain.gain.value = (state.soundType === 'wind') ? 0 : 0.5;
-
       oceanSrc.connect(oceanLP).connect(oceanGain).connect(ambientGain);
       oceanSrc.start();
 
-      // Wind noise (filtered higher, modulated)
       const windSrc = ctx.createBufferSource();
       windSrc.buffer = makeNoiseBuffer(ctx, 4);
       windSrc.loop = true;
-
       const windBP = ctx.createBiquadFilter();
       windBP.type = 'bandpass';
       windBP.frequency.value = 900;
       windBP.Q.value = 0.5;
-
       windGain = ctx.createGain();
       windGain.gain.value = (state.soundType === 'ocean') ? 0 : 0.25;
-
       windSrc.connect(windBP).connect(windGain).connect(ambientGain);
       windSrc.start();
 
-      ambientNodes = { oceanSrc, windSrc, oceanLP, windBP };
-    } catch (e) { /* ignore */ }
+      ambientNodes = { oceanSrc, windSrc };
+    } catch (e) {}
   }
 
   function stopAmbient() {
@@ -1647,15 +1618,12 @@
     const pace = PACES[state.pace];
     game.phaseDuration = phase === 'inhale' ? pace.inhale : (phase === 'exhale' ? pace.exhale : 1);
 
-    // Reset exhale tracking when entering exhale
     if (phase === 'exhale') {
       game.exhaleHoldTime = 0;
       game.qualityCount = 0;
-      // Short haptic pulse to signal exhale start
       haptic(20);
     }
 
-    // Update banner
     updateBreathBanner();
   }
 
@@ -1678,7 +1646,6 @@
     } else if (game.phase === 'inhale') {
       setPhase('exhale');
     } else if (game.phase === 'exhale') {
-      // Evaluate exhale quality
       const pace = PACES[state.pace];
       const quality = game.exhaleHoldTime / pace.exhale;
       game.lastQuality = quality;
@@ -1687,17 +1654,11 @@
       game.cycleCount++;
       state.totalCycles = (state.totalCycles || 0) + 1;
 
-      // Coherence display
       const avgCoherence = (game.qualitySum / game.qualityCount) * 100;
       coherenceStat.textContent = Math.round(avgCoherence) + '%';
 
-      // Bonus sail wind for high quality
-      if (quality > 0.9) {
-        // Excellent exhale
-        haptic(30);
-      } else if (quality > 0.6) {
-        haptic(15);
-      }
+      if (quality > 0.9) haptic(30);
+      else if (quality > 0.6) haptic(15);
 
       cyclesStat.textContent = game.cycleCount;
       saveState();
@@ -1710,9 +1671,8 @@
      HOLD BUTTON
      ============================================================ */
   function startHold(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (game.phase !== 'exhale') {
-      // Only allow holding during exhale
       haptic(8);
       return;
     }
@@ -1739,10 +1699,8 @@
   holdBtn.addEventListener('contextmenu', e => e.preventDefault());
 
   /* ============================================================
-     GAME LOOP
+     UPDATE
      ============================================================ */
-  let lastTimestamp = 0;
-
   function update(dt) {
     game.time += dt;
 
@@ -1750,16 +1708,12 @@
     if (game.phase !== 'ready') {
       game.phaseElapsed += dt;
 
-      // Compute inhale progress for banner animation (CSS handles the icon)
       if (game.phase === 'inhale') {
-        // Sail wind builds during inhale (preparation)
         game.targetSailWind = 0.15;
       } else if (game.phase === 'exhale') {
-        // Track hold time during exhale
         if (game.isHolding) {
           game.exhaleHoldTime += dt;
         }
-        // Sail wind tied to hold time
         const pace = PACES[state.pace];
         const holdFrac = Math.min(1, game.exhaleHoldTime / pace.exhale);
         game.targetSailWind = holdFrac;
@@ -1770,24 +1724,17 @@
       }
     }
 
-    // Smooth sail wind
     game.sailWind += (game.targetSailWind - game.sailWind) * Math.min(1, dt * 6);
 
-    // ===== BOAT MOVEMENT =====
-    // Speed proportional to sail wind (only meaningful during exhale)
+    // ===== BOAT PROGRESS (diagonal course) =====
     const speedFactor = game.sailWind * (game.phase === 'exhale' ? 1 : 0.3);
-    const pixelsPerSecond = 80;
-    game.boatX += (speedFactor * pixelsPerSecond * dt) / canvasW;
-    if (game.boatX > 1.05) {
-      game.boatX = -0.05; // wrap around for endless sailing
-    }
+    game.boatProgress += speedFactor * dt * 0.15;
+    if (game.boatProgress > 1.0) game.boatProgress = 0; // loop the voyage
 
-    // Distance counter
-    game.distance += speedFactor * dt * 3; // arbitrary scale
+    game.distance += speedFactor * dt * 3;
     state.totalDistance = (state.totalDistance || 0) + speedFactor * dt * 3;
     distanceStat.textContent = Math.round(state.totalDistance) + 'm';
 
-    // Boat bobbing
     game.boatBobbing = Math.sin(game.time * 2.5) * 3;
 
     // ===== UI UPDATE: HOLD BUTTON FILL =====
@@ -1802,7 +1749,6 @@
         setTimeout(() => windMeterFill.classList.remove('full'), 600);
       }
 
-      // Button hint
       if (!game.isHolding && game.exhaleHoldTime === 0) {
         holdBtn.classList.add('ready');
       } else {
@@ -1816,22 +1762,23 @@
 
     // ===== PARTICLES =====
     updateWindParticles(dt);
-    updateWaterWaves(dt);
+    updateWaterLines(dt);
     updateClouds(dt);
+    updateFoam(dt);
+    updateSeagulls(dt);
   }
 
   function updateWindParticles(dt) {
-    // Spawn wind particles proportional to sail wind
-    if (game.sailWind > 0.05 && Math.random() < game.sailWind * 0.6) {
-      const boatX = game.boatX * canvasW;
-      const boatY = canvasH * 0.65;
+    if (game.sailWind > 0.05 && Math.random() < game.sailWind * 0.7) {
+      // Get boat position (3/4 perspective) to emit from the sail
+      const pos = getBoatScreenPos();
       game.windParticles.push({
-        x: boatX + 30,
-        y: boatY - 20 + Math.random() * 15,
-        vx: -80 - Math.random() * 60,
-        vy: (Math.random() - 0.5) * 20,
-        life: 1.2,
-        size: 2 + Math.random() * 3,
+        x: pos.x + 20,
+        y: pos.y - 50 + Math.random() * 30,
+        vx: -100 - Math.random() * 80,
+        vy: (Math.random() - 0.5) * 30,
+        life: 1.4,
+        len: 8 + Math.random() * 14,
       });
     }
 
@@ -1840,31 +1787,32 @@
       p.x += p.vx * dt;
       p.y += p.vy * dt;
       p.life -= dt;
-      if (p.life <= 0 || p.x < -20) {
+      if (p.life <= 0 || p.x < -30) {
         game.windParticles.splice(i, 1);
       }
     }
   }
 
-  function updateWaterWaves(dt) {
-    // Waves move right-to-left relative to boat
-    for (let i = game.waterWaves.length - 1; i >= 0; i--) {
-      const w = game.waterWaves[i];
-      w.x -= (40 + w.speed) * dt;
+  function updateWaterLines(dt) {
+    for (let i = game.waterLines.length - 1; i >= 0; i--) {
+      const w = game.waterLines[i];
+      w.x -= (30 + w.speed) * dt;
       w.phase += dt * 1.5;
-      if (w.x < -50) {
-        game.waterWaves.splice(i, 1);
+      w.life -= dt * 0.15;
+      if (w.x < -60 || w.life <= 0) {
+        game.waterLines.splice(i, 1);
       }
     }
 
-    // Spawn new waves
-    if (Math.random() < 0.4) {
-      game.waterWaves.push({
-        x: canvasW + 20,
-        y: canvasH * 0.68 + Math.random() * canvasH * 0.25,
-        len: 20 + Math.random() * 40,
+    if (Math.random() < 0.5) {
+      game.waterLines.push({
+        x: canvasW + 30,
+        y: canvasH * 0.72 + Math.random() * canvasH * 0.25,
+        len: 30 + Math.random() * 60,
         speed: 20 + Math.random() * 40,
         phase: Math.random() * Math.PI * 2,
+        life: 1,
+        opacity: 0.3 + Math.random() * 0.4,
       });
     }
   }
@@ -1877,20 +1825,77 @@
         game.clouds.splice(i, 1);
       }
     }
-    if (Math.random() < 0.008 && game.clouds.length < 5) {
+    if (Math.random() < 0.01 && game.clouds.length < 5) {
       game.clouds.push({
         x: canvasW + 60,
-        y: 30 + Math.random() * canvasH * 0.3,
-        w: 60 + Math.random() * 80,
-        h: 18 + Math.random() * 12,
-        speed: 8 + Math.random() * 12,
-        alpha: 0.5 + Math.random() * 0.3,
+        y: 20 + Math.random() * canvasH * 0.3,
+        w: 70 + Math.random() * 90,
+        h: 20 + Math.random() * 14,
+        speed: 8 + Math.random() * 14,
+        alpha: 0.5 + Math.random() * 0.35,
       });
     }
   }
 
+  function updateFoam(dt) {
+    // Foam trails behind the boat when moving
+    if (game.sailWind > 0.2 && Math.random() < game.sailWind * 0.8) {
+      const pos = getBoatScreenPos();
+      game.foamTrail.push({
+        x: pos.x - 30,
+        y: pos.y + 8,
+        size: 3 + Math.random() * 5,
+        life: 1.5,
+        vx: -30 - Math.random() * 30,
+        vy: 5 + Math.random() * 10,
+      });
+    }
+
+    for (let i = game.foamTrail.length - 1; i >= 0; i--) {
+      const f = game.foamTrail[i];
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
+      f.life -= dt * 0.7;
+      f.size *= 0.98;
+      if (f.life <= 0) {
+        game.foamTrail.splice(i, 1);
+      }
+    }
+  }
+
+  function updateSeagulls(dt) {
+    if (Math.random() < 0.005 && game.seagulls.length < 3) {
+      game.seagulls.push({
+        x: canvasW + 40,
+        y: canvasH * 0.15 + Math.random() * canvasH * 0.25,
+        vx: -40 - Math.random() * 30,
+        bobPhase: Math.random() * Math.PI * 2,
+        scale: 0.6 + Math.random() * 0.5,
+      });
+    }
+    for (let i = game.seagulls.length - 1; i >= 0; i--) {
+      const g = game.seagulls[i];
+      g.x += g.vx * dt;
+      g.bobPhase += dt * 4;
+      if (g.x < -50) game.seagulls.splice(i, 1);
+    }
+  }
+
   /* ============================================================
-     RENDER
+     BOAT POSITION — 3/4 perspective diagonal course
+     ============================================================ */
+  function getBoatScreenPos() {
+    // Boat sails along a diagonal from bottom-left (0, 1) to top-right (1, 0)
+    // Adding a curve so it feels like a perspective waterway
+    const t = game.boatProgress;
+    const baseX = canvasW * (0.15 + t * 0.7);
+    const baseY = canvasH * (0.82 - t * 0.32) + game.boatBobbing;
+
+    return { x: baseX, y: baseY, t };
+  }
+
+  /* ============================================================
+     RENDER — 3/4 perspective view
      ============================================================ */
   function render() {
     const w = canvasW;
@@ -1899,209 +1904,395 @@
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    // ===== SKY GRADIENT =====
-    const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.7);
+    // ===== SKY =====
+    const horizonY = h * 0.52;
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
     if (isDark) {
-      skyGrad.addColorStop(0, '#0a1428');
-      skyGrad.addColorStop(0.5, '#122a47');
-      skyGrad.addColorStop(1, '#1e4267');
+      skyGrad.addColorStop(0, '#060c18');
+      skyGrad.addColorStop(0.4, '#0d1e35');
+      skyGrad.addColorStop(0.8, '#1a3556');
+      skyGrad.addColorStop(1, '#2e5275');
     } else {
-      skyGrad.addColorStop(0, '#e1f3fc');
-      skyGrad.addColorStop(0.5, '#b8e0f2');
-      skyGrad.addColorStop(1, '#7fc4e8');
+      skyGrad.addColorStop(0, '#c3daf0');
+      skyGrad.addColorStop(0.4, '#d6e6f7');
+      skyGrad.addColorStop(0.8, '#e8f3fb');
+      skyGrad.addColorStop(1, '#f5e6d3');
     }
     ctx.fillStyle = skyGrad;
-    ctx.fillRect(0, 0, w, h * 0.7);
+    ctx.fillRect(0, 0, w, horizonY);
 
-    // ===== SUN / MOON =====
-    const sunX = w * 0.8;
-    const sunY = h * 0.15;
-    const sunR = 30;
+    // ===== SUN / MOON (lower, near horizon) =====
+    const sunX = w * 0.78;
+    const sunY = horizonY - 60;
+    const sunR = 26;
+
+    // Sun/moon glow
+    const glowGrad = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunR * 3);
     if (isDark) {
-      // Moon
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(220, 235, 255, 0.9)';
-      ctx.shadowColor = 'rgba(200, 220, 255, 0.6)';
-      ctx.shadowBlur = 30;
-      ctx.fill();
-      ctx.shadowBlur = 0;
+      glowGrad.addColorStop(0, 'rgba(230, 240, 255, 0.4)');
+      glowGrad.addColorStop(1, 'rgba(230, 240, 255, 0)');
+    } else {
+      glowGrad.addColorStop(0, 'rgba(255, 220, 130, 0.5)');
+      glowGrad.addColorStop(1, 'rgba(255, 220, 130, 0)');
+    }
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunR * 3, 0, Math.PI * 2);
+    ctx.fill();
 
-      // Moon crater
+    // Sun/moon body
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+    if (isDark) {
+      ctx.fillStyle = '#e8f1fc';
+    } else {
+      ctx.fillStyle = '#ffe9a8';
+    }
+    ctx.fill();
+
+    if (isDark) {
       ctx.beginPath();
-      ctx.arc(sunX - 8, sunY - 5, 6, 0, Math.PI * 2);
+      ctx.arc(sunX - 7, sunY - 4, 5, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(180, 200, 230, 0.5)';
       ctx.fill();
-    } else {
-      // Sun
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 235, 150, 0.95)';
-      ctx.shadowColor = 'rgba(255, 220, 100, 0.7)';
-      ctx.shadowBlur = 40;
-      ctx.fill();
-      ctx.shadowBlur = 0;
     }
 
     // ===== CLOUDS =====
     game.clouds.forEach(c => {
       ctx.globalAlpha = c.alpha;
-      ctx.fillStyle = isDark ? 'rgba(180, 210, 240, 0.4)' : 'rgba(255, 255, 255, 0.85)';
-      roundRect(ctx, c.x, c.y, c.w, c.h, c.h / 2);
-      ctx.fill();
-      // Fluff
-      ctx.beginPath();
-      ctx.arc(c.x + c.w * 0.3, c.y - 4, c.h * 0.6, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(c.x + c.w * 0.6, c.y - 6, c.h * 0.7, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = isDark ? 'rgba(140, 180, 220, 0.4)' : 'rgba(255, 255, 255, 0.85)';
+      drawCloud(c.x, c.y, c.w, c.h);
     });
     ctx.globalAlpha = 1;
 
-    // ===== WATER =====
-    const waterGrad = ctx.createLinearGradient(0, h * 0.7, 0, h);
-    if (isDark) {
-      waterGrad.addColorStop(0, '#0277bd');
-      waterGrad.addColorStop(0.5, '#01579b');
-      waterGrad.addColorStop(1, '#014361');
-    } else {
-      waterGrad.addColorStop(0, '#4fc3f7');
-      waterGrad.addColorStop(0.5, '#0288d1');
-      waterGrad.addColorStop(1, '#01579b');
-    }
-    ctx.fillStyle = waterGrad;
-    ctx.fillRect(0, h * 0.7, w, h * 0.3);
-
-    // ===== WAVES =====
-    ctx.strokeStyle = isDark ? 'rgba(120, 200, 240, 0.35)' : 'rgba(255, 255, 255, 0.5)';
-    ctx.lineWidth = 2;
-    game.waterWaves.forEach(w2 => {
+    // ===== SEAGULLS =====
+    game.seagulls.forEach(g => {
+      ctx.strokeStyle = isDark ? 'rgba(200, 220, 240, 0.7)' : 'rgba(90, 90, 110, 0.7)';
+      ctx.lineWidth = 1.5;
+      const bob = Math.sin(g.bobPhase) * 3;
+      const s = g.scale;
       ctx.beginPath();
-      ctx.moveTo(w2.x, w2.y);
-      const segments = 8;
+      ctx.moveTo(g.x - 10 * s, g.y + bob);
+      ctx.quadraticCurveTo(g.x - 5 * s, g.y - 3 * s + bob, g.x, g.y + bob);
+      ctx.quadraticCurveTo(g.x + 5 * s, g.y - 3 * s + bob, g.x + 10 * s, g.y + bob);
+      ctx.stroke();
+    });
+
+    // ===== OCEAN (large, with perspective) =====
+    const oceanGrad = ctx.createLinearGradient(0, horizonY, 0, h);
+    if (isDark) {
+      oceanGrad.addColorStop(0, '#1e4267');
+      oceanGrad.addColorStop(0.3, '#0d2f4f');
+      oceanGrad.addColorStop(0.7, '#062036');
+      oceanGrad.addColorStop(1, '#02121f');
+    } else {
+      oceanGrad.addColorStop(0, '#7fc4e8');
+      oceanGrad.addColorStop(0.3, '#4fc3f7');
+      oceanGrad.addColorStop(0.7, '#0288d1');
+      oceanGrad.addColorStop(1, '#01579b');
+    }
+    ctx.fillStyle = oceanGrad;
+    ctx.fillRect(0, horizonY, w, h - horizonY);
+
+    // ===== SUN REFLECTION ON WATER (vertical shimmer) =====
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 20; i++) {
+      const t = i / 20;
+      const rx = sunX + Math.sin(game.time * 1.5 + i) * 12;
+      const ry = horizonY + t * (h - horizonY) * 0.7;
+      const rw = 20 - t * 14;
+      const rh = 3 + t * 2;
+      if (isDark) {
+        ctx.fillStyle = `rgba(230, 240, 255, ${0.15 * (1 - t)})`;
+      } else {
+        ctx.fillStyle = `rgba(255, 235, 160, ${0.25 * (1 - t)})`;
+      }
+      ctx.beginPath();
+      ctx.ellipse(rx, ry, rw, rh, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ===== WATER LINES (perspective: closer lines get bigger/faster) =====
+    game.waterLines.forEach(w2 => {
+      // Depth-based scaling
+      const depth = (w2.y - horizonY) / (h - horizonY); // 0 (horizon) .. 1 (bottom)
+      const scaleX = 0.3 + depth * 1.4;
+      const opacity = w2.opacity * (0.4 + depth * 0.6);
+
+      ctx.strokeStyle = isDark
+        ? `rgba(120, 200, 240, ${opacity * 0.6})`
+        : `rgba(255, 255, 255, ${opacity})`;
+      ctx.lineWidth = 1 + depth * 2;
+
+      ctx.beginPath();
+      const segments = 6;
       for (let i = 0; i <= segments; i++) {
         const t = i / segments;
-        const x = w2.x + t * w2.len;
-        const y = w2.y + Math.sin(w2.phase + t * Math.PI * 2) * 3;
+        const x = w2.x + t * w2.len * scaleX;
+        const y = w2.y + Math.sin(w2.phase + t * Math.PI * 2) * (2 + depth * 3);
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
     });
 
-    // ===== BOAT =====
-    const boatScreenX = game.boatX * w;
-    const boatScreenY = h * 0.68 + game.boatBobbing;
+    // ===== HORIZON MIST (soft fade) =====
+    const mistGrad = ctx.createLinearGradient(0, horizonY - 20, 0, horizonY + 20);
+    if (isDark) {
+      mistGrad.addColorStop(0, 'rgba(20, 40, 70, 0)');
+      mistGrad.addColorStop(0.5, 'rgba(30, 60, 100, 0.5)');
+      mistGrad.addColorStop(1, 'rgba(20, 40, 70, 0)');
+    } else {
+      mistGrad.addColorStop(0, 'rgba(245, 230, 210, 0)');
+      mistGrad.addColorStop(0.5, 'rgba(245, 230, 210, 0.7)');
+      mistGrad.addColorStop(1, 'rgba(245, 230, 210, 0)');
+    }
+    ctx.fillStyle = mistGrad;
+    ctx.fillRect(0, horizonY - 20, w, 40);
 
-    ctx.save();
-    ctx.translate(boatScreenX, boatScreenY);
-
-    // Water reflection
-    ctx.globalAlpha = 0.3;
-    ctx.fillStyle = isDark ? '#01579b' : '#0288d1';
-    ctx.beginPath();
-    ctx.ellipse(0, 8, 40, 6, 0, 0, Math.PI * 2);
-    ctx.fill();
+    // ===== FOAM TRAIL =====
+    game.foamTrail.forEach(f => {
+      ctx.globalAlpha = f.life * 0.5;
+      ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.6)' : 'rgba(255, 255, 255, 0.85)';
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
     ctx.globalAlpha = 1;
 
-    // Mast
-    ctx.strokeStyle = isDark ? '#8d6e63' : '#5d4037';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, -55);
-    ctx.stroke();
-
-    // Sail — curved triangle whose fullness grows with sailWind
-    const sailW = 8 + game.sailWind * 42;
-    const sailH = 50;
-    const sailGrad = ctx.createLinearGradient(0, -sailH, sailW, 0);
-    if (isDark) {
-      sailGrad.addColorStop(0, '#e8f1fc');
-      sailGrad.addColorStop(1, '#a3bcd9');
-    } else {
-      sailGrad.addColorStop(0, '#ffffff');
-      sailGrad.addColorStop(1, '#d6e6f7');
-    }
-
-    ctx.beginPath();
-    ctx.moveTo(2, -52);
-    ctx.quadraticCurveTo(sailW * 0.6, -28, 2, -4);
-    ctx.quadraticCurveTo(sailW * 0.4, -28, 2, -52);
-    ctx.closePath();
-    ctx.fillStyle = sailGrad;
-    ctx.fill();
-    ctx.strokeStyle = isDark ? 'rgba(200, 220, 240, 0.7)' : 'rgba(120, 160, 200, 0.5)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // Sail fullness lines (wind streaks inside the sail)
-    if (game.sailWind > 0.2) {
-      ctx.strokeStyle = `rgba(255, 255, 255, ${game.sailWind * 0.5})`;
-      ctx.lineWidth = 1.2;
-      for (let i = 1; i <= 3; i++) {
-        const t = i / 4;
-        ctx.beginPath();
-        ctx.moveTo(2, -52 + t * sailH * 0.9);
-        ctx.quadraticCurveTo(sailW * 0.5, -28 + t * 10, 2, -52 + t * sailH * 0.9 + 6);
-        ctx.stroke();
-      }
-    }
-
-    // Hull
-    ctx.fillStyle = isDark ? '#3e2723' : '#5d4037';
-    ctx.beginPath();
-    ctx.moveTo(-35, 0);
-    ctx.quadraticCurveTo(-30, 12, 0, 12);
-    ctx.quadraticCurveTo(30, 12, 35, 0);
-    ctx.lineTo(30, -3);
-    ctx.lineTo(-30, -3);
-    ctx.closePath();
-    ctx.fill();
-
-    // Hull highlight
-    ctx.fillStyle = isDark ? 'rgba(120, 90, 70, 0.6)' : 'rgba(120, 80, 60, 0.5)';
-    ctx.beginPath();
-    ctx.moveTo(-32, -2);
-    ctx.lineTo(32, -2);
-    ctx.lineTo(28, 0);
-    ctx.lineTo(-28, 0);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.restore();
+    // ===== BOAT (3/4 perspective) =====
+    const pos = getBoatScreenPos();
+    drawBoat(pos.x, pos.y, game.sailWind, isDark);
 
     // ===== WIND PARTICLES =====
     game.windParticles.forEach(p => {
       ctx.globalAlpha = Math.min(1, p.life);
-      ctx.strokeStyle = isDark ? 'rgba(180, 220, 255, 0.7)' : 'rgba(255, 255, 255, 0.8)';
+      ctx.strokeStyle = isDark ? 'rgba(180, 220, 255, 0.85)' : 'rgba(255, 255, 255, 0.9)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.lineTo(p.x + 12, p.y);
+      ctx.lineTo(p.x + p.len, p.y);
       ctx.stroke();
     });
     ctx.globalAlpha = 1;
   }
 
-  function roundRect(ctx, x, y, w, h, r) {
+  function drawCloud(x, y, w, h) {
     ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.ellipse(x + w * 0.3, y + h * 0.6, h * 0.7, h * 0.6, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + w * 0.55, y + h * 0.4, h * 0.85, h * 0.75, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + w * 0.75, y + h * 0.6, h * 0.65, h * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /* ============================================================
+     DRAW BOAT — 3/4 perspective, viewed from behind-left
+     ============================================================ */
+  function drawBoat(x, y, sailWind, isDark) {
+    // Sail fullness angle (visual)
+    const sailFullness = sailWind;
+
+    ctx.save();
+    ctx.translate(x, y);
+
+    // === Water reflection / wake ===
+    ctx.globalAlpha = 0.35;
+    ctx.fillStyle = isDark ? '#014361' : '#0288d1';
+    ctx.beginPath();
+    ctx.ellipse(0, 10, 42, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // === Boat hull — 3/4 view (stern facing viewer slightly) ===
+    // Main hull shape (rounded, wider at back)
+    const hullGrad = ctx.createLinearGradient(-40, -5, 40, 15);
+    if (isDark) {
+      hullGrad.addColorStop(0, '#5d4037');
+      hullGrad.addColorStop(0.5, '#4e342e');
+      hullGrad.addColorStop(1, '#2d1f1a');
+    } else {
+      hullGrad.addColorStop(0, '#8d6e63');
+      hullGrad.addColorStop(0.5, '#6d4c41');
+      hullGrad.addColorStop(1, '#3e2723');
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(-38, -2);
+    ctx.quadraticCurveTo(-42, 8, -28, 14);
+    ctx.quadraticCurveTo(0, 20, 28, 14);
+    ctx.quadraticCurveTo(42, 8, 38, -2);
+    ctx.quadraticCurveTo(20, -8, 0, -8);
+    ctx.quadraticCurveTo(-20, -8, -38, -2);
     ctx.closePath();
+    ctx.fillStyle = hullGrad;
+    ctx.fill();
+
+    // Deck line (top of hull)
+    ctx.beginPath();
+    ctx.moveTo(-38, -2);
+    ctx.quadraticCurveTo(-20, -8, 0, -8);
+    ctx.quadraticCurveTo(20, -8, 38, -2);
+    ctx.strokeStyle = isDark ? 'rgba(255, 220, 150, 0.4)' : 'rgba(255, 220, 150, 0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Hull highlight (top edge catching sun)
+    ctx.beginPath();
+    ctx.moveTo(-34, -3);
+    ctx.quadraticCurveTo(0, -8, 34, -3);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // === Mast (leaning slightly for 3/4 perspective) ===
+    const mastLean = -3; // slight backward lean
+    ctx.strokeStyle = isDark ? '#a1887f' : '#5d4037';
+    ctx.lineWidth = 3.5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(0, -5);
+    ctx.lineTo(mastLean, -68);
+    ctx.stroke();
+
+    // Mast highlight
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(-1, -5);
+    ctx.lineTo(mastLean - 1, -68);
+    ctx.stroke();
+
+    // === Boom (horizontal spar at bottom of sail) ===
+    const boomLen = 40 + sailFullness * 12;
+    ctx.strokeStyle = isDark ? '#8d6e63' : '#5d4037';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(mastLean - 2, -12);
+    ctx.lineTo(mastLean + boomLen, -12);
+    ctx.stroke();
+
+    // === Sail (main) — curved triangle bulging to the right (billowing) ===
+    const sailTopX = mastLean;
+    const sailTopY = -66;
+    const sailBottomY = -14;
+
+    // Billow amount
+    const billow = 8 + sailFullness * 42;
+
+    const sailGrad = ctx.createLinearGradient(
+      sailTopX, sailTopY,
+      sailTopX + billow, sailBottomY
+    );
+    if (isDark) {
+      sailGrad.addColorStop(0, '#f4f8fd');
+      sailGrad.addColorStop(0.6, '#c9dcef');
+      sailGrad.addColorStop(1, '#8fa9c4');
+    } else {
+      sailGrad.addColorStop(0, '#ffffff');
+      sailGrad.addColorStop(0.6, '#eaf2fb');
+      sailGrad.addColorStop(1, '#b8cee2');
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(sailTopX, sailTopY);
+    // Leading edge (curves down along the mast — nearly straight)
+    ctx.lineTo(sailTopX + 1, sailBottomY);
+    // Bottom edge across the boom
+    ctx.lineTo(sailTopX + boomLen, sailBottomY);
+    // Trailing edge curves back up — billowing outward based on sail wind
+    ctx.bezierCurveTo(
+      sailTopX + boomLen * 0.7 + billow * 0.4, sailTopY + (sailBottomY - sailTopY) * 0.55,
+      sailTopX + boomLen * 0.3 + billow * 0.7, sailTopY + (sailBottomY - sailTopY) * 0.25,
+      sailTopX, sailTopY
+    );
+    ctx.closePath();
+    ctx.fillStyle = sailGrad;
+    ctx.fill();
+
+    // Sail outline
+    ctx.strokeStyle = isDark ? 'rgba(180, 200, 220, 0.6)' : 'rgba(120, 150, 180, 0.45)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Sail seams (parallel curved lines for texture)
+    if (sailFullness > 0.15) {
+      ctx.strokeStyle = `rgba(120, 150, 180, ${0.15 + sailFullness * 0.25})`;
+      ctx.lineWidth = 0.8;
+      for (let i = 1; i <= 3; i++) {
+        const t = i / 4;
+        ctx.beginPath();
+        ctx.moveTo(sailTopX + t * 3, sailTopY + (sailBottomY - sailTopY) * t);
+        ctx.quadraticCurveTo(
+          sailTopX + boomLen * 0.5 + billow * 0.5, sailTopY + (sailBottomY - sailTopY) * (t + 0.1),
+          sailTopX + boomLen * t, sailBottomY
+        );
+        ctx.stroke();
+      }
+    }
+
+    // === Jib (front sail — smaller, adds to 3/4 feel) ===
+    if (sailFullness > 0.1) {
+      const jibBillow = 3 + sailFullness * 20;
+      ctx.beginPath();
+      ctx.moveTo(mastLean - 2, -50);
+      ctx.lineTo(mastLean - 22, -10);
+      ctx.quadraticCurveTo(
+        mastLean - 20 + jibBillow * 0.6, -30,
+        mastLean - 2, -50
+      );
+      ctx.closePath();
+      const jibGrad = ctx.createLinearGradient(mastLean - 25, -50, mastLean - 5, -10);
+      if (isDark) {
+        jibGrad.addColorStop(0, '#dce9f6');
+        jibGrad.addColorStop(1, '#9ab3cc');
+      } else {
+        jibGrad.addColorStop(0, '#ffffff');
+        jibGrad.addColorStop(1, '#c6d9ec');
+      }
+      ctx.fillStyle = jibGrad;
+      ctx.fill();
+      ctx.strokeStyle = isDark ? 'rgba(180, 200, 220, 0.5)' : 'rgba(120, 150, 180, 0.4)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    // === Stern flag (small triangle at mast top) ===
+    ctx.beginPath();
+    ctx.moveTo(mastLean - 1, -68);
+    ctx.lineTo(mastLean - 14, -63);
+    ctx.lineTo(mastLean - 1, -58);
+    ctx.closePath();
+    ctx.fillStyle = sailFullness > 0.3
+      ? (isDark ? '#42a5f5' : '#1976d2')
+      : (isDark ? '#546e7a' : '#90a4ae');
+    ctx.fill();
+
+    // === Stern cabin (small box at back for depth) ===
+    ctx.beginPath();
+    ctx.moveTo(-30, -8);
+    ctx.lineTo(-30, -18);
+    ctx.lineTo(-16, -20);
+    ctx.lineTo(-16, -8);
+    ctx.closePath();
+    ctx.fillStyle = isDark ? '#3e2723' : '#5d4037';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-30, -18);
+    ctx.lineTo(-16, -20);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+
+    ctx.restore();
   }
 
   /* ============================================================
      ANIMATION LOOP
      ============================================================ */
+  let lastTimestamp = 0;
+
   function loop(timestamp) {
     if (!lastTimestamp) lastTimestamp = timestamp;
     const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
@@ -2154,7 +2345,6 @@
 
   bindToggle(toggleHaptics, 'haptics');
 
-  // Sound type picker
   function refreshSoundPicker() {
     soundPicker.querySelectorAll('.option-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.sound === state.soundType);
@@ -2173,7 +2363,6 @@
     showToast(`${names[state.soundType]} sound`, '🔊');
   });
 
-  // Pace picker
   function refreshPacePicker() {
     pacePicker.querySelectorAll('.option-btn').forEach(b => {
       b.classList.toggle('active', b.dataset.pace === state.pace);
@@ -2186,7 +2375,6 @@
     state.pace = btn.dataset.pace;
     refreshPacePicker();
     saveState();
-    // Reset cycle
     game.phase = 'ready';
     game.phaseElapsed = 0;
     updateBreathBanner();
@@ -2195,7 +2383,6 @@
     showToast(`${names[state.pace]} pace`, '🧘');
   });
 
-  // Sliders
   volumeSlider.addEventListener('input', () => {
     state.volume = parseInt(volumeSlider.value, 10);
     volumeValue.textContent = state.volume + '%';
@@ -2210,15 +2397,12 @@
   });
   hapticStrengthSlider.addEventListener('change', () => { haptic(60); });
 
-  // Test buttons
   testSoundBtn.addEventListener('click', () => {
     const prev = state.sound;
     state.sound = true;
     startAmbient();
     updateAmbientMix();
-    setTimeout(() => {
-      if (!prev) { stopAmbient(); }
-    }, 3000);
+    setTimeout(() => { if (!prev) stopAmbient(); }, 3000);
     haptic(6);
     showToast('Testing ambient sound for 3s', '🔊');
   });
@@ -2227,7 +2411,7 @@
     const prev = state.haptics;
     state.haptics = true;
     haptic(80);
-    haptic(60);
+    setTimeout(() => haptic(60), 200);
     state.haptics = prev;
     showToast('Testing vibration', '📳');
   });
@@ -2258,7 +2442,7 @@
     game.cycleCount = 0;
     game.qualitySum = 0;
     game.qualityCount = 0;
-    game.boatX = 0;
+    game.boatProgress = 0;
     game.sailWind = 0;
     game.targetSailWind = 0;
     game.phase = 'ready';
@@ -2279,7 +2463,7 @@
     game.cycleCount = 0;
     game.qualitySum = 0;
     game.qualityCount = 0;
-    game.boatX = 0;
+    game.boatProgress = 0;
     game.sailWind = 0;
     game.phase = 'ready';
     game.phaseElapsed = 0;
@@ -2310,10 +2494,7 @@
     closeWelcome();
     haptic(10);
     setTimeout(() => {
-      // Auto-start breathing cycle
-      if (game.phase === 'ready') {
-        setPhase('inhale');
-      }
+      if (game.phase === 'ready') setPhase('inhale');
     }, 400);
   });
   welcomeBackdrop.addEventListener('click', (e) => {
@@ -2328,7 +2509,6 @@
       if (settingsBackdrop.classList.contains('show')) closeSettings();
       else if (welcomeBackdrop.classList.contains('show')) closeWelcome();
     }
-    // Spacebar to hold
     if (e.code === 'Space' && !e.repeat) {
       e.preventDefault();
       startHold(e);
@@ -2361,11 +2541,9 @@
     hapticStrengthSlider.value = state.hapticStrength;
     hapticStrengthValue.textContent = state.hapticStrength;
 
-    // Show all-time stats initially
     distanceStat.textContent = Math.round(state.totalDistance || 0) + 'm';
     cyclesStat.textContent = state.totalCycles || 0;
 
-    // Start ambient sound if enabled (on first user interaction)
     if (state.sound) {
       const startAudio = () => {
         startAmbient();
@@ -2375,11 +2553,9 @@
       document.addEventListener('pointerdown', startAudio, { once: true });
     }
 
-    // Welcome modal
     if (!state.hasSeenWelcome) {
       setTimeout(openWelcome, 400);
     } else {
-      // Auto-start breathing after a short delay
       setTimeout(() => {
         if (game.phase === 'ready') setPhase('inhale');
       }, 800);
@@ -2388,23 +2564,20 @@
       }, 1400);
     }
 
-    // Begin animation loop
     requestAnimationFrame(loop);
 
-    // Pre-populate clouds
     for (let i = 0; i < 3; i++) {
       game.clouds.push({
         x: Math.random() * canvasW,
-        y: 30 + Math.random() * canvasH * 0.3,
-        w: 60 + Math.random() * 80,
-        h: 18 + Math.random() * 12,
-        speed: 8 + Math.random() * 12,
-        alpha: 0.5 + Math.random() * 0.3,
+        y: 20 + Math.random() * canvasH * 0.3,
+        w: 70 + Math.random() * 90,
+        h: 20 + Math.random() * 14,
+        speed: 8 + Math.random() * 14,
+        alpha: 0.5 + Math.random() * 0.35,
       });
     }
   }
 
-  // Start when DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
