@@ -228,6 +228,8 @@
     100% { transform: scale(1); }
   }
 
+  .stat-value.danger { color: var(--danger); }
+
   /* ============ GAME CANVAS ============ */
   .game-wrap {
     position: relative;
@@ -279,6 +281,16 @@
     background: rgba(0, 172, 193, 0.6);
   }
 
+  .breath-overlay.critical {
+    background: rgba(229, 72, 77, 0.75);
+    animation: critPulse 0.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes critPulse {
+    from { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.6); }
+    to { box-shadow: 0 0 0 12px rgba(229, 72, 77, 0); }
+  }
+
   .breath-overlay .breath-icon {
     font-size: 15px;
     animation: breatheIcon 4s ease-in-out infinite;
@@ -302,7 +314,44 @@
     50% { transform: scale(0.65); }
   }
 
-  /* Floating feedback text in canvas overlay */
+  /* Countdown on exhale phase */
+  .countdown {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 42px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 100, 100, 0.5);
+    pointer-events: none;
+    z-index: 7;
+    opacity: 0;
+    transition: opacity 0.2s;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown.show {
+    opacity: 1;
+  }
+
+  .countdown.grace {
+    color: #ffd166;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 200, 80, 0.7);
+  }
+
+  .countdown.critical {
+    color: #ff5f5f;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 60, 60, 0.8);
+    animation: countPulse 0.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes countPulse {
+    from { transform: translateX(-50%) scale(1); }
+    to { transform: translateX(-50%) scale(1.15); }
+  }
+
   .float-feedback {
     position: absolute;
     left: 50%;
@@ -334,8 +383,8 @@
   .float-feedback.golden { color: #ffe066; }
   .float-feedback.good { color: #7dffa8; }
   .float-feedback.miss { color: #ffa8b8; }
+  .float-feedback.critical { color: #ff5f5f; }
 
-  /* Subtitle suggestion banner below canvas top */
   .suggestion-banner {
     position: absolute;
     bottom: 12px;
@@ -364,6 +413,87 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+
+  /* Sink overlay */
+  .sink-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(8, 20, 40, 0.5), rgba(8, 20, 40, 0.85));
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+    z-index: 9;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .sink-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sink-icon {
+    font-size: 60px;
+    margin-bottom: 12px;
+    animation: sinkBobbing 2s ease-in-out infinite;
+  }
+
+  @keyframes sinkBobbing {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+  }
+
+  .sink-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .sink-sub {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 4px;
+    line-height: 1.5;
+    max-width: 280px;
+  }
+
+  .sink-progress {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .sink-restart {
+    margin-top: 20px;
+    padding: 12px 32px;
+    background: var(--accent-grad);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -10px var(--accent);
+    transition: transform 0.15s;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sink-restart:hover { transform: translateY(-1px); }
+  .sink-restart:active { transform: scale(0.97); }
 
   /* ============ HOLD BUTTON ============ */
   .hold-wrap {
@@ -411,13 +541,19 @@
     animation: holdPulse 1.4s ease-in-out infinite;
   }
 
+  .hold-btn.critical {
+    border-color: var(--danger);
+    animation: holdCritical 0.5s ease-in-out infinite alternate;
+  }
+
   @keyframes holdPulse {
     0%, 100% { box-shadow: 0 0 20px -5px var(--accent), var(--shadow-md); }
     50% { box-shadow: 0 0 40px -3px var(--accent-2), var(--shadow-lg); }
   }
 
-  .hold-btn.disabled {
-    opacity: 0.55;
+  @keyframes holdCritical {
+    from { box-shadow: 0 0 20px -3px var(--danger), var(--shadow-md); }
+    to { box-shadow: 0 0 45px 2px var(--danger), var(--shadow-lg); }
   }
 
   .hold-fill {
@@ -559,6 +695,7 @@
     transform: translateX(-50%) translateY(0);
   }
 
+  /* ============ WELCOME ============ */
   .welcome-backdrop {
     position: fixed;
     inset: 0;
@@ -576,10 +713,7 @@
     overflow-y: auto;
   }
 
-  .welcome-backdrop.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .welcome-backdrop.show { opacity: 1; pointer-events: auto; }
 
   .welcome {
     background: var(--surface);
@@ -704,6 +838,11 @@
     box-shadow: 0 4px 10px -4px var(--accent);
   }
 
+  .step-num.warn {
+    background: linear-gradient(135deg, #e5484d, #ff7b7b);
+    box-shadow: 0 4px 10px -4px #e5484d;
+  }
+
   .step-text {
     font-size: 12.5px;
     color: var(--text-2);
@@ -722,6 +861,11 @@
     padding: 12px 14px;
     border-radius: 10px;
     margin-top: 6px;
+  }
+
+  .welcome-note.danger {
+    border-left-color: var(--danger);
+    color: var(--text-2);
   }
 
   .welcome-note strong { color: var(--text-2); }
@@ -763,6 +907,7 @@
 
   .welcome-brand strong { color: var(--text-2); font-weight: 700; }
 
+  /* ============ SETTINGS ============ */
   .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -1114,8 +1259,8 @@
       <div class="stat-value" id="cyclesStat">0</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Avg Hold</div>
-      <div class="stat-value" id="coherenceStat">—</div>
+      <div class="stat-label">Best Run</div>
+      <div class="stat-value" id="bestStat">0</div>
     </div>
   </div>
 
@@ -1125,8 +1270,20 @@
       <span class="breath-icon">🌬️</span>
       <span id="breathText">Ready</span>
     </div>
+    <div class="countdown" id="countdown"></div>
     <div class="float-feedback" id="floatFeedback"></div>
     <div class="suggestion-banner" id="suggestionBanner"></div>
+
+    <!-- SINK OVERLAY -->
+    <div class="sink-overlay" id="sinkOverlay">
+      <div class="sink-icon">🌊</div>
+      <div class="sink-title" id="sinkTitle">Ship Sank!</div>
+      <div class="sink-sub" id="sinkSub">You missed the exhale.</div>
+      <div class="sink-progress" id="sinkProgress"></div>
+      <button class="sink-restart" id="sinkRestart">
+        <span>⚓</span> Set sail again
+      </button>
+    </div>
   </div>
 
   <div class="hold-wrap">
@@ -1159,6 +1316,7 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- WELCOME -->
 <div class="welcome-backdrop" id="welcomeBackdrop">
   <div class="welcome" role="dialog" aria-modal="true" aria-label="Welcome">
     <button class="welcome-close" id="welcomeClose" aria-label="Close">✕</button>
@@ -1173,9 +1331,7 @@
         <strong>HooHoo Sailer</strong> is a slow-breathing biofeedback experience
         grounded in <strong>heart-rate variability (HRV) research</strong>. Slow
         paced breathing at ~6 breaths per minute increases vagal tone, reduces
-        cortisol, and calms the nervous system. Here, the boat moves
-        <strong>only during your exhale</strong> — the longer and steadier you
-        breathe out, the further you sail.
+        cortisol, and calms the nervous system.
       </div>
     </div>
 
@@ -1192,35 +1348,35 @@
         <div class="step-item">
           <div class="step-num">2</div>
           <div class="step-text">
-            <strong>Press and hold</strong> the button when the banner shows
-            <em>Breathe out</em>. The longer you hold, the more wind fills the sail.
+            <strong>Press and hold</strong> the button when <em>Breathe out</em>
+            appears. Keep holding for the full exhale.
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num step-num warn">!</div>
+          <div class="step-text">
+            <strong>Don't miss an exhale.</strong> If you don't press the button
+            before the countdown ends, your ship sinks — and you start from the
+            beginning.
           </div>
         </div>
         <div class="step-item">
           <div class="step-num">3</div>
           <div class="step-text">
-            <strong>Hold for the full exhale</strong> (6s by default). The meter
-            fills. The boat glides forward with sound and vibration.
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num">4</div>
-          <div class="step-text">
-            <strong>Release and repeat.</strong> Every exhale earns feedback.
-            Build a steady rhythm for higher coherence.
+            <strong>Hold the full exhale</strong> to fill the sail, sail further,
+            and build your streak.
           </div>
         </div>
       </div>
     </div>
 
-    <div class="welcome-note">
-      <strong>Not a replacement for professional care.</strong>
-      If stress becomes persistent or overwhelming, please reach out to a
-      licensed mental health professional.
+    <div class="welcome-note danger">
+      <strong>Every exhale counts.</strong> Miss one and the voyage restarts.
+      Build the longest run you can.
     </div>
 
     <button class="start-btn" id="startBtn">
-      <span>🚀</span> Set sail
+      <span>⛵</span> Set sail
     </button>
 
     <div class="welcome-brand">
@@ -1229,6 +1385,7 @@
   </div>
 </div>
 
+<!-- SETTINGS -->
 <div class="modal-backdrop" id="settingsBackdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
     <div class="modal-handle"></div>
@@ -1324,8 +1481,9 @@
         <strong>HooHoo Sailer</strong> uses slow-paced breathing at ~6 breaths
         per minute, a protocol shown in HRV research to increase vagal tone,
         reduce cortisol, and support emotional regulation. The boat moves
-        <strong>only during your exhale</strong> — this reinforces long, steady
-        exhales, which are particularly effective for parasympathetic activation.
+        <strong>only during your exhale</strong>. Missing an exhale sinks the
+        ship and restarts the voyage — this reinforces sustained attention to
+        the breath.
         <br><br>
         Not a replacement for professional care. If stress is persistent,
         please reach out to a licensed mental health professional.
@@ -1354,13 +1512,10 @@
     pace: 'calm',
     hasSeenWelcome: false,
     totalDistance: 0,
-    totalCycles: 0,
-    bestHold: 0,
-    holdSum: 0,
-    holdCount: 0,
+    bestRun: 0,
   };
 
-  const STORAGE_KEY = 'hoohooSailer.v2';
+  const STORAGE_KEY = 'hoohooSailer.v3';
 
   const PACES = {
     calm:     { inhale: 4, exhale: 6 },
@@ -1368,21 +1523,32 @@
     deep:     { inhale: 5, exhale: 7 },
   };
 
+  // Grace period after exhale begins before we consider it missed (seconds)
+  const EXHALE_GRACE = 1.5;
+  // How long after exhale the countdown is shown (seconds)
+  const COUNTDOWN_WINDOW = 0.5;
+
   const $ = id => document.getElementById(id);
 
   const gameCanvas     = $('gameCanvas');
   const ctx            = gameCanvas.getContext('2d');
   const breathOverlay  = $('breathOverlay');
   const breathText     = $('breathText');
+  const countdownEl    = $('countdown');
   const floatFeedback  = $('floatFeedback');
   const suggestionBanner = $('suggestionBanner');
+  const sinkOverlay    = $('sinkOverlay');
+  const sinkTitle      = $('sinkTitle');
+  const sinkSub        = $('sinkSub');
+  const sinkProgress   = $('sinkProgress');
+  const sinkRestart    = $('sinkRestart');
   const holdBtn        = $('holdBtn');
   const holdFill       = $('holdFill');
   const holdLabel      = $('holdLabel');
   const windMeterFill  = $('windMeterFill');
   const distanceStat   = $('distanceStat');
   const cyclesStat     = $('cyclesStat');
-  const coherenceStat  = $('coherenceStat');
+  const bestStat       = $('bestStat');
   const toast          = $('toast');
 
   const settingsBtn    = $('settingsBtn');
@@ -1429,39 +1595,35 @@
      GAME STATE
      ============================================================ */
   const game = {
-    phase: 'ready',
+    phase: 'ready',        // ready | inhale | exhale | sinking | finished
     phaseElapsed: 0,
     phaseDuration: 0,
-    cycleCount: 0,
+    runExhales: 0,         // this voyage
+    globalRun: 0,          // best run in session
 
     isHolding: false,
     exhaleHoldTime: 0,
+    exhaleLockedIn: false, // set true when user starts holding during an exhale
     sailWind: 0,
     targetSailWind: 0,
     distance: 0,
     time: 0,
 
-    // Visual effects
     windParticles: [],
     waterLines: [],
     clouds: [],
     seagulls: [],
     foamTrail: [],
 
-    // Feedback
-    lastExhaleMsg: '',
-    lastExhaleColor: '',
-    sessionExhales: [],
-
-    // Boat bobbing
     boatBobbing: 0,
-
-    // Sailing sound active
     sailingSoundOn: false,
     hapticPulseTimer: 0,
-
-    // Camera shake while sailing
     shake: 0,
+
+    // Sink animation
+    sinkProgress: 0,
+    sinkBoatY: 0,
+    sinkBoatRot: 0,
   };
 
   /* ============================================================
@@ -1471,17 +1633,14 @@
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
     const scale = 0.3 + (state.hapticStrength / 10) * 1.7;
-    try { navigator.vibrate(Math.round(durationMs * scale)); }
-    catch (e) {}
+    try { navigator.vibrate(Math.round(durationMs * scale)); } catch (e) {}
   }
 
   function hapticPattern(pattern) {
     if (!state.haptics) return;
     if (!navigator.vibrate) return;
     const scale = 0.3 + (state.hapticStrength / 10) * 1.7;
-    try {
-      navigator.vibrate(pattern.map(v => Math.round(v * scale)));
-    } catch (e) {}
+    try { navigator.vibrate(pattern.map(v => Math.round(v * scale))); } catch (e) {}
   }
 
   function stopHaptic() {
@@ -1498,8 +1657,6 @@
   let ambientGain = null;
   let oceanGain = null;
   let windGain = null;
-
-  // Sailing whoosh
   let sailNoiseSrc = null;
   let sailFilter = null;
   let sailGain = null;
@@ -1535,7 +1692,6 @@
       ambientGain.gain.value = (state.volume / 100) * 0.35;
       ambientGain.connect(ctx.destination);
 
-      // Ocean ambience
       const oceanSrc = ctx.createBufferSource();
       oceanSrc.buffer = makeNoiseBuffer(ctx, 4);
       oceanSrc.loop = true;
@@ -1548,7 +1704,6 @@
       oceanSrc.connect(oceanLP).connect(oceanGain).connect(ambientGain);
       oceanSrc.start();
 
-      // Wind ambience (subtle)
       const windSrc = ctx.createBufferSource();
       windSrc.buffer = makeNoiseBuffer(ctx, 4);
       windSrc.loop = true;
@@ -1586,9 +1741,6 @@
     if (windGain) windGain.gain.value = (state.soundType === 'ocean') ? 0 : 0.2;
   }
 
-  /* ============================================================
-     SAILING SOUND — whoosh while exhaling
-     ============================================================ */
   function startSailingSound() {
     if (!state.sound) return;
     const ctx = ensureAudio();
@@ -1596,7 +1748,6 @@
     if (game.sailingSoundOn) return;
 
     try {
-      // Reuse a looping noise buffer with a modulated bandpass
       sailNoiseSrc = ctx.createBufferSource();
       sailNoiseSrc.buffer = makeNoiseBuffer(ctx, 4);
       sailNoiseSrc.loop = true;
@@ -1612,7 +1763,6 @@
       sailNoiseSrc.connect(sailFilter).connect(sailGain).connect(ctx.destination);
       sailNoiseSrc.start();
 
-      // Fade in
       const vol = (state.volume / 100) * 0.35;
       sailGain.gain.cancelScheduledValues(ctx.currentTime);
       sailGain.gain.setValueAtTime(0, ctx.currentTime);
@@ -1633,9 +1783,7 @@
         sailGain.gain.linearRampToValueAtTime(0, now + 0.25);
       }
       const src = sailNoiseSrc;
-      setTimeout(() => {
-        try { src.stop(); } catch (e) {}
-      }, 320);
+      setTimeout(() => { try { src.stop(); } catch (e) {} }, 320);
     } catch (e) {}
     sailNoiseSrc = null;
     sailFilter = null;
@@ -1644,7 +1792,6 @@
   }
 
   function updateSailingSoundIntensity(intensity) {
-    // intensity 0..1 — modulate the sail filter for whoosh
     if (!sailFilter || !sailGain || !audioCtx) return;
     try {
       const now = audioCtx.currentTime;
@@ -1699,6 +1846,44 @@
     } catch (e) {}
   }
 
+  function playSinkSound() {
+    if (!state.sound) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      // Descending sad tones + noise splash
+      [392, 349.23, 293.66, 220].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const vol = (state.volume / 100) * 0.1;
+        gain.gain.setValueAtTime(0, now + i * 0.15);
+        gain.gain.linearRampToValueAtTime(vol, now + i * 0.15 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.6);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i * 0.15);
+        osc.stop(now + i * 0.15 + 0.65);
+      });
+
+      // Splash noise
+      const noise = ctx.createBufferSource();
+      noise.buffer = makeNoiseBuffer(ctx, 0.8);
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.setValueAtTime(1200, now + 0.4);
+      lp.frequency.exponentialRampToValueAtTime(200, now + 1.2);
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0, now + 0.4);
+      ng.gain.linearRampToValueAtTime(0.15 * (state.volume/100), now + 0.45);
+      ng.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      noise.connect(lp).connect(ng).connect(ctx.destination);
+      noise.start(now + 0.4);
+      noise.stop(now + 1.3);
+    } catch (e) {}
+  }
+
   /* ============================================================
      TOAST
      ============================================================ */
@@ -1711,7 +1896,7 @@
   }
 
   /* ============================================================
-     FLOAT FEEDBACK & SUGGESTION BANNER
+     FLOAT FEEDBACK & SUGGESTION
      ============================================================ */
   let suggestionTimer = null;
   function showFloat(text, cls) {
@@ -1728,6 +1913,10 @@
     suggestionTimer = setTimeout(() => {
       suggestionBanner.classList.remove('show');
     }, durationMs || 3500);
+  }
+
+  function hideSuggestion() {
+    suggestionBanner.classList.remove('show');
   }
 
   /* ============================================================
@@ -1780,48 +1969,61 @@
         pace: state.pace,
         hasSeenWelcome: state.hasSeenWelcome,
         totalDistance: state.totalDistance,
-        totalCycles: state.totalCycles,
-        bestHold: state.bestHold,
-        holdSum: state.holdSum,
-        holdCount: state.holdCount,
+        bestRun: state.bestRun,
       }));
     } catch (e) {}
   }
 
   /* ============================================================
-     BREATHING CYCLE LOGIC
+     PHASE LOGIC
      ============================================================ */
   function setPhase(phase) {
     game.phase = phase;
     game.phaseElapsed = 0;
     const pace = PACES[state.pace];
     game.phaseDuration = phase === 'inhale' ? pace.inhale :
-                         phase === 'exhale' ? pace.exhale : 1;
+                         phase === 'exhale' ? pace.exhale + EXHALE_GRACE : 1;
 
     if (phase === 'exhale') {
       game.exhaleHoldTime = 0;
-      // Signal start of exhale
+      game.exhaleLockedIn = false;
       hapticPattern([25, 40, 25]);
       holdBtn.classList.add('ready');
+      holdBtn.classList.remove('critical');
       updateHoldLabel();
+      countdownEl.classList.remove('show', 'grace', 'critical');
     } else if (phase === 'inhale') {
-      holdBtn.classList.remove('ready', 'charging');
-      holdLabel.textContent = 'Hold to exhale';
+      holdBtn.classList.remove('ready', 'charging', 'critical');
+      holdLabel.textContent = 'Wait for exhale';
       stopSailingSound();
       stopHaptic();
+      countdownEl.classList.remove('show');
+      hideSuggestion();
     }
 
     updateBreathBanner();
   }
 
   function updateBreathBanner() {
-    breathOverlay.classList.remove('inhale', 'exhale');
+    breathOverlay.classList.remove('inhale', 'exhale', 'critical');
     if (game.phase === 'inhale') {
       breathOverlay.classList.add('inhale');
       breathText.textContent = 'Breathe in';
     } else if (game.phase === 'exhale') {
-      breathOverlay.classList.add('exhale');
-      breathText.textContent = 'Breathe out & hold';
+      if (!game.exhaleLockedIn) {
+        // Only breathing out without holding is critical
+        const elapsed = game.phaseElapsed;
+        if (elapsed > EXHALE_GRACE * 0.5) {
+          breathOverlay.classList.add('critical');
+        } else {
+          breathOverlay.classList.add('exhale');
+        }
+      } else {
+        breathOverlay.classList.add('exhale');
+      }
+      breathText.textContent = game.exhaleLockedIn ? 'Hold & sail' : 'Breathe out — press!';
+    } else if (game.phase === 'sinking') {
+      breathText.textContent = 'Sinking...';
     } else {
       breathText.textContent = 'Ready';
     }
@@ -1837,107 +2039,134 @@
     }
   }
 
-  function evaluateExhale(held) {
+  /* ============================================================
+     EVALUATE EXHALE — success or failure
+     ============================================================ */
+  function evaluateExhale() {
     const pace = PACES[state.pace];
-    const target = pace.exhale;
-    const quality = Math.min(1, held / target);
+    const held = game.exhaleHoldTime;
+    const quality = Math.min(1, held / pace.exhale);
 
-    // Store data
-    game.sessionExhales.push(quality);
-    state.totalCycles = (state.totalCycles || 0) + 1;
-    state.holdSum = (state.holdSum || 0) + held;
-    state.holdCount = (state.holdCount || 0) + 1;
-    if (held > (state.bestHold || 0)) state.bestHold = held;
+    // Determine result — did they hold the button at all during exhale?
+    if (!game.exhaleLockedIn || held < 0.5) {
+      // MISSED — ship sinks
+      sinkShip('missed');
+      return false;
+    }
 
-    // Update UI
-    cyclesStat.textContent = game.cycleCount;
-    const avgHold = state.holdSum / state.holdCount;
-    coherenceStat.textContent = avgHold.toFixed(1) + 's';
+    // SUCCESS — count it
+    game.runExhales++;
+    cyclesStat.textContent = game.runExhales;
+    cyclesStat.classList.remove('danger');
+    bumpEl(cyclesStat);
 
-    // Provide feedback with reinforcement
+    // Feedback tiers
     if (quality >= 0.95) {
-      // Perfect
-      game.lastExhaleMsg = 'Perfect exhale!';
       showFloat('PERFECT! 🏆', 'golden');
       playGoldenChime();
       hapticPattern([60, 40, 60, 40, 100]);
-      showSuggestion(randomFrom(perfectTips), 4000);
+      showSuggestion('Beautiful. Feel how calm and steady you are.', 4000);
     } else if (quality >= 0.8) {
-      game.lastExhaleMsg = 'Great exhale';
       showFloat('Great! ✨', 'good');
       playSuccessChime();
       hapticPattern([50, 40, 80]);
-      showSuggestion(randomFrom(greatTips), 3500);
+      showSuggestion('Almost perfect — extend just a touch more next time.', 3500);
     } else if (quality >= 0.6) {
-      game.lastExhaleMsg = 'Nice';
       showFloat('Nice 👍', 'good');
       haptic(50);
-      showSuggestion(randomFrom(niceTips), 3000);
-    } else if (quality >= 0.35) {
-      game.lastExhaleMsg = 'Keep going';
+      showSuggestion('Good. Aim for the full hold next round.', 3000);
+    } else if (quality >= 0.3) {
       showFloat('Keep going', '');
       haptic(30);
-      showSuggestion(randomFrom(keepGoingTips), 3500);
-    } else if (quality > 0.05) {
-      game.lastExhaleMsg = 'Try longer';
-      showFloat('Longer breath 💨', 'miss');
-      haptic(20);
-      showSuggestion(randomFrom(longerTips), 4000);
+      showSuggestion('Slow, long exhales generate the strongest wind.', 3500);
     } else {
-      game.lastExhaleMsg = 'Breathe out fully';
-      showFloat('Breathe out', 'miss');
-      showSuggestion('Press and hold the button as soon as "Breathe out" appears.', 4500);
+      showFloat('Short breath', 'miss');
+      haptic(20);
+      showSuggestion('Hold the button longer — count to 6 in your head.', 3500);
     }
 
-    // Milestone reinforcements
-    if (game.cycleCount === 1) {
+    // Milestones
+    if (game.runExhales === 1) {
       setTimeout(() => showToast('First exhale — you\'re sailing!', '⛵'), 900);
-    } else if (game.cycleCount === 5) {
+    } else if (game.runExhales === 5) {
       setTimeout(() => showToast('5 exhales — finding the rhythm.', '🌊'), 900);
-    } else if (game.cycleCount === 10) {
-      setTimeout(() => showToast('10 exhales — strong voyage!', '🏆'), 900);
-    } else if (game.cycleCount > 0 && game.cycleCount % 20 === 0) {
-      setTimeout(() => showToast(`${game.cycleCount} exhales — beautiful consistency.`, '✨'), 900);
+    } else if (game.runExhales === 10) {
+      setTimeout(() => showToast('10 exhales — beautiful voyage!', '🏆'), 900);
+    } else if (game.runExhales > 0 && game.runExhales % 15 === 0) {
+      setTimeout(() => showToast(`${game.runExhales} exhales — steady captain.`, '✨'), 900);
+    }
+
+    // Update best run
+    if (game.runExhales > state.bestRun) {
+      state.bestRun = game.runExhales;
+      bestStat.textContent = state.bestRun;
+      bumpEl(bestStat);
     }
 
     saveState();
+    return true;
   }
 
-  // Suggestion pools
-  const perfectTips = [
-    'Beautiful. Notice how calm and steady your breath feels.',
-    'Perfect rhythm — that\'s the coherence zone.',
-    'Excellent. Long exhales like that activate your parasympathetic system.',
-    'You nailed it. Feel the calm settle in.',
-  ];
-  const greatTips = [
-    'Almost perfect. Try to extend just a touch more next time.',
-    'Great control — keep that steady pace.',
-    'Very nice. Let your shoulders drop as you exhale.',
-    'You\'re finding the flow. Stay with it.',
-  ];
-  const niceTips = [
-    'Good. Aim to hold for the full duration next time.',
-    'Try to soften the exhale — let it be slow and even.',
-    'You\'re halfway there. Inhale deeper next round.',
-    'Steady breaths build the strongest sails.',
-  ];
-  const keepGoingTips = [
-    'Slow down. Let the exhale be long and gentle — no rush.',
-    'Try breathing out through pursed lips for a smoother flow.',
-    'Relax your jaw and shoulders. Then exhale fully.',
-    'You can do this. The boat needs the full exhale to sail.',
-  ];
-  const longerTips = [
-    'Hold the button the entire exhale — try counting to 6.',
-    'Release too early makes the sail go flat. Hold longer.',
-    'Breathe out slowly and don\'t lift your finger.',
-    'Longer exhales tell your body it\'s safe to relax.',
-  ];
+  /* ============================================================
+     SINK THE SHIP
+     ============================================================ */
+  function sinkShip(reason) {
+    game.phase = 'sinking';
+    game.sinkProgress = 0;
+    game.sinkBoatY = 0;
+    game.sinkBoatRot = 0;
 
-  function randomFrom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
+    stopSailingSound();
+    stopHaptic();
+    playSinkSound();
+    hapticPattern([100, 80, 200, 100, 400]);
+    holdBtn.classList.remove('ready', 'charging', 'critical');
+    countdownEl.classList.remove('show', 'grace', 'critical');
+    hideSuggestion();
+
+    const msgs = {
+      missed: {
+        title: 'Ship Sank! 🌊',
+        sub: 'You missed the exhale. The wind died and the boat went under.',
+      },
+      short: {
+        title: 'Ship Sank! 🌊',
+        sub: 'The exhale was too short. The sail never filled.',
+      },
+    };
+    const m = msgs[reason] || msgs.missed;
+    sinkTitle.textContent = m.title;
+    sinkSub.textContent = m.sub;
+    sinkProgress.textContent = `You completed ${game.runExhales} exhale${game.runExhales === 1 ? '' : 's'} this run.`;
+
+    // Freeze the boat visually and start sink animation
+    sinkOverlay.classList.add('show');
   }
+
+  function restartVoyage() {
+    sinkOverlay.classList.remove('show');
+    game.runExhales = 0;
+    cyclesStat.textContent = '0';
+    game.distance = 0;
+    game.sailWind = 0;
+    game.targetSailWind = 0;
+    game.boatProgress = 0;
+    game.sinkProgress = 0;
+    game.sinkBoatY = 0;
+    game.sinkBoatRot = 0;
+    game.windParticles = [];
+    game.foamTrail = [];
+    game.phase = 'ready';
+    game.phaseElapsed = 0;
+    updateBreathBanner();
+    haptic(10);
+
+    setTimeout(() => {
+      if (game.phase === 'ready') setPhase('inhale');
+    }, 500);
+  }
+
+  sinkRestart.addEventListener('click', restartVoyage);
 
   /* ============================================================
      HOLD BUTTON
@@ -1951,14 +2180,16 @@
     if (game.isHolding) return;
 
     game.isHolding = true;
+    game.exhaleLockedIn = true;   // <-- Critical: successful start
     game.exhaleHoldTime = 0;
     holdBtn.classList.add('charging');
-    holdBtn.classList.remove('ready');
+    holdBtn.classList.remove('ready', 'critical');
+    countdownEl.classList.remove('show', 'grace', 'critical');
     updateHoldLabel();
     haptic(20);
 
-    // Start sailing sound
     startSailingSound();
+    updateBreathBanner();
   }
 
   function endHold(e) {
@@ -1984,37 +2215,44 @@
   function update(dt) {
     game.time += dt;
 
-    if (game.phase !== 'ready') {
+    if (game.phase === 'inhale' || game.phase === 'exhale') {
       game.phaseElapsed += dt;
 
       if (game.phase === 'inhale') {
-        // No sail — boat waits
         game.targetSailWind = 0;
       } else if (game.phase === 'exhale') {
         if (game.isHolding) {
           game.exhaleHoldTime += dt;
-          // Sail wind follows hold time
           const pace = PACES[state.pace];
           game.targetSailWind = Math.min(1, game.exhaleHoldTime / pace.exhale);
         } else {
           game.targetSailWind = 0;
+
+          // If not locked in and grace period passed, and still no hold — we
+          // still wait until end of phase to sink (keeps it fair).
         }
+
+        // Update countdown visibility
+        updateCountdown();
+        updateBreathBanner();
       }
 
       if (game.phaseElapsed >= game.phaseDuration) {
-        const held = game.exhaleHoldTime;
         if (game.phase === 'exhale') {
-          // End of exhale: evaluate
-          game.cycleCount++;
-          evaluateExhale(held);
+          // End of exhale — evaluate
+          const ok = evaluateExhale();
+          if (!ok) return; // sink triggered
         }
         advancePhase();
       }
+    } else if (game.phase === 'sinking') {
+      game.sinkProgress += dt * 0.6;
+      game.sinkBoatY += dt * 35;
+      game.sinkBoatRot += dt * 0.5;
     }
 
     game.sailWind += (game.targetSailWind - game.sailWind) * Math.min(1, dt * 8);
 
-    // Sound intensity follows sail wind
     if (game.sailingSoundOn) {
       updateSailingSoundIntensity(game.sailWind);
     }
@@ -2022,7 +2260,6 @@
     // Continuous haptic pulsing while sailing
     if (game.isHolding && game.sailWind > 0.1 && state.haptics) {
       game.hapticPulseTimer += dt;
-      // Pulse every 120ms with intensity based on wind
       if (game.hapticPulseTimer > 0.12) {
         game.hapticPulseTimer = 0;
         const pulse = 8 + game.sailWind * 18;
@@ -2032,8 +2269,8 @@
       game.hapticPulseTimer = 0;
     }
 
-    // Distance only while sailing
-    if (game.sailWind > 0.05) {
+    // Distance only while actively sailing
+    if (game.sailWind > 0.05 && game.phase === 'exhale') {
       const gain = game.sailWind * dt * 4;
       game.distance += gain;
       state.totalDistance = (state.totalDistance || 0) + gain;
@@ -2042,14 +2279,13 @@
 
     game.boatBobbing = Math.sin(game.time * 2.5) * 2;
 
-    // Camera shake while sailing
     if (game.sailWind > 0.4) {
       game.shake = Math.min(1, game.shake + dt * 3);
     } else {
       game.shake = Math.max(0, game.shake - dt * 2);
     }
 
-    // UI: hold fill and wind meter
+    // UI: hold fill
     if (game.phase === 'exhale') {
       const pace = PACES[state.pace];
       const holdFrac = Math.min(1, game.exhaleHoldTime / pace.exhale);
@@ -2065,12 +2301,45 @@
       windMeterFill.style.width = '0%';
     }
 
-    // Particles
     updateWindParticles(dt);
     updateWaterLines(dt);
     updateClouds(dt);
     updateFoam(dt);
     updateSeagulls(dt);
+  }
+
+  function updateCountdown() {
+    if (game.phase !== 'exhale') {
+      countdownEl.classList.remove('show', 'grace', 'critical');
+      return;
+    }
+
+    if (game.exhaleLockedIn) {
+      // Holding — hide countdown
+      countdownEl.classList.remove('show', 'grace', 'critical');
+      return;
+    }
+
+    // Time remaining until sink
+    const pace = PACES[state.pace];
+    const totalExhale = pace.exhale + EXHALE_GRACE;
+    const remaining = Math.max(0, totalExhale - game.phaseElapsed);
+
+    // Show countdown only in the grace period
+    if (remaining <= EXHALE_GRACE) {
+      countdownEl.classList.add('show');
+      countdownEl.classList.remove('grace', 'critical');
+      countdownEl.classList.add('critical');
+      countdownEl.textContent = remaining.toFixed(1);
+
+      // Critical pulsing
+      holdBtn.classList.add('critical');
+      breathOverlay.classList.add('critical');
+    } else {
+      countdownEl.classList.remove('show', 'grace', 'critical');
+      holdBtn.classList.remove('critical');
+      breathOverlay.classList.remove('critical');
+    }
   }
 
   function advancePhase() {
@@ -2083,8 +2352,13 @@
     }
   }
 
+  function bumpEl(el) {
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+  }
+
   function updateWindParticles(dt) {
-    // Only emit when actually sailing
     if (game.sailWind > 0.15 && game.isHolding) {
       const intensity = game.sailWind;
       const emitRate = intensity * 8;
@@ -2100,7 +2374,6 @@
         });
       }
     }
-
     for (let i = game.windParticles.length - 1; i >= 0; i--) {
       const p = game.windParticles[i];
       p.x += p.vx * dt;
@@ -2118,7 +2391,6 @@
       w.life -= dt * 0.15;
       if (w.x < -60 || w.life <= 0) game.waterLines.splice(i, 1);
     }
-
     if (Math.random() < 0.5) {
       game.waterLines.push({
         x: canvasW + 30,
@@ -2162,7 +2434,6 @@
         vy: 5 + Math.random() * 10,
       });
     }
-
     for (let i = game.foamTrail.length - 1; i >= 0; i--) {
       const f = game.foamTrail[i];
       f.x += f.vx * dt;
@@ -2191,13 +2462,10 @@
     }
   }
 
-  /* ============================================================
-     BOAT POSITION — diagonal course
-     ============================================================ */
   function getBoatScreenPos() {
-    const t = Math.min(1, game.distance / 120);
+    const t = Math.min(1, game.runExhales / 30);
     const baseX = canvasW * (0.2 + t * 0.6);
-    const baseY = canvasH * (0.82 - t * 0.3) + game.boatBobbing;
+    const baseY = canvasH * (0.82 - t * 0.3) + game.boatBobbing + game.sinkBoatY;
     return { x: baseX, y: baseY, t };
   }
 
@@ -2211,7 +2479,6 @@
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    // Apply camera shake offset
     const shakeAmp = game.shake * 2;
     const shakeX = shakeAmp * (Math.random() - 0.5);
     const shakeY = shakeAmp * (Math.random() - 0.5);
@@ -2219,7 +2486,7 @@
     ctx.save();
     ctx.translate(shakeX, shakeY);
 
-    // ===== SKY =====
+    // Sky
     const horizonY = h * 0.52;
     const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
     if (isDark) {
@@ -2236,7 +2503,7 @@
     ctx.fillStyle = skyGrad;
     ctx.fillRect(-10, -10, w + 20, horizonY + 10);
 
-    // ===== SUN / MOON =====
+    // Sun/Moon
     const sunX = w * 0.78;
     const sunY = horizonY - 60;
     const sunR = 26;
@@ -2266,7 +2533,7 @@
       ctx.fill();
     }
 
-    // ===== CLOUDS =====
+    // Clouds
     game.clouds.forEach(c => {
       ctx.globalAlpha = c.alpha;
       ctx.fillStyle = isDark ? 'rgba(140, 180, 220, 0.4)' : 'rgba(255, 255, 255, 0.85)';
@@ -2274,7 +2541,7 @@
     });
     ctx.globalAlpha = 1;
 
-    // ===== SEAGULLS =====
+    // Seagulls
     game.seagulls.forEach(g => {
       ctx.strokeStyle = isDark ? 'rgba(200, 220, 240, 0.7)' : 'rgba(90, 90, 110, 0.7)';
       ctx.lineWidth = 1.5;
@@ -2287,7 +2554,7 @@
       ctx.stroke();
     });
 
-    // ===== OCEAN =====
+    // Ocean
     const oceanGrad = ctx.createLinearGradient(0, horizonY, 0, h + 10);
     if (isDark) {
       oceanGrad.addColorStop(0, '#1e4267');
@@ -2321,7 +2588,7 @@
     }
     ctx.restore();
 
-    // ===== WATER LINES =====
+    // Water lines
     game.waterLines.forEach(w2 => {
       const depth = (w2.y - horizonY) / (h - horizonY);
       const scaleX = 0.3 + depth * 1.4;
@@ -2358,7 +2625,7 @@
     ctx.fillStyle = mistGrad;
     ctx.fillRect(-10, horizonY - 20, w + 20, 40);
 
-    // ===== FOAM =====
+    // Foam
     game.foamTrail.forEach(f => {
       ctx.globalAlpha = f.life * 0.5;
       ctx.fillStyle = isDark ? 'rgba(200, 230, 255, 0.6)' : 'rgba(255, 255, 255, 0.85)';
@@ -2368,11 +2635,12 @@
     });
     ctx.globalAlpha = 1;
 
-    // ===== BOAT =====
+    // Boat (with sinking animation)
     const pos = getBoatScreenPos();
-    drawBoat(pos.x, pos.y, game.sailWind, isDark);
+    const boatRot = game.phase === 'sinking' ? game.sinkBoatRot : 0;
+    drawBoat(pos.x, pos.y, game.sailWind, isDark, boatRot, game.phase === 'sinking');
 
-    // ===== WIND PARTICLES =====
+    // Wind particles
     game.windParticles.forEach(p => {
       ctx.globalAlpha = Math.min(1, p.life);
       ctx.strokeStyle = isDark ? 'rgba(180, 220, 255, 0.85)' : 'rgba(255, 255, 255, 0.9)';
@@ -2395,11 +2663,12 @@
     ctx.fill();
   }
 
-  function drawBoat(x, y, sailWind, isDark) {
+  function drawBoat(x, y, sailWind, isDark, rotation, sinking) {
     const sailFullness = sailWind;
 
     ctx.save();
     ctx.translate(x, y);
+    if (rotation) ctx.rotate(rotation);
 
     // Water reflection
     ctx.globalAlpha = 0.35;
@@ -2473,7 +2742,7 @@
     ctx.lineTo(mastLean + boomLen, -12);
     ctx.stroke();
 
-    // Main sail
+    // Sail
     const sailTopX = mastLean;
     const sailTopY = -66;
     const sailBottomY = -14;
@@ -2525,7 +2794,6 @@
       }
     }
 
-    // Jib
     if (sailFullness > 0.1) {
       const jibBillow = 3 + sailFullness * 20;
       ctx.beginPath();
@@ -2551,7 +2819,7 @@
       ctx.stroke();
     }
 
-    // Stern flag
+    // Flag
     ctx.beginPath();
     ctx.moveTo(mastLean - 1, -68);
     ctx.lineTo(mastLean - 14, -63);
@@ -2571,12 +2839,18 @@
     ctx.closePath();
     ctx.fillStyle = isDark ? '#3e2723' : '#5d4037';
     ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(-30, -18);
-    ctx.lineTo(-16, -20);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
+
+    // Sinking bubbles
+    if (sinking) {
+      for (let i = 0; i < 6; i++) {
+        const bx = -30 + Math.random() * 60;
+        const by = -20 + Math.random() * 40;
+        ctx.beginPath();
+        ctx.arc(bx, by - game.sinkBoatY * 0.5, 2 + Math.random() * 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(180, 220, 255, 0.6)';
+        ctx.fill();
+      }
+    }
 
     ctx.restore();
   }
@@ -2619,13 +2893,6 @@
       saveState();
       haptic(8);
       if (onCb) onCb(state[key]);
-      const labels = { sound: ['Sound on', 'Sound off'], haptics: ['Haptics on', 'Haptics off'] };
-      const icons = { sound: '🔊', haptics: '📳' };
-      const iconsOff = { sound: '🔇', haptics: '📴' };
-      if (labels[key]) {
-        if (state[key]) showToast(labels[key][0], icons[key]);
-        else showToast(labels[key][1], iconsOff[key]);
-      }
     });
   }
 
@@ -2700,7 +2967,6 @@
   testHapticBtn.addEventListener('click', () => {
     const prev = state.haptics;
     state.haptics = true;
-    // Simulate sailing pulse pattern
     let count = 0;
     const pulse = () => {
       if (count++ > 8) return;
@@ -2715,15 +2981,12 @@
   clearHistoryBtn.addEventListener('click', () => {
     if (!confirm('Reset all data & counters? This cannot be undone.')) return;
     state.totalDistance = 0;
-    state.totalCycles = 0;
-    state.bestHold = 0;
-    state.holdSum = 0;
-    state.holdCount = 0;
+    state.bestRun = 0;
     distanceStat.textContent = '0m';
+    bestStat.textContent = '0';
     cyclesStat.textContent = '0';
-    coherenceStat.textContent = '—';
+    game.runExhales = 0;
     game.distance = 0;
-    game.cycleCount = 0;
     saveState();
     closeSettings();
     showToast('All data reset', '🧹');
@@ -2731,35 +2994,43 @@
   });
 
   resetSessionBtn.addEventListener('click', () => {
-    if (!confirm('Start a new voyage? Session counters will reset.')) return;
+    if (game.runExhales > 0 && !confirm('Restart the voyage? Current run will be lost.')) return;
+    game.runExhales = 0;
     game.distance = 0;
-    game.cycleCount = 0;
     game.sailWind = 0;
     game.targetSailWind = 0;
+    game.sinkBoatY = 0;
+    game.sinkBoatRot = 0;
+    game.windParticles = [];
+    game.foamTrail = [];
     game.phase = 'ready';
     game.phaseElapsed = 0;
-    distanceStat.textContent = '0m';
     cyclesStat.textContent = '0';
+    distanceStat.textContent = Math.round(state.totalDistance) + 'm';
+    sinkOverlay.classList.remove('show');
     updateBreathBanner();
     showToast('New voyage started', '⛵');
     haptic(12);
+    setTimeout(() => {
+      if (game.phase === 'ready') setPhase('inhale');
+    }, 500);
   });
 
   resetAllBtn.addEventListener('click', () => {
     if (!confirm('Reset everything including all-time stats?')) return;
     state.totalDistance = 0;
-    state.totalCycles = 0;
-    state.bestHold = 0;
-    state.holdSum = 0;
-    state.holdCount = 0;
+    state.bestRun = 0;
+    game.runExhales = 0;
     game.distance = 0;
-    game.cycleCount = 0;
     game.sailWind = 0;
+    game.sinkBoatY = 0;
+    game.sinkBoatRot = 0;
     game.phase = 'ready';
     game.phaseElapsed = 0;
     distanceStat.textContent = '0m';
+    bestStat.textContent = '0';
     cyclesStat.textContent = '0';
-    coherenceStat.textContent = '—';
+    sinkOverlay.classList.remove('show');
     updateBreathBanner();
     saveState();
     showToast('Everything reset', '🧹');
@@ -2820,10 +3091,8 @@
     hapticStrengthValue.textContent = state.hapticStrength;
 
     distanceStat.textContent = Math.round(state.totalDistance || 0) + 'm';
-    cyclesStat.textContent = state.totalCycles || 0;
-    if (state.holdCount > 0) {
-      coherenceStat.textContent = (state.holdSum / state.holdCount).toFixed(1) + 's';
-    }
+    bestStat.textContent = state.bestRun || 0;
+    cyclesStat.textContent = '0';
 
     if (state.sound) {
       const startAudio = () => {
